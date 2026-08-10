@@ -1,153 +1,546 @@
-<!DOCTYPE html>
-<html lang="hi">
+<!DOCTYPE html><html lang="hi">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Book My Car</title>
-
-<style>
-body{
-    font-family:Arial,sans-serif;
-    background:#f4f4f4;
-    margin:0;
-    padding:0;
-}
-header{
-    background:#007bff;
-    color:white;
-    text-align:center;
-    padding:20px;
-}
-.container{
-    max-width:500px;
-    margin:25px auto;
-    background:white;
-    padding:20px;
-    border-radius:12px;
-    box-shadow:0 3px 10px #bbb;
-}
-input,select,button{
-    width:100%;
-    padding:12px;
-    margin:8px 0;
+<meta name="viewport" content="width=device-width, initial-scale=1.0"><title>Book My Car</title><style>
+*{
     box-sizing:border-box;
-    border-radius:6px;
-    border:1px solid #ccc;
 }
-button{
-    background:#007bff;
+
+body{
+    margin:0;
+    font-family:Arial,sans-serif;
+    background:#f2f6ff;
+    color:#222;
+}
+
+header{
+    background:linear-gradient(135deg,#007bff,#0056d6);
     color:white;
-    border:none;
-    font-size:17px;
-    cursor:pointer;
-}
-button:hover{
-    background:#0056b3;
-}
-#message{
+    padding:28px 15px;
     text-align:center;
-    margin-top:15px;
+}
+
+header h1{
+    margin:0;
+    font-size:32px;
+}
+
+header p{
+    margin:8px 0 0;
+}
+
+.container{
+    width:92%;
+    max-width:600px;
+    margin:25px auto;
+}
+
+.booking-box{
+    background:white;
+    padding:25px;
+    border-radius:16px;
+    box-shadow:0 5px 20px rgba(0,0,0,.12);
+}
+
+.booking-box h2{
+    text-align:center;
+    margin-top:0;
+    color:#007bff;
+}
+
+label{
+    display:block;
+    margin-top:13px;
     font-weight:bold;
 }
-</style>
-</head>
 
-<body>
+input,select{
+    width:100%;
+    padding:13px;
+    margin-top:6px;
+    border:1px solid #ddd;
+    border-radius:8px;
+    font-size:16px;
+}
 
-<header>
+button{
+    width:100%;
+    padding:14px;
+    margin-top:20px;
+    border:0;
+    border-radius:8px;
+    background:#007bff;
+    color:white;
+    font-size:18px;
+    font-weight:bold;
+    cursor:pointer;
+}
+
+button:disabled{
+    background:#888;
+}
+
+.admin-link{
+    display:block;
+    text-align:center;
+    margin-top:18px;
+    color:#007bff;
+    text-decoration:none;
+    font-weight:bold;
+}
+
+.note{
+    margin-top:15px;
+    padding:12px;
+    background:#eef5ff;
+    border-radius:8px;
+    font-size:14px;
+    text-align:center;
+}
+
+footer{
+    text-align:center;
+    padding:20px;
+    color:#777;
+}
+</style></head><body><header>
     <h1>🚗 Book My Car</h1>
-    <p>Car Booking Service</p>
-</header>
+    <p>आसान और भरोसेमंद Car Booking</p>
+</header><div class="container"><div class="booking-box"><h2>🚘 Car Booking</h2><label>Customer Name</label>
+<input
+type="text"
+id="customerName"
+placeholder="अपना नाम लिखें"
 
-<div class="container">
+«»
 
-<h2>Booking करें</h2>
+<label>Mobile Number</label>
+<input
+type="tel"
+id="customerPhone"
+placeholder="10 अंकों का मोबाइल नंबर"
+maxlength="10"
+inputmode="numeric"
 
-<form id="bookingForm">
+«»
 
-<input type="text" id="name" placeholder="आपका नाम" required>
+<label>कहाँ से जाना है? 📍</label>
+<input
+type="text"
+id="pickupLocation"
+placeholder="जैसे: सारंगढ़"
 
-<input type="tel" id="phone" placeholder="मोबाइल नंबर" required>
+«»
 
-<input type="text" id="car" placeholder="कार का नाम" required>
+<label>कहाँ तक जाना है? 🏁</label>
+<input
+type="text"
+id="dropLocation"
+placeholder="जैसे: रायगढ़"
 
-<input type="date" id="date" required>
+«»
 
-<input type="time" id="time" required>
+<label>Car</label>
+<select id="carName">
 
-<button type="submit">🚗 Booking करें</button>
+<option value="">Car चुनें</option><option value="Swift Dzire">
+    Swift Dzire
+</option><option value="Ertiga">
+    Ertiga
+</option><option value="Innova">
+    Innova
+</option><option value="Bolero">
+    Bolero
+</option><option value="Scorpio">
+    Scorpio
+</option></select><label>Booking Date</label>
+<input
+type="date"
+id="bookingDate"
 
-</form>
+«»
 
-<div id="message"></div>
+<label>Booking Time</label>
+<input
+type="time"
+id="bookingTime"
+
+«»
+
+<label>Advance Amount ₹</label>
+<input
+type="number"
+id="advanceAmount"
+placeholder="Advance राशि"
+min="0"
+
+«»
+
+<button
+type="button"
+id="bookButton"
+onclick="saveCustomerBooking()"
+
+«»
+
+🚗 BOOK NOW
+</button>
+
+<div class="note">Booking भेजने के बाद आपका Booking ID मिलेगा।<br>
+
+Admin confirmation के बाद booking Confirm होगी।
+
+</div><a
+class="admin-link"
+href="Admin.html"
+
+«»
+
+🔐 Admin Panel
+</a>
 
 </div>
+</div><footer>
+© 2026 Book My Car
+</footer><script type="module">
 
-<script type="module">
+import { initializeApp }
 
-import { initializeApp } from "https://www.gstatic.com/firebasejs/12.17.1/firebase-app.js";
+from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
+
 
 import {
     getFirestore,
     collection,
     addDoc,
     serverTimestamp
-} from "https://www.gstatic.com/firebasejs/12.17.1/firebase-firestore.js";
+}
+
+from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
 
 
 const firebaseConfig = {
-    apiKey: "AIzaSyDD-jSNG_HfhW4aTXtdf0kpdclaDVbgrNA",
-    authDomain: "book-my-car-a97cf.firebaseapp.com",
-    projectId: "book-my-car-a97cf",
-    storageBucket: "book-my-car-a97cf.firebasestorage.app",
-    messagingSenderId: "546652899903",
-    appId: "1:546652899903:web:c280a58db101e01d1d468a"
+
+    apiKey:
+    "AIzaSyDD-jSNG_HfhW4aTXtdf0kpdclaDVbgrNA",
+
+    authDomain:
+    "book-my-car-a97cf.firebaseapp.com",
+
+    projectId:
+    "book-my-car-a97cf",
+
+    storageBucket:
+    "book-my-car-a97cf.firebasestorage.app",
+
+    messagingSenderId:
+    "546652899903",
+
+    appId:
+    "1:546652899903:web:c280a58db101e01d1d468a"
 };
+
 
 const app = initializeApp(firebaseConfig);
 
 const db = getFirestore(app);
 
-const bookingForm = document.getElementById("bookingForm");
 
-bookingForm.addEventListener("submit", async (e) => {
+window.saveCustomerBooking = async function(){
 
-    e.preventDefault();
+    const customer =
+        document.getElementById("customerName")
+        .value.trim();
 
-    const message = document.getElementById("message");
 
-    message.innerText = "Booking save हो रही है...";
+    const phone =
+        document.getElementById("customerPhone")
+        .value.trim();
 
-    try {
 
-        await addDoc(collection(db, "bookings"), {
+    const pickup =
+        document.getElementById("pickupLocation")
+        .value.trim();
 
-            name: document.getElementById("name").value,
-            phone: document.getElementById("phone").value,
-            car: document.getElementById("car").value,
-            date: document.getElementById("date").value,
-            time: document.getElementById("time").value,
-            status: "pending",
-            createdAt: serverTimestamp()
 
-        });
+    const drop =
+        document.getElementById("dropLocation")
+        .value.trim();
 
-        message.innerText = "✅ Booking सफलतापूर्वक भेज दी गई!";
 
-        bookingForm.reset();
+    const car =
+        document.getElementById("carName")
+        .value;
 
-    } catch (error) {
 
-        console.error(error);
+    const date =
+        document.getElementById("bookingDate")
+        .value;
 
-        message.innerText =
-        "❌ Booking save नहीं हुई। Firebase settings/check करें।";
+
+    const time =
+        document.getElementById("bookingTime")
+        .value;
+
+
+    const advance =
+        Number(
+            document.getElementById("advanceAmount")
+            .value
+        ) || 0;
+
+
+    if(customer === ""){
+
+        alert(
+            "कृपया Customer Name भरें।"
+        );
+
+        return;
+    }
+
+
+    if(!/^[0-9]{10}$/.test(phone)){
+
+        alert(
+            "कृपया सही 10 अंकों का Mobile Number डालें।"
+        );
+
+        return;
+    }
+
+
+    if(pickup === ""){
+
+        alert(
+            "कृपया Pickup Location भरें।"
+        );
+
+        return;
+    }
+
+
+    if(drop === ""){
+
+        alert(
+            "कृपया Drop Location भरें।"
+        );
+
+        return;
+    }
+
+
+    if(car === ""){
+
+        alert(
+            "कृपया Car चुनें।"
+        );
+
+        return;
+    }
+
+
+    if(date === ""){
+
+        alert(
+            "कृपया Booking Date चुनें।"
+        );
+
+        return;
+    }
+
+
+    if(time === ""){
+
+        alert(
+            "कृपया Booking Time चुनें।"
+        );
+
+        return;
+    }
+
+
+    if(advance < 0){
+
+        alert(
+            "Advance राशि सही डालें।"
+        );
+
+        return;
+    }
+
+
+    const selectedDateTime =
+        new Date(date + "T" + time);
+
+
+    const now = new Date();
+
+
+    if(selectedDateTime <= now){
+
+        alert(
+            "कृपया भविष्य की Date और Time चुनें।"
+        );
+
+        return;
+    }
+
+
+    const button =
+        document.getElementById("bookButton");
+
+
+    button.disabled = true;
+
+    button.innerText =
+        "⏳ Booking भेजी जा रही है...";
+
+
+    try{
+
+        const bookingData = {
+
+            customer:
+            customer,
+
+            phone:
+            phone,
+
+            pickup:
+            pickup,
+
+            drop:
+            drop,
+
+            car:
+            car,
+
+            owner:
+            "Pending",
+
+            driver:
+            "Pending",
+
+            date:
+            date,
+
+            time:
+            time,
+
+            advance:
+            advance,
+
+            status:
+            "Pending",
+
+            createdAt:
+            serverTimestamp()
+
+        };
+
+
+        const docRef =
+            await addDoc(
+
+                collection(
+                    db,
+                    "bookings"
+                ),
+
+                bookingData
+
+            );
+
+
+        alert(
+
+            "✅ Booking सफलतापूर्वक भेज दी गई!\n\n" +
+
+            "Booking ID:\n" +
+
+            docRef.id +
+
+            "\n\n" +
+
+            "📍 From: " +
+            pickup +
+
+            "\n🏁 To: " +
+            drop +
+
+            "\n\n" +
+
+            "Status: Pending\n\n" +
+
+            "Admin confirmation के बाद booking Confirm होगी।"
+
+        );
+
+
+        document.getElementById(
+            "customerName"
+        ).value = "";
+
+
+        document.getElementById(
+            "customerPhone"
+        ).value = "";
+
+
+        document.getElementById(
+            "pickupLocation"
+        ).value = "";
+
+
+        document.getElementById(
+            "dropLocation"
+        ).value = "";
+
+
+        document.getElementById(
+            "carName"
+        ).value = "";
+
+
+        document.getElementById(
+            "bookingDate"
+        ).value = "";
+
+
+        document.getElementById(
+            "bookingTime"
+        ).value = "";
+
+
+        document.getElementById(
+            "advanceAmount"
+        ).value = "";
+
 
     }
 
-});
+    catch(error){
 
-</script>
+        console.error(error);
 
-</body>
+        alert(
+
+            "❌ Booking save नहीं हुई।\n\n" +
+
+            "Firebase Firestore Rules/Settings check करें।"
+
+        );
+
+    }
+
+
+    button.disabled = false;
+
+    button.innerText =
+        "🚗 BOOK NOW";
+
+};
+
+</script></body>
 </html>
