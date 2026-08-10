@@ -2,6 +2,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0"><title>Book My Car - Add Car</title><style>
+
 *{
     box-sizing:border-box;
 }
@@ -10,42 +11,35 @@ body{
     margin:0;
     font-family:Arial,sans-serif;
     background:#f2f6ff;
-    color:#222;
 }
 
 header{
-    background:linear-gradient(135deg,#007bff,#0056d6);
+    background:#007bff;
     color:white;
-    padding:28px 15px;
     text-align:center;
+    padding:25px 10px;
 }
 
 header h1{
     margin:0;
-    font-size:30px;
-}
-
-header p{
-    margin:8px 0 0;
 }
 
 .container{
-    width:92%;
     max-width:600px;
+    width:92%;
     margin:25px auto;
 }
 
-.form-box{
+.box{
     background:white;
-    padding:25px;
-    border-radius:16px;
+    padding:22px;
+    border-radius:15px;
     box-shadow:0 5px 20px rgba(0,0,0,.12);
 }
 
-.form-box h2{
+h2{
     text-align:center;
     color:#007bff;
-    margin-top:0;
 }
 
 label{
@@ -58,48 +52,24 @@ input,select,textarea{
     width:100%;
     padding:13px;
     margin-top:6px;
-    border:1px solid #ddd;
+    border:1px solid #ccc;
     border-radius:8px;
     font-size:16px;
 }
 
 textarea{
-    min-height:80px;
-    resize:vertical;
-}
-
-.rate-title{
-    margin-top:20px;
-    padding:10px;
-    background:#eef5ff;
-    border-radius:8px;
-    color:#0056d6;
-    font-weight:bold;
+    height:80px;
 }
 
 button{
     width:100%;
     padding:14px;
-    margin-top:22px;
+    margin-top:20px;
     border:0;
     border-radius:8px;
     background:#007bff;
     color:white;
     font-size:18px;
-    font-weight:bold;
-    cursor:pointer;
-}
-
-button:disabled{
-    background:#888;
-}
-
-.back{
-    display:block;
-    text-align:center;
-    margin-top:18px;
-    color:#007bff;
-    text-decoration:none;
     font-weight:bold;
 }
 
@@ -108,34 +78,30 @@ button:disabled{
     padding:12px;
     background:#eef5ff;
     border-radius:8px;
+    text-align:center;
     font-size:14px;
-    text-align:center;
 }
 
-footer{
+.back{
+    display:block;
     text-align:center;
-    padding:20px;
-    color:#777;
+    margin-top:18px;
+    color:#007bff;
+    text-decoration:none;
 }
 
-.required{
-    color:red;
-}
-</style></head><body><header>
-    <h1>🚗 Book My Car</h1>
-    <p>अपनी Car हमारे साथ जोड़ें</p>
-</header><div class="container"><div class="form-box"><h2>🚘 अपनी Car Add करें</h2><label>
-    Owner Name <span class="required">*</span>
-</label><input
+</style></head><body><header><h1>🚗 Book My Car</h1><p>अपनी Car जोड़ें</p></header><div class="container"><div class="box"><h2>🚘 Car Owner Form</h2><label>Owner Name</label>
+
+<input
 type="text"
 id="ownerName"
-placeholder="Car Owner का नाम"
+placeholder="Owner का नाम"
 
 «»
 
-<label>
-    Owner Mobile <span class="required">*</span>
-</label><input
+<label>Owner Mobile</label>
+
+<input
 type="tel"
 id="ownerPhone"
 placeholder="10 अंकों का मोबाइल नंबर"
@@ -144,42 +110,29 @@ inputmode="numeric"
 
 «»
 
-<label>
-    Car Model <span class="required">*</span>
-</label><select id="carModel"><option value="">Car चुनें</option><option value="Swift Dzire">
-    Swift Dzire
-</option><option value="Ertiga">
-    Ertiga
-</option><option value="Innova">
-    Innova
-</option><option value="Bolero">
-    Bolero
-</option><option value="Scorpio">
-    Scorpio
-</option><option value="Other">
-    Other
-</option></select><label>
-    Car Number <span class="required">*</span>
-</label><input
+<label>Car Model</label>
+
+<select id="carModel"><option value="">Car चुनें</option><option>Swift Dzire</option><option>Ertiga</option><option>Innova</option><option>Bolero</option><option>Scorpio</option><option>Other</option></select><label>Car Number</label>
+
+<input
 type="text"
 id="carNumber"
 placeholder="जैसे CG13AB1234"
-style="text-transform:uppercase"
 
 «»
 
-<label>
-    Driver Name <span class="required">*</span>
-</label><input
+<label>Driver Name</label>
+
+<input
 type="text"
 id="driverName"
 placeholder="Driver का नाम"
 
 «»
 
-<label>
-    Driver Mobile <span class="required">*</span>
-</label><input
+<label>Driver Mobile</label>
+
+<input
 type="tel"
 id="driverPhone"
 placeholder="10 अंकों का मोबाइल नंबर"
@@ -188,20 +141,18 @@ inputmode="numeric"
 
 «»
 
-<label>
-    Car उपलब्ध स्थान <span class="required">*</span>
-</label><input
+<label>Car उपलब्ध स्थान</label>
+
+<input
 type="text"
 id="location"
 placeholder="जैसे Sarangarh"
 
 «»
 
-<div class="rate-title">
-    💰 Car का Rate
-</div><label>
-    Per Day Rate ₹
-</label><input
+<label>Per Day Rate ₹</label>
+
+<input
 type="number"
 id="dayRate"
 placeholder="जैसे 2500"
@@ -209,20 +160,19 @@ min="0"
 
 «»
 
-<label>
-    Per KM Rate ₹
-</label><input
+<label>Per KM Rate ₹</label>
+
+<input
 type="number"
 id="kmRate"
 placeholder="जैसे 15"
 min="0"
-step="0.01"
 
 «»
 
-<label>
-    Outstation Rate ₹
-</label><input
+<label>Outstation Rate ₹</label>
+
+<input
 type="number"
 id="outstationRate"
 placeholder="जैसे 3000"
@@ -230,24 +180,22 @@ min="0"
 
 «»
 
-<label>
-    अतिरिक्त जानकारी
-</label><textarea
-    id="notes"
-    placeholder="Car की अन्य जानकारी लिखें"
+<label>अन्य जानकारी</label>
+
+<textarea
+id="notes"
+placeholder="अन्य जानकारी"
 ></textarea><button
 type="button"
 id="submitButton"
-onclick="submitCar()"
 
 «»
 
 🚗 CAR SUBMIT करें
 </button>
 
-<div class="note">आपकी Car की जानकारी पहले Admin के पास जाएगी।<br>
-
-Admin की मंजूरी के बाद ही Car Booking के लिए उपलब्ध होगी।
+<div class="note">Car की जानकारी Admin के पास जाएगी।<br>
+Approval के बाद Car Booking में उपलब्ध होगी।
 
 </div><a
 href="index.html"
@@ -255,17 +203,13 @@ class="back"
 
 «»
 
-⬅️ Customer Booking पर वापस जाएँ
+⬅️ Booking Website पर जाएँ
 </a>
 
-</div>
-</div><footer>
-© 2026 Book My Car
-</footer><script type="module">
+</div></div><script type="module">
 
-import {
-    initializeApp
-}
+import { initializeApp }
+
 from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
 
 
@@ -275,367 +219,350 @@ import {
     addDoc,
     serverTimestamp
 }
+
 from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
 
 
 const firebaseConfig = {
 
-    apiKey:
-    "AIzaSyDD-jSNG_HfhW4aTXtdf0kpdclaDVbgrNA",
+apiKey:
+"AIzaSyDD-jSNG_HfhW4aTXtdf0kpdclaDVbgrNA",
 
-    authDomain:
-    "book-my-car-a97cf.firebaseapp.com",
+authDomain:
+"book-my-car-a97cf.firebaseapp.com",
 
-    projectId:
-    "book-my-car-a97cf",
+projectId:
+"book-my-car-a97cf",
 
-    storageBucket:
-    "book-my-car-a97cf.firebasestorage.app",
+storageBucket:
+"book-my-car-a97cf.firebasestorage.app",
 
-    messagingSenderId:
-    "546652899903",
+messagingSenderId:
+"546652899903",
 
-    appId:
-    "1:546652899903:web:c280a58db101e01d1d468a"
+appId:
+"1:546652899903:web:c280a58db101e01d1d468a"
+
 };
 
 
 const app =
-    initializeApp(firebaseConfig);
+initializeApp(firebaseConfig);
 
 
 const db =
-    getFirestore(app);
+getFirestore(app);
 
 
-window.submitCar = async function(){
+document.getElementById(
+"submitButton"
+).addEventListener(
+"click",
+submitCar
+);
 
-    const ownerName =
-        document.getElementById(
-            "ownerName"
-        ).value.trim();
 
+async function submitCar(){
 
-    const ownerPhone =
-        document.getElementById(
-            "ownerPhone"
-        ).value.trim();
+const ownerName =
+document.getElementById(
+"ownerName"
+).value.trim();
 
 
-    const carModel =
-        document.getElementById(
-            "carModel"
-        ).value;
+const ownerPhone =
+document.getElementById(
+"ownerPhone"
+).value.trim();
 
 
-    const carNumber =
-        document.getElementById(
-            "carNumber"
-        ).value.trim()
-        .toUpperCase();
+const carModel =
+document.getElementById(
+"carModel"
+).value;
 
 
-    const driverName =
-        document.getElementById(
-            "driverName"
-        ).value.trim();
+const carNumber =
+document.getElementById(
+"carNumber"
+).value.trim()
+.toUpperCase();
 
 
-    const driverPhone =
-        document.getElementById(
-            "driverPhone"
-        ).value.trim();
+const driverName =
+document.getElementById(
+"driverName"
+).value.trim();
 
 
-    const location =
-        document.getElementById(
-            "location"
-        ).value.trim();
+const driverPhone =
+document.getElementById(
+"driverPhone"
+).value.trim();
 
 
-    const dayRate =
-        Number(
-            document.getElementById(
-                "dayRate"
-            ).value
-        ) || 0;
+const location =
+document.getElementById(
+"location"
+).value.trim();
 
 
-    const kmRate =
-        Number(
-            document.getElementById(
-                "kmRate"
-            ).value
-        ) || 0;
+const dayRate =
+Number(
+document.getElementById(
+"dayRate"
+).value
+) || 0;
 
 
-    const outstationRate =
-        Number(
-            document.getElementById(
-                "outstationRate"
-            ).value
-        ) || 0;
+const kmRate =
+Number(
+document.getElementById(
+"kmRate"
+).value
+) || 0;
 
 
-    const notes =
-        document.getElementById(
-            "notes"
-        ).value.trim();
+const outstationRate =
+Number(
+document.getElementById(
+"outstationRate"
+).value
+) || 0;
 
 
-    // VALIDATION
+const notes =
+document.getElementById(
+"notes"
+).value.trim();
 
-    if(ownerName === ""){
 
-        alert(
-            "कृपया Owner Name भरें।"
-        );
+if(ownerName===""){
 
-        return;
-    }
+alert("Owner Name भरें।");
 
+return;
 
-    if(!/^[0-9]{10}$/.test(ownerPhone)){
+}
 
-        alert(
-            "कृपया सही 10 अंकों का Owner Mobile Number डालें।"
-        );
 
-        return;
-    }
+if(!/^[0-9]{10}$/.test(ownerPhone)){
 
+alert(
+"सही 10 अंकों का Owner Mobile डालें।"
+);
 
-    if(carModel === ""){
+return;
 
-        alert(
-            "कृपया Car Model चुनें।"
-        );
+}
 
-        return;
-    }
 
+if(carModel===""){
 
-    if(carNumber === ""){
+alert("Car Model चुनें।");
 
-        alert(
-            "कृपया Car Number भरें।"
-        );
+return;
 
-        return;
-    }
+}
 
 
-    if(driverName === ""){
+if(carNumber===""){
 
-        alert(
-            "कृपया Driver Name भरें।"
-        );
+alert("Car Number भरें।");
 
-        return;
-    }
+return;
 
+}
 
-    if(!/^[0-9]{10}$/.test(driverPhone)){
 
-        alert(
-            "कृपया सही 10 अंकों का Driver Mobile Number डालें।"
-        );
+if(driverName===""){
 
-        return;
-    }
+alert("Driver Name भरें।");
 
+return;
 
-    if(location === ""){
+}
 
-        alert(
-            "कृपया Car उपलब्ध स्थान भरें।"
-        );
 
-        return;
-    }
+if(!/^[0-9]{10}$/.test(driverPhone)){
 
+alert(
+"सही 10 अंकों का Driver Mobile डालें।"
+);
 
-    if(
-        dayRate <= 0 &&
-        kmRate <= 0 &&
-        outstationRate <= 0
-    ){
+return;
 
-        alert(
-            "कम से कम एक Rate भरना जरूरी है।"
-        );
+}
 
-        return;
-    }
 
+if(location===""){
 
-    const button =
-        document.getElementById(
-            "submitButton"
-        );
+alert("Car उपलब्ध स्थान भरें।");
 
+return;
 
-    button.disabled = true;
+}
 
-    button.innerText =
-        "⏳ जानकारी भेजी जा रही है...";
 
+if(
+dayRate<=0 &&
+kmRate<=0 &&
+outstationRate<=0
+){
 
-    try{
+alert(
+"कम से कम एक Rate भरना जरूरी है।"
+);
 
-        const carData = {
+return;
 
-            ownerName:
-                ownerName,
+}
 
-            ownerPhone:
-                ownerPhone,
 
-            carModel:
-                carModel,
+const button =
+document.getElementById(
+"submitButton"
+);
 
-            carNumber:
-                carNumber,
 
-            driverName:
-                driverName,
+button.disabled=true;
 
-            driverPhone:
-                driverPhone,
+button.innerText=
+"⏳ Submit हो रहा है...";
 
-            location:
-                location,
 
-            dayRate:
-                dayRate,
+try{
 
-            kmRate:
-                kmRate,
+const data={
 
-            outstationRate:
-                outstationRate,
+ownerName:ownerName,
 
-            notes:
-                notes,
+ownerPhone:ownerPhone,
 
-            status:
-                "Pending",
+carModel:carModel,
 
-            createdAt:
-                serverTimestamp()
+carNumber:carNumber,
 
-        };
+driverName:driverName,
 
+driverPhone:driverPhone,
 
-        const docRef =
-            await addDoc(
+location:location,
 
-                collection(
-                    db,
-                    "carRequests"
-                ),
+dayRate:dayRate,
 
-                carData
+kmRate:kmRate,
 
-            );
+outstationRate:outstationRate,
 
+notes:notes,
 
-        alert(
+status:"Pending",
 
-            "✅ Car की जानकारी सफलतापूर्वक भेज दी गई!\n\n" +
-
-            "Request ID:\n" +
-
-            docRef.id +
-
-            "\n\n" +
-
-            "Status: Pending\n\n" +
-
-            "Admin approval के बाद आपकी Car Booking के लिए उपलब्ध होगी।"
-
-        );
-
-
-        // CLEAR FORM
-
-        document.getElementById(
-            "ownerName"
-        ).value = "";
-
-
-        document.getElementById(
-            "ownerPhone"
-        ).value = "";
-
-
-        document.getElementById(
-            "carModel"
-        ).value = "";
-
-
-        document.getElementById(
-            "carNumber"
-        ).value = "";
-
-
-        document.getElementById(
-            "driverName"
-        ).value = "";
-
-
-        document.getElementById(
-            "driverPhone"
-        ).value = "";
-
-
-        document.getElementById(
-            "location"
-        ).value = "";
-
-
-        document.getElementById(
-            "dayRate"
-        ).value = "";
-
-
-        document.getElementById(
-            "kmRate"
-        ).value = "";
-
-
-        document.getElementById(
-            "outstationRate"
-        ).value = "";
-
-
-        document.getElementById(
-            "notes"
-        ).value = "";
-
-    }
-
-    catch(error){
-
-        console.error(error);
-
-        alert(
-
-            "❌ Car information save नहीं हुई।\n\n" +
-
-            "Firebase Firestore Rules check करें।"
-
-        );
-
-    }
-
-
-    button.disabled = false;
-
-    button.innerText =
-        "🚗 CAR SUBMIT करें";
+createdAt:serverTimestamp()
 
 };
+
+
+const result =
+await addDoc(
+
+collection(
+db,
+"carRequests"
+),
+
+data
+
+);
+
+
+alert(
+
+"✅ Car successfully submit हो गई!\n\n"+
+
+"Request ID:\n"+
+
+result.id+
+
+"\n\nStatus: Pending"
+
+);
+
+
+document.getElementById(
+"ownerName"
+).value="";
+
+
+document.getElementById(
+"ownerPhone"
+).value="";
+
+
+document.getElementById(
+"carModel"
+).value="";
+
+
+document.getElementById(
+"carNumber"
+).value="";
+
+
+document.getElementById(
+"driverName"
+).value="";
+
+
+document.getElementById(
+"driverPhone"
+).value="";
+
+
+document.getElementById(
+"location"
+).value="";
+
+
+document.getElementById(
+"dayRate"
+).value="";
+
+
+document.getElementById(
+"kmRate"
+).value="";
+
+
+document.getElementById(
+"outstationRate"
+).value="";
+
+
+document.getElementById(
+"notes"
+).value="";
+
+}
+
+catch(error){
+
+console.error(error);
+
+alert(
+"❌ Car submit नहीं हुई।\n\n"+
+error.message
+);
+
+}
+
+button.disabled=false;
+
+button.innerText=
+"🚗 CAR SUBMIT करें";
+
+}
 
 </script></body>
 </html>
