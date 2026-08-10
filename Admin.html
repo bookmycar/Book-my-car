@@ -1,1 +1,688 @@
+<!DOCTYPE html><html lang="hi">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0"><title>Book My Car - Admin Panel</title><style>
+*{
+    box-sizing:border-box;
+}
 
+body{
+    margin:0;
+    font-family:Arial,sans-serif;
+    background:#f3f6fb;
+    color:#222;
+}
+
+header{
+    background:linear-gradient(135deg,#007bff,#0056d6);
+    color:white;
+    padding:22px 15px;
+    text-align:center;
+}
+
+header h1{
+    margin:0;
+    font-size:28px;
+}
+
+.container{
+    width:95%;
+    max-width:1100px;
+    margin:20px auto;
+}
+
+.login-box,
+.dashboard{
+    background:white;
+    padding:20px;
+    border-radius:14px;
+    box-shadow:0 5px 20px rgba(0,0,0,.10);
+}
+
+.login-box{
+    max-width:450px;
+    margin:30px auto;
+}
+
+h2{
+    color:#007bff;
+    text-align:center;
+}
+
+input{
+    width:100%;
+    padding:13px;
+    margin-top:10px;
+    border:1px solid #ddd;
+    border-radius:8px;
+    font-size:16px;
+}
+
+button{
+    border:0;
+    border-radius:7px;
+    padding:10px 14px;
+    color:white;
+    cursor:pointer;
+    font-weight:bold;
+}
+
+.login-btn{
+    width:100%;
+    margin-top:15px;
+    background:#007bff;
+    font-size:17px;
+}
+
+.logout-btn{
+    background:#dc3545;
+    float:right;
+}
+
+.refresh-btn{
+    background:#198754;
+    margin-bottom:15px;
+}
+
+.booking-card{
+    border:1px solid #ddd;
+    border-radius:12px;
+    padding:16px;
+    margin-top:15px;
+    background:#fafafa;
+}
+
+.booking-card h3{
+    margin-top:0;
+    color:#007bff;
+}
+
+.info{
+    margin:7px 0;
+    line-height:1.5;
+}
+
+.status{
+    display:inline-block;
+    padding:6px 10px;
+    border-radius:20px;
+    font-weight:bold;
+    font-size:13px;
+}
+
+.pending{
+    background:#fff3cd;
+    color:#856404;
+}
+
+.confirmed{
+    background:#d1e7dd;
+    color:#0f5132;
+}
+
+.cancelled{
+    background:#f8d7da;
+    color:#842029;
+}
+
+.action-buttons{
+    display:flex;
+    gap:8px;
+    margin-top:14px;
+    flex-wrap:wrap;
+}
+
+.confirm-btn{
+    background:#198754;
+}
+
+.cancel-btn{
+    background:#dc3545;
+}
+
+.delete-btn{
+    background:#6c757d;
+}
+
+.empty{
+    text-align:center;
+    padding:30px;
+    color:#777;
+}
+
+#error{
+    color:#dc3545;
+    text-align:center;
+    margin-top:10px;
+}
+
+@media(max-width:600px){
+
+    header h1{
+        font-size:24px;
+    }
+
+    .container{
+        width:94%;
+    }
+
+    .booking-card{
+        font-size:15px;
+    }
+
+}
+</style></head><body><header>
+    <h1>🚗 Book My Car - Admin Panel</h1>
+</header><div class="container"><!-- LOGIN --><div class="login-box" id="loginBox"><h2>🔐 Admin Login</h2>
+
+<input
+    type="email"
+    id="email"
+    placeholder="Admin Email"
+>
+
+<input
+    type="password"
+    id="password"
+    placeholder="Password"
+>
+
+<button
+    class="login-btn"
+    onclick="adminLogin()"
+>
+    Login
+</button>
+
+<div id="error"></div>
+
+</div><!-- DASHBOARD --><div
+    class="dashboard"
+    id="dashboard"
+    style="display:none;"
+><button
+    class="logout-btn"
+    onclick="adminLogout()"
+>
+    Logout
+</button>
+
+<h2>📋 Booking Dashboard</h2>
+
+<button
+    class="refresh-btn"
+    onclick="loadBookings()"
+>
+    🔄 Refresh Bookings
+</button>
+
+<div id="bookingList">
+    Loading...
+</div>
+
+</div></div><script type="module">
+
+import {
+    initializeApp
+}
+from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
+
+
+import {
+    getAuth,
+    signInWithEmailAndPassword,
+    onAuthStateChanged,
+    signOut
+}
+from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
+
+
+import {
+    getFirestore,
+    collection,
+    query,
+    orderBy,
+    getDocs,
+    doc,
+    updateDoc,
+    deleteDoc
+}
+from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
+
+
+const firebaseConfig = {
+
+    apiKey:
+    "AIzaSyDD-jSNG_HfhW4aTXtdf0kpdclaDVbgrNA",
+
+    authDomain:
+    "book-my-car-a97cf.firebaseapp.com",
+
+    projectId:
+    "book-my-car-a97cf",
+
+    storageBucket:
+    "book-my-car-a97cf.firebasestorage.app",
+
+    messagingSenderId:
+    "546652899903",
+
+    appId:
+    "1:546652899903:web:c280a58db101e01d1d468a"
+};
+
+
+const app =
+    initializeApp(firebaseConfig);
+
+
+const auth =
+    getAuth(app);
+
+
+const db =
+    getFirestore(app);
+
+
+// LOGIN
+
+window.adminLogin =
+async function(){
+
+    const email =
+        document.getElementById("email")
+        .value.trim();
+
+    const password =
+        document.getElementById("password")
+        .value;
+
+
+    const error =
+        document.getElementById("error");
+
+
+    error.innerText = "";
+
+
+    if(email === "" || password === ""){
+
+        error.innerText =
+            "Email और Password भरें।";
+
+        return;
+    }
+
+
+    try{
+
+        await signInWithEmailAndPassword(
+            auth,
+            email,
+            password
+        );
+
+    }
+    catch(e){
+
+        console.error(e);
+
+        error.innerText =
+            "Login failed: Email या Password गलत है।";
+    }
+
+};
+
+
+// LOGOUT
+
+window.adminLogout =
+async function(){
+
+    await signOut(auth);
+
+};
+
+
+// AUTH STATE
+
+onAuthStateChanged(
+    auth,
+    user => {
+
+        if(user){
+
+            document.getElementById(
+                "loginBox"
+            ).style.display = "none";
+
+
+            document.getElementById(
+                "dashboard"
+            ).style.display = "block";
+
+
+            loadBookings();
+
+        }
+        else{
+
+            document.getElementById(
+                "loginBox"
+            ).style.display = "block";
+
+
+            document.getElementById(
+                "dashboard"
+            ).style.display = "none";
+
+        }
+
+    }
+);
+
+
+// LOAD BOOKINGS
+
+window.loadBookings =
+async function(){
+
+    const list =
+        document.getElementById(
+            "bookingList"
+        );
+
+
+    list.innerHTML =
+        "⏳ Bookings loading...";
+
+
+    try{
+
+        const q =
+            query(
+                collection(db,"bookings"),
+                orderBy(
+                    "createdAt",
+                    "desc"
+                )
+            );
+
+
+        const snapshot =
+            await getDocs(q);
+
+
+        if(snapshot.empty){
+
+            list.innerHTML =
+                '<div class="empty">अभी कोई booking नहीं है।</div>';
+
+            return;
+        }
+
+
+        list.innerHTML = "";
+
+
+        snapshot.forEach(
+            bookingDoc => {
+
+                const data =
+                    bookingDoc.data();
+
+
+                const id =
+                    bookingDoc.id;
+
+
+                const status =
+                    data.status || "Pending";
+
+
+                let statusClass =
+                    "pending";
+
+
+                if(status === "Confirmed"){
+                    statusClass =
+                        "confirmed";
+                }
+
+
+                if(status === "Cancelled"){
+                    statusClass =
+                        "cancelled";
+                }
+
+
+                const card =
+                    document.createElement(
+                        "div"
+                    );
+
+
+                card.className =
+                    "booking-card";
+
+
+                card.innerHTML = `
+
+                    <h3>
+                        🚗 ${escapeHTML(data.car || "Car")}
+                    </h3>
+
+                    <div class="info">
+                        <b>Booking ID:</b>
+                        ${escapeHTML(id)}
+                    </div>
+
+                    <div class="info">
+                        👤 <b>Customer:</b>
+                        ${escapeHTML(data.customer || "-")}
+                    </div>
+
+                    <div class="info">
+                        📞 <b>Mobile:</b>
+                        ${escapeHTML(data.phone || "-")}
+                    </div>
+
+                    <div class="info">
+                        📍 <b>From:</b>
+                        ${escapeHTML(data.pickup || "-")}
+                    </div>
+
+                    <div class="info">
+                        🏁 <b>To:</b>
+                        ${escapeHTML(data.drop || "-")}
+                    </div>
+
+                    <div class="info">
+                        📅 <b>Date:</b>
+                        ${escapeHTML(data.date || "-")}
+                    </div>
+
+                    <div class="info">
+                        ⏰ <b>Time:</b>
+                        ${escapeHTML(data.time || "-")}
+                    </div>
+
+                    <div class="info">
+                        💰 <b>Advance:</b>
+                        ₹${Number(data.advance || 0)}
+                    </div>
+
+                    <div class="info">
+                        👨‍✈️ <b>Driver:</b>
+                        ${escapeHTML(data.driver || "Pending")}
+                    </div>
+
+                    <div class="info">
+                        🚘 <b>Owner:</b>
+                        ${escapeHTML(data.owner || "Pending")}
+                    </div>
+
+                    <div class="info">
+                        <b>Status:</b>
+                        <span class="status ${statusClass}">
+                            ${escapeHTML(status)}
+                        </span>
+                    </div>
+
+                    <div class="action-buttons">
+
+                        <button
+                            class="confirm-btn"
+                            onclick="updateStatus('${id}','Confirmed')"
+                        >
+                            ✅ Confirm
+                        </button>
+
+                        <button
+                            class="cancel-btn"
+                            onclick="updateStatus('${id}','Cancelled')"
+                        >
+                            ❌ Cancel
+                        </button>
+
+                        <button
+                            class="delete-btn"
+                            onclick="deleteBooking('${id}')"
+                        >
+                            🗑 Delete
+                        </button>
+
+                    </div>
+
+                `;
+
+
+                list.appendChild(card);
+
+            }
+        );
+
+    }
+    catch(error){
+
+        console.error(error);
+
+        list.innerHTML =
+            `<div class="empty">
+                ❌ Booking load नहीं हुई।<br><br>
+                Firestore Rules या Index check करें।
+            </div>`;
+
+    }
+
+};
+
+
+// UPDATE STATUS
+
+window.updateStatus =
+async function(id,status){
+
+    try{
+
+        await updateDoc(
+
+            doc(
+                db,
+                "bookings",
+                id
+            ),
+
+            {
+                status: status
+            }
+
+        );
+
+
+        alert(
+            "Booking status: " + status
+        );
+
+
+        loadBookings();
+
+    }
+    catch(error){
+
+        console.error(error);
+
+        alert(
+            "Status update नहीं हुआ।"
+        );
+
+    }
+
+};
+
+
+// DELETE BOOKING
+
+window.deleteBooking =
+async function(id){
+
+    const ok =
+        confirm(
+            "क्या आप यह booking delete करना चाहते हैं?"
+        );
+
+
+    if(!ok){
+        return;
+    }
+
+
+    try{
+
+        await deleteDoc(
+
+            doc(
+                db,
+                "bookings",
+                id
+            )
+
+        );
+
+
+        alert(
+            "Booking delete हो गई।"
+        );
+
+
+        loadBookings();
+
+    }
+    catch(error){
+
+        console.error(error);
+
+        alert(
+            "Booking delete नहीं हुई।"
+        );
+
+    }
+
+};
+
+
+// HTML SECURITY
+
+function escapeHTML(value){
+
+    return String(value)
+        .replace(/&/g,"&amp;")
+        .replace(/</g,"&lt;")
+        .replace(/>/g,"&gt;")
+        .replace(/"/g,"&quot;")
+        .replace(/'/g,"&#039;");
+
+}
+
+</script></body>
+</html>
