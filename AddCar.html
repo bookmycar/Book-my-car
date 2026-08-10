@@ -1,225 +1,540 @@
-<!DOCTYPE html><html lang="hi"><head><meta charset="UTF-8"><meta name="viewport"
-content="width=device-width, initial-scale=1.0">
+<!DOCTYPE html>
+<html lang="hi">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Book My Car - Add Car</title><style>
+<title>Book My Car - Add Car</title>
+
+<style>
+*{
+    box-sizing:border-box;
+}
 
 body{
     margin:0;
     font-family:Arial,sans-serif;
-    background:#f2f6ff;
+    background:#f2f5f9;
+    color:#222;
 }
 
-header{
-    background:#007bff;
+.header{
+    background:linear-gradient(135deg,#0d47a1,#1976d2);
     color:white;
+    padding:22px 15px;
     text-align:center;
-    padding:25px;
+}
+
+.header h1{
+    margin:0;
+    font-size:28px;
+}
+
+.header p{
+    margin:7px 0 0;
+    font-size:14px;
 }
 
 .container{
-    width:92%;
-    max-width:550px;
-    margin:25px auto;
+    max-width:650px;
+    margin:20px auto;
+    padding:0 12px;
 }
 
-.box{
+.card{
     background:white;
+    border-radius:16px;
     padding:20px;
-    border-radius:15px;
-    box-shadow:0 4px 15px #ccc;
+    margin-bottom:18px;
+    box-shadow:0 4px 15px rgba(0,0,0,.08);
 }
 
-h2{
-    text-align:center;
-    color:#007bff;
+.section-title{
+    font-size:19px;
+    font-weight:bold;
+    color:#0d47a1;
+    margin-bottom:15px;
+    padding-bottom:9px;
+    border-bottom:2px solid #e8eef7;
 }
 
 label{
     display:block;
-    margin-top:15px;
     font-weight:bold;
+    margin:13px 0 6px;
+    font-size:14px;
 }
 
 input,select{
     width:100%;
+    padding:13px;
+    border:1px solid #ccd4df;
+    border-radius:9px;
+    font-size:15px;
+    outline:none;
+}
+
+input:focus,select:focus{
+    border-color:#1976d2;
+}
+
+.info{
+    background:#e8f1ff;
+    color:#174a8b;
     padding:12px;
-    margin-top:6px;
-    border:1px solid #ccc;
-    border-radius:7px;
-    font-size:16px;
+    border-radius:9px;
+    font-size:13px;
+    line-height:1.5;
+    margin-top:12px;
+}
+
+.warning{
+    background:#fff7df;
+    color:#765800;
+    padding:12px;
+    border-radius:9px;
+    font-size:13px;
+    line-height:1.5;
+    margin-top:12px;
+}
+
+.switch-row{
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    background:#f7f9fc;
+    padding:13px;
+    border-radius:9px;
+    margin-top:10px;
+}
+
+.switch-row span{
+    font-weight:bold;
+    font-size:14px;
+}
+
+.checkbox{
+    width:20px;
+    height:20px;
 }
 
 button{
     width:100%;
-    padding:14px;
-    margin-top:20px;
-    background:#007bff;
-    color:white;
     border:0;
-    border-radius:7px;
-    font-size:18px;
+    padding:15px;
+    border-radius:10px;
+    background:#0d47a1;
+    color:white;
+    font-size:17px;
     font-weight:bold;
+    cursor:pointer;
 }
 
-.message{
+button:disabled{
+    background:#8fa4c2;
+}
+
+.success{
+    display:none;
+    background:#e8f7ed;
+    color:#176b35;
+    padding:14px;
+    border-radius:9px;
     margin-top:15px;
+    font-weight:bold;
     text-align:center;
-    color:green;
+}
+
+.error{
+    display:none;
+    background:#ffebee;
+    color:#b71c1c;
+    padding:14px;
+    border-radius:9px;
+    margin-top:15px;
     font-weight:bold;
 }
 
-</style></head><body><header><h1>🚗 Book My Car</h1><p>अपनी Car जोड़ें</p></header><div class="container"><div class="box"><h2>🚘 Car Owner Form</h2><label>Owner Name</label>
+.footer{
+    text-align:center;
+    color:#777;
+    font-size:12px;
+    padding:20px;
+}
+</style>
+</head>
 
-<input
-id="ownerName"
-type="text"
-placeholder="Owner का नाम"
+<body>
 
-«»
+<div class="header">
+    <h1>🚗 Book My Car</h1>
+    <p>Advanced Car Registration</p>
+</div>
 
-<label>Owner Mobile</label>
+<div class="container">
 
-<input
-id="ownerPhone"
-type="tel"
-placeholder="10 अंकों का मोबाइल नंबर"
-maxlength="10"
+<form id="carForm">
 
-«»
+<!-- CAR DETAILS -->
+<div class="card">
 
-<label>Car Model</label>
+<div class="section-title">🚘 Car Details</div>
 
-<select id="carModel"><option value="">
-Car चुनें
-</option><option>
-Swift Dzire
-</option><option>
-Ertiga
-</option><option>
-Innova
-</option><option>
-Bolero
-</option><option>
-Scorpio
-</option><option>
-Other
-</option></select><label>Car Number</label>
+<label>Owner Name *</label>
+<input type="text" id="ownerName" placeholder="Owner ka naam" required>
 
-<input
-id="carNumber"
-type="text"
-placeholder="CG13AB1234"
+<label>Owner Mobile Number *</label>
+<input type="tel" id="ownerMobile" placeholder="10 digit mobile number"
+       maxlength="10" required>
 
-«»
+<label>Car Model *</label>
+<input type="text" id="carModel" placeholder="Example: Swift Dzire" required>
+
+<label>Car Number *</label>
+<input type="text" id="carNumber" placeholder="Example: CG04AB1234"
+       style="text-transform:uppercase" required>
 
 <label>Driver Name</label>
+<input type="text" id="driverName" placeholder="Driver ka naam">
 
-<input
-id="driverName"
-type="text"
-placeholder="Driver का नाम"
+<label>Driver Mobile Number</label>
+<input type="tel" id="driverMobile"
+       placeholder="Driver mobile number"
+       maxlength="10">
 
-«»
+<label>Car Available Location *</label>
+<input type="text" id="location"
+       placeholder="Example: Sarangarh"
+       required>
 
-<label>Driver Mobile</label>
+</div>
 
-<input
-id="driverPhone"
-type="tel"
-placeholder="10 अंकों का मोबाइल नंबर"
-maxlength="10"
 
-«»
+<!-- LOCAL BOOKING -->
+<div class="card">
 
-<label>Car उपलब्ध स्थान</label>
+<div class="section-title">📍 Local / Short Distance Booking</div>
 
-<input
-id="location"
-type="text"
-placeholder="जैसे Sarangarh"
+<label>Local Distance Limit</label>
+<input type="number" id="localLimit"
+       value="100" min="100" readonly>
 
-«»
+<label>Local Fixed Rate (₹) *</label>
+<input type="number" id="localFixedRate"
+       placeholder="Example: 1200"
+       min="0" required>
 
-<label>Per Day Rate ₹</label>
+<label>100 KM से अधिक Per KM Rate (₹) *</label>
+<input type="number" id="perKmRate"
+       placeholder="Example: 14"
+       min="0" required>
 
-<input
-id="dayRate"
-type="number"
-placeholder="2500"
+<div class="info">
+ℹ️ 100 KM तक Local Fixed Rate लागू होगा।
+100 KM से अधिक होने पर निर्धारित Per KM Rate लागू होगा।
+</div>
 
-«»
+</div>
 
-<label>Per KM Rate ₹</label>
 
-<input
-id="kmRate"
-type="number"
-placeholder="15"
+<!-- PER DAY -->
+<div class="card">
 
-«»
+<div class="section-title">📅 Per Day Booking</div>
 
-<label>Outstation Rate ₹</label>
+<label>Per Day Car Rent (₹) *</label>
+<input type="number" id="perDayRate"
+       placeholder="Example: 2000"
+       min="0" required>
 
-<input
-id="outstationRate"
-type="number"
-placeholder="3000"
+<div class="switch-row">
+    <span>⛽ Diesel / Petrol — Customer का</span>
+    <input class="checkbox" type="checkbox"
+           id="fuelCustomer" checked>
+</div>
 
-«»
+<div class="switch-row">
+    <span>🛣️ Toll Tax — Customer का</span>
+    <input class="checkbox" type="checkbox"
+           id="tollCustomer" checked>
+</div>
 
-<button
-type="button"
-onclick="submitCar()"
+<label>Driver Allowance (₹ / Day)</label>
+<input type="number" id="driverAllowance"
+       placeholder="Example: 300"
+       min="0">
 
-«»
+<div class="warning">
+⚠️ Per Day booking में Diesel/Petrol और Toll Tax
+Customer के जिम्मे रहेगा।
+</div>
 
-🚗 CAR SUBMIT करें
+</div>
 
-</button><div
-id="message"
-class="message"
-></div></div></div><script>
 
-function submitCar(){
+<!-- OUTSTATION -->
+<div class="card">
 
-    const owner =
-    document.getElementById(
-        "ownerName"
-    ).value;
+<div class="section-title">🛣️ Outstation Booking</div>
 
-    const phone =
-    document.getElementById(
-        "ownerPhone"
-    ).value;
+<label>Outstation Rate (₹ / KM) *</label>
+<input type="number" id="outstationRate"
+       placeholder="Example: 15"
+       min="0" required>
 
-    const car =
-    document.getElementById(
-        "carModel"
-    ).value;
+<label>Minimum Distance / Day (KM)</label>
+<input type="number" id="minimumKm"
+       placeholder="Example: 250"
+       min="0">
 
-    if(owner==="" ||
-       phone==="" ||
-       car===""){
+<div class="switch-row">
+    <span>⛽ Fuel — Customer का</span>
+    <input class="checkbox" type="checkbox"
+           id="outFuelCustomer" checked>
+</div>
 
-        alert(
-            "कृपया Owner Name, Mobile और Car भरें।"
+<div class="switch-row">
+    <span>🛣️ Toll Tax — Customer का</span>
+    <input class="checkbox" type="checkbox"
+           id="outTollCustomer" checked>
+</div>
+
+</div>
+
+
+<!-- COMMISSION -->
+<div class="card">
+
+<div class="section-title">💼 Book My Car Commission</div>
+
+<label>Commission (%) *</label>
+<input type="number" id="commission"
+       placeholder="Example: 10"
+       min="0" max="100" step="0.01"
+       required>
+
+<div class="info">
+💡 Commission booking amount के अनुसार calculate किया जाएगा।
+</div>
+
+</div>
+
+
+<!-- TERMS -->
+<div class="card">
+
+<div class="section-title">📋 Booking Terms</div>
+
+<div class="info">
+✔ Local booking में 100 KM तक Fixed Rate लागू होगा।<br><br>
+
+✔ 100 KM से अधिक होने पर Per KM Rate लागू होगा।<br><br>
+
+✔ Per Day booking में Diesel/Petrol Customer का होगा।<br><br>
+
+✔ Toll Tax Customer का होगा।<br><br>
+
+✔ Driver Allowance अलग से लिया जा सकता है।<br><br>
+
+✔ Commission booking amount के अनुसार calculate होगा।
+</div>
+
+</div>
+
+
+<!-- SUBMIT -->
+<div class="card">
+
+<button type="submit" id="saveBtn">
+🚗 ADD CAR
+</button>
+
+<div class="success" id="successMsg">
+✅ Car Successfully Added!
+</div>
+
+<div class="error" id="errorMsg">
+❌ Car save नहीं हो पाई। कृपया दोबारा कोशिश करें।
+</div>
+
+</div>
+
+</form>
+
+</div>
+
+<div class="footer">
+Created by Arvind Mehar
+</div>
+
+
+<!-- Firebase -->
+<script type="module">
+
+import { initializeApp }
+from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
+
+import {
+    getFirestore,
+    collection,
+    addDoc,
+    serverTimestamp
+}
+from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
+
+
+const firebaseConfig = {
+    apiKey: "AIzaSyDD-jSNG_HfhW4aTXtdf0kpdclaDVbgrNA",
+    authDomain: "book-my-car-a97cf.firebaseapp.com",
+    projectId: "book-my-car-a97cf",
+    storageBucket: "book-my-car-a97cf.firebasestorage.app",
+    messagingSenderId: "YOUR_MESSAGING_SENDER_ID",
+    appId: "YOUR_APP_ID"
+};
+
+
+const app = initializeApp(firebaseConfig);
+const db = getFirestore(app);
+
+
+const form = document.getElementById("carForm");
+const saveBtn = document.getElementById("saveBtn");
+const successMsg = document.getElementById("successMsg");
+const errorMsg = document.getElementById("errorMsg");
+
+
+form.addEventListener("submit", async function(e){
+
+    e.preventDefault();
+
+    successMsg.style.display = "none";
+    errorMsg.style.display = "none";
+
+    saveBtn.disabled = true;
+    saveBtn.innerText = "Saving...";
+
+
+    try{
+
+        const carData = {
+
+            ownerName:
+                document.getElementById("ownerName").value.trim(),
+
+            ownerMobile:
+                document.getElementById("ownerMobile").value.trim(),
+
+            carModel:
+                document.getElementById("carModel").value.trim(),
+
+            carNumber:
+                document.getElementById("carNumber").value.trim().toUpperCase(),
+
+            driverName:
+                document.getElementById("driverName").value.trim(),
+
+            driverMobile:
+                document.getElementById("driverMobile").value.trim(),
+
+            location:
+                document.getElementById("location").value.trim(),
+
+
+            localBooking: {
+
+                distanceLimitKm: 100,
+
+                fixedRate:
+                    Number(document.getElementById("localFixedRate").value),
+
+                above100KmPerKm:
+                    Number(document.getElementById("perKmRate").value)
+
+            },
+
+
+            perDayBooking: {
+
+                dailyRate:
+                    Number(document.getElementById("perDayRate").value),
+
+                fuelCustomer:
+                    document.getElementById("fuelCustomer").checked,
+
+                tollCustomer:
+                    document.getElementById("tollCustomer").checked,
+
+                driverAllowance:
+                    Number(document.getElementById("driverAllowance").value || 0)
+
+            },
+
+
+            outstationBooking: {
+
+                ratePerKm:
+                    Number(document.getElementById("outstationRate").value),
+
+                minimumKmPerDay:
+                    Number(document.getElementById("minimumKm").value || 0),
+
+                fuelCustomer:
+                    document.getElementById("outFuelCustomer").checked,
+
+                tollCustomer:
+                    document.getElementById("outTollCustomer").checked
+
+            },
+
+
+            commissionPercent:
+                Number(document.getElementById("commission").value),
+
+
+            status: "Available",
+
+            createdAt: serverTimestamp()
+
+        };
+
+
+        await addDoc(
+            collection(db, "cars"),
+            carData
         );
 
-        return;
+
+        successMsg.style.display = "block";
+
+        form.reset();
+
+        document.getElementById("localLimit").value = 100;
+
+        document.getElementById("fuelCustomer").checked = true;
+        document.getElementById("tollCustomer").checked = true;
+
+        document.getElementById("outFuelCustomer").checked = true;
+        document.getElementById("outTollCustomer").checked = true;
+
+
+        saveBtn.disabled = false;
+        saveBtn.innerText = "🚗 ADD CAR";
+
+
+    }catch(error){
+
+        console.error(error);
+
+        errorMsg.style.display = "block";
+
+        saveBtn.disabled = false;
+        saveBtn.innerText = "🚗 ADD CAR";
+
     }
 
+});
 
-    document.getElementById(
-        "message"
-    ).innerHTML =
+</script>
 
-    "✅ Car की जानकारी submit हो गई!";
-
-
-    alert(
-        "✅ Car की जानकारी सफलतापूर्वक submit हो गई।"
-    );
-
-}
-
-</script></body></html>
+</body>
+    </html>
