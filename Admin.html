@@ -1,7 +1,12 @@
-<!DOCTYPE html><html lang="hi">
+<!DOCTYPE html>
+<html lang="hi">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0"><title>Book My Car - Admin Panel</title><style>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>Book My Car - Admin Panel</title>
+
+<style>
 *{
     box-sizing:border-box;
 }
@@ -81,10 +86,15 @@ button{
 
 .refresh-btn{
     background:#198754;
-    margin-bottom:15px;
+    margin:5px 5px 15px 0;
 }
 
-.booking-card{
+.car-refresh{
+    background:#0d6efd;
+}
+
+.booking-card,
+.car-card{
     border:1px solid #ddd;
     border-radius:12px;
     padding:16px;
@@ -92,9 +102,18 @@ button{
     background:#fafafa;
 }
 
-.booking-card h3{
+.booking-card h3,
+.car-card h3{
     margin-top:0;
     color:#007bff;
+}
+
+.car-card{
+    border-left:5px solid #198754;
+}
+
+.car-card h3{
+    color:#198754;
 }
 
 .info{
@@ -144,16 +163,50 @@ button{
     background:#6c757d;
 }
 
+.section{
+    margin-top:30px;
+    padding-top:10px;
+    border-top:2px solid #eee;
+}
+
+.section-title{
+    background:#eef5ff;
+    padding:12px;
+    border-radius:8px;
+    color:#0056d6;
+    font-size:21px;
+    font-weight:bold;
+}
+
+.car-title{
+    background:#eaf8ef;
+    color:#198754;
+}
+
 .empty{
     text-align:center;
     padding:30px;
     color:#777;
 }
 
+.loading{
+    text-align:center;
+    padding:20px;
+    color:#007bff;
+}
+
 #error{
     color:#dc3545;
     text-align:center;
     margin-top:10px;
+}
+
+.success{
+    color:#198754;
+}
+
+.danger{
+    color:#dc3545;
 }
 
 @media(max-width:600px){
@@ -166,61 +219,128 @@ button{
         width:94%;
     }
 
-    .booking-card{
+    .booking-card,
+    .car-card{
         font-size:15px;
     }
 
+    button{
+        padding:9px 11px;
+    }
 }
-</style></head><body><header>
+</style>
+</head>
+
+<body>
+
+<header>
     <h1>🚗 Book My Car - Admin Panel</h1>
-</header><div class="container"><!-- LOGIN --><div class="login-box" id="loginBox"><h2>🔐 Admin Login</h2>
+</header>
 
-<input
-    type="email"
-    id="email"
-    placeholder="Admin Email"
->
+<div class="container">
 
-<input
-    type="password"
-    id="password"
-    placeholder="Password"
->
+<!-- LOGIN -->
 
-<button
-    class="login-btn"
-    onclick="adminLogin()"
->
-    Login
-</button>
+<div class="login-box" id="loginBox">
 
-<div id="error"></div>
+    <h2>🔐 Admin Login</h2>
 
-</div><!-- DASHBOARD --><div
+    <input
+        type="email"
+        id="email"
+        placeholder="Admin Email"
+    >
+
+    <input
+        type="password"
+        id="password"
+        placeholder="Password"
+    >
+
+    <button
+        class="login-btn"
+        onclick="adminLogin()"
+    >
+        Login
+    </button>
+
+    <div id="error"></div>
+
+</div>
+
+
+<!-- DASHBOARD -->
+
+<div
     class="dashboard"
     id="dashboard"
     style="display:none;"
-><button
+>
+
+<button
     class="logout-btn"
     onclick="adminLogout()"
 >
     Logout
 </button>
 
-<h2>📋 Booking Dashboard</h2>
 
-<button
-    class="refresh-btn"
-    onclick="loadBookings()"
->
-    🔄 Refresh Bookings
-</button>
+<h2>📊 Admin Dashboard</h2>
 
-<div id="bookingList">
-    Loading...
+
+<!-- BOOKINGS -->
+
+<div class="section">
+
+    <div class="section-title">
+        📋 Booking Dashboard
+    </div>
+
+    <br>
+
+    <button
+        class="refresh-btn"
+        onclick="loadBookings()"
+    >
+        🔄 Refresh Bookings
+    </button>
+
+    <div id="bookingList">
+        Loading...
+    </div>
+
 </div>
 
-</div></div><script type="module">
+
+<!-- CARS -->
+
+<div class="section">
+
+    <div class="section-title car-title">
+        🚗 Added Cars
+    </div>
+
+    <br>
+
+    <button
+        class="refresh-btn car-refresh"
+        onclick="loadCars()"
+    >
+        🔄 Refresh Cars
+    </button>
+
+    <div id="carList">
+        Cars loading...
+    </div>
+
+</div>
+
+</div>
+
+</div>
+
+
+<script type="module">
 
 import {
     initializeApp
@@ -250,6 +370,10 @@ import {
 from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
 
 
+/* =========================
+   FIREBASE CONFIG
+========================= */
+
 const firebaseConfig = {
 
     apiKey:
@@ -275,19 +399,18 @@ const firebaseConfig = {
 const app =
     initializeApp(firebaseConfig);
 
-
 const auth =
     getAuth(app);
-
 
 const db =
     getFirestore(app);
 
 
-// LOGIN
+/* =========================
+   LOGIN
+========================= */
 
-window.adminLogin =
-async function(){
+window.adminLogin = async function(){
 
     const email =
         document.getElementById("email")
@@ -297,22 +420,18 @@ async function(){
         document.getElementById("password")
         .value;
 
-
     const error =
         document.getElementById("error");
 
-
     error.innerText = "";
-
 
     if(email === "" || password === ""){
 
         error.innerText =
-            "Email और Password भरें।";
+        "Email और Password भरें।";
 
         return;
     }
-
 
     try{
 
@@ -328,23 +447,25 @@ async function(){
         console.error(e);
 
         error.innerText =
-            "Login failed: Email या Password गलत है।";
+        "Login failed: Email या Password गलत है।";
     }
-
 };
 
 
-// LOGOUT
+/* =========================
+   LOGOUT
+========================= */
 
-window.adminLogout =
-async function(){
+window.adminLogout = async function(){
 
     await signOut(auth);
 
 };
 
 
-// AUTH STATE
+/* =========================
+   AUTH STATE
+========================= */
 
 onAuthStateChanged(
     auth,
@@ -356,13 +477,13 @@ onAuthStateChanged(
                 "loginBox"
             ).style.display = "none";
 
-
             document.getElementById(
                 "dashboard"
             ).style.display = "block";
 
-
             loadBookings();
+
+            loadCars();
 
         }
         else{
@@ -370,7 +491,6 @@ onAuthStateChanged(
             document.getElementById(
                 "loginBox"
             ).style.display = "block";
-
 
             document.getElementById(
                 "dashboard"
@@ -382,20 +502,19 @@ onAuthStateChanged(
 );
 
 
-// LOAD BOOKINGS
+/* =========================
+   LOAD BOOKINGS
+========================= */
 
-window.loadBookings =
-async function(){
+window.loadBookings = async function(){
 
     const list =
         document.getElementById(
             "bookingList"
         );
 
-
     list.innerHTML =
-        "⏳ Bookings loading...";
-
+        '<div class="loading">⏳ Bookings loading...</div>';
 
     try{
 
@@ -408,22 +527,18 @@ async function(){
                 )
             );
 
-
         const snapshot =
             await getDocs(q);
-
 
         if(snapshot.empty){
 
             list.innerHTML =
-                '<div class="empty">अभी कोई booking नहीं है।</div>';
+            '<div class="empty">अभी कोई booking नहीं है।</div>';
 
             return;
         }
 
-
         list.innerHTML = "";
-
 
         snapshot.forEach(
             bookingDoc => {
@@ -431,45 +546,37 @@ async function(){
                 const data =
                     bookingDoc.data();
 
-
                 const id =
                     bookingDoc.id;
-
 
                 const status =
                     data.status || "Pending";
 
-
                 let statusClass =
                     "pending";
 
-
                 if(status === "Confirmed"){
                     statusClass =
-                        "confirmed";
+                    "confirmed";
                 }
-
 
                 if(status === "Cancelled"){
                     statusClass =
-                        "cancelled";
+                    "cancelled";
                 }
 
-
                 const card =
-                    document.createElement(
-                        "div"
-                    );
-
+                    document.createElement("div");
 
                 card.className =
                     "booking-card";
 
-
                 card.innerHTML = `
 
                     <h3>
-                        🚗 ${escapeHTML(data.car || "Car")}
+                        🚗 ${escapeHTML(
+                            data.car || "Car"
+                        )}
                     </h3>
 
                     <div class="info">
@@ -479,51 +586,70 @@ async function(){
 
                     <div class="info">
                         👤 <b>Customer:</b>
-                        ${escapeHTML(data.customer || "-")}
+                        ${escapeHTML(
+                            data.customer || "-"
+                        )}
                     </div>
 
                     <div class="info">
                         📞 <b>Mobile:</b>
-                        ${escapeHTML(data.phone || "-")}
+                        ${escapeHTML(
+                            data.phone || "-"
+                        )}
                     </div>
 
                     <div class="info">
                         📍 <b>From:</b>
-                        ${escapeHTML(data.pickup || "-")}
+                        ${escapeHTML(
+                            data.pickup || "-"
+                        )}
                     </div>
 
                     <div class="info">
                         🏁 <b>To:</b>
-                        ${escapeHTML(data.drop || "-")}
+                        ${escapeHTML(
+                            data.drop || "-"
+                        )}
                     </div>
 
                     <div class="info">
                         📅 <b>Date:</b>
-                        ${escapeHTML(data.date || "-")}
+                        ${escapeHTML(
+                            data.date || "-"
+                        )}
                     </div>
 
                     <div class="info">
                         ⏰ <b>Time:</b>
-                        ${escapeHTML(data.time || "-")}
+                        ${escapeHTML(
+                            data.time || "-"
+                        )}
                     </div>
 
                     <div class="info">
                         💰 <b>Advance:</b>
-                        ₹${Number(data.advance || 0)}
+                        ₹${Number(
+                            data.advance || 0
+                        )}
                     </div>
 
                     <div class="info">
                         👨‍✈️ <b>Driver:</b>
-                        ${escapeHTML(data.driver || "Pending")}
+                        ${escapeHTML(
+                            data.driver || "Pending"
+                        )}
                     </div>
 
                     <div class="info">
                         🚘 <b>Owner:</b>
-                        ${escapeHTML(data.owner || "Pending")}
+                        ${escapeHTML(
+                            data.owner || "Pending"
+                        )}
                     </div>
 
                     <div class="info">
                         <b>Status:</b>
+
                         <span class="status ${statusClass}">
                             ${escapeHTML(status)}
                         </span>
@@ -533,29 +659,35 @@ async function(){
 
                         <button
                             class="confirm-btn"
-                            onclick="updateStatus('${id}','Confirmed')"
+                            onclick="updateStatus(
+                                '${id}',
+                                'Confirmed'
+                            )"
                         >
                             ✅ Confirm
                         </button>
 
                         <button
                             class="cancel-btn"
-                            onclick="updateStatus('${id}','Cancelled')"
+                            onclick="updateStatus(
+                                '${id}',
+                                'Cancelled'
+                            )"
                         >
                             ❌ Cancel
                         </button>
 
                         <button
                             class="delete-btn"
-                            onclick="deleteBooking('${id}')"
+                            onclick="deleteBooking(
+                                '${id}'
+                            )"
                         >
                             🗑 Delete
                         </button>
 
                     </div>
-
                 `;
-
 
                 list.appendChild(card);
 
@@ -568,17 +700,288 @@ async function(){
         console.error(error);
 
         list.innerHTML =
-            `<div class="empty">
-                ❌ Booking load नहीं हुई।<br><br>
-                Firestore Rules या Index check करें।
-            </div>`;
+        `<div class="empty">
+            ❌ Booking load नहीं हुई।<br><br>
+            Firestore Rules या createdAt field check करें।
+        </div>`;
 
     }
-
 };
 
 
-// UPDATE STATUS
+/* =========================
+   LOAD CARS
+========================= */
+
+window.loadCars = async function(){
+
+    const list =
+        document.getElementById(
+            "carList"
+        );
+
+    list.innerHTML =
+        '<div class="loading">⏳ Cars loading...</div>';
+
+    try{
+
+        /*
+         * IMPORTANT:
+         * यह cars collection पढ़ेगा
+         */
+
+        const q =
+            query(
+                collection(db,"cars"),
+                orderBy(
+                    "createdAt",
+                    "desc"
+                )
+            );
+
+        const snapshot =
+            await getDocs(q);
+
+        if(snapshot.empty){
+
+            list.innerHTML =
+            `<div class="empty">
+                🚗 अभी कोई car add नहीं हुई है।
+                <br><br>
+                AddCar.html से car add करके
+                यहाँ Refresh Cars दबाएँ।
+            </div>`;
+
+            return;
+        }
+
+        list.innerHTML = "";
+
+        snapshot.forEach(
+            carDoc => {
+
+                const data =
+                    carDoc.data();
+
+                const id =
+                    carDoc.id;
+
+
+                /*
+                 * अलग-अलग AddCar versions में
+                 * field names अलग हो सकते हैं।
+                 * इसलिए कई possible names check किए गए हैं।
+                 */
+
+                const carName =
+                    data.carName ||
+                    data.car ||
+                    data.vehicleName ||
+                    data.name ||
+                    "Car";
+
+
+                const owner =
+                    data.ownerName ||
+                    data.owner ||
+                    data.owner_name ||
+                    "-";
+
+
+                const ownerPhone =
+                    data.ownerPhone ||
+                    data.phone ||
+                    data.mobile ||
+                    data.ownerMobile ||
+                    "-";
+
+
+                const driver =
+                    data.driverName ||
+                    data.driver ||
+                    "-";
+
+
+                const driverPhone =
+                    data.driverPhone ||
+                    data.driverMobile ||
+                    "-";
+
+
+                const carNumber =
+                    data.carNumber ||
+                    data.number ||
+                    data.vehicleNumber ||
+                    "Not Available";
+
+
+                const carType =
+                    data.carType ||
+                    data.type ||
+                    "-";
+
+
+                const localRate =
+                    data.localRate ||
+                    data.local_rate ||
+                    data.localPrice ||
+                    data.localRent ||
+                    "";
+
+
+                const outstationRate =
+                    data.outstationRate ||
+                    data.outstation_rate ||
+                    data.outstationPrice ||
+                    data.outstationRent ||
+                    "";
+
+
+                const perKm =
+                    data.perKm ||
+                    data.ratePerKm ||
+                    data.rateKm ||
+                    data.kmRate ||
+                    "";
+
+
+                const commission =
+                    data.commission ||
+                    data.commissionPercent ||
+                    data.commissionRate ||
+                    "";
+
+
+                const status =
+                    data.status ||
+                    "Available";
+
+
+                const card =
+                    document.createElement("div");
+
+                card.className =
+                    "car-card";
+
+
+                card.innerHTML = `
+
+                    <h3>
+                        🚗 ${escapeHTML(carName)}
+                    </h3>
+
+                    <div class="info">
+                        <b>Car ID:</b>
+                        ${escapeHTML(id)}
+                    </div>
+
+                    <div class="info">
+                        🚘 <b>Car Number:</b>
+                        ${escapeHTML(carNumber)}
+                    </div>
+
+                    <div class="info">
+                        🚙 <b>Car Type:</b>
+                        ${escapeHTML(carType)}
+                    </div>
+
+                    <div class="info">
+                        👤 <b>Owner:</b>
+                        ${escapeHTML(owner)}
+                    </div>
+
+                    <div class="info">
+                        📞 <b>Owner Mobile:</b>
+                        ${escapeHTML(ownerPhone)}
+                    </div>
+
+                    <div class="info">
+                        👨‍✈️ <b>Driver:</b>
+                        ${escapeHTML(driver)}
+                    </div>
+
+                    <div class="info">
+                        📞 <b>Driver Mobile:</b>
+                        ${escapeHTML(driverPhone)}
+                    </div>
+
+                    <div class="info">
+                        🏠 <b>Local Rate:</b>
+                        ${localRate !== ""
+                            ? "₹" + escapeHTML(localRate)
+                            : "-"
+                        }
+                    </div>
+
+                    <div class="info">
+                        🛣️ <b>Outstation Rate:</b>
+                        ${outstationRate !== ""
+                            ? "₹" + escapeHTML(outstationRate)
+                            : "-"
+                        }
+                    </div>
+
+                    <div class="info">
+                        📏 <b>Rate / KM:</b>
+                        ${perKm !== ""
+                            ? "₹" + escapeHTML(perKm)
+                            : "-"
+                        }
+                    </div>
+
+                    <div class="info">
+                        💼 <b>Commission:</b>
+                        ${commission !== ""
+                            ? escapeHTML(commission) + "%"
+                            : "-"
+                        }
+                    </div>
+
+                    <div class="info">
+                        📌 <b>Status:</b>
+                        ${escapeHTML(status)}
+                    </div>
+
+                    <div class="action-buttons">
+
+                        <button
+                            class="delete-btn"
+                            onclick="deleteCar('${id}')"
+                        >
+                            🗑 Delete Car
+                        </button>
+
+                    </div>
+
+                `;
+
+                list.appendChild(card);
+
+            }
+        );
+
+    }
+    catch(error){
+
+        console.error(error);
+
+        list.innerHTML =
+        `<div class="empty">
+            ❌ Cars load नहीं हुईं।<br><br>
+
+            संभव कारण:<br>
+            1. Firestore में "cars" collection नहीं है।<br>
+            2. Firestore Rules read की अनुमति नहीं दे रहे हैं।<br>
+            3. createdAt field मौजूद नहीं है।
+        </div>`;
+
+    }
+};
+
+
+/* =========================
+   UPDATE BOOKING STATUS
+========================= */
 
 window.updateStatus =
 async function(id,status){
@@ -594,16 +997,14 @@ async function(id,status){
             ),
 
             {
-                status: status
+                status:status
             }
 
         );
 
-
         alert(
             "Booking status: " + status
         );
-
 
         loadBookings();
 
@@ -621,68 +1022,12 @@ async function(id,status){
 };
 
 
-// DELETE BOOKING
+/* =========================
+   DELETE BOOKING
+========================= */
 
 window.deleteBooking =
 async function(id){
 
     const ok =
         confirm(
-            "क्या आप यह booking delete करना चाहते हैं?"
-        );
-
-
-    if(!ok){
-        return;
-    }
-
-
-    try{
-
-        await deleteDoc(
-
-            doc(
-                db,
-                "bookings",
-                id
-            )
-
-        );
-
-
-        alert(
-            "Booking delete हो गई।"
-        );
-
-
-        loadBookings();
-
-    }
-    catch(error){
-
-        console.error(error);
-
-        alert(
-            "Booking delete नहीं हुई।"
-        );
-
-    }
-
-};
-
-
-// HTML SECURITY
-
-function escapeHTML(value){
-
-    return String(value)
-        .replace(/&/g,"&amp;")
-        .replace(/</g,"&lt;")
-        .replace(/>/g,"&gt;")
-        .replace(/"/g,"&quot;")
-        .replace(/'/g,"&#039;");
-
-}
-
-</script></body>
-</html>
