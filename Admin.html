@@ -72,6 +72,10 @@ button{
     font-weight:bold;
 }
 
+button:active{
+    transform:scale(.98);
+}
+
 .login-btn{
     width:100%;
     margin-top:15px;
@@ -119,6 +123,7 @@ button{
 .info{
     margin:7px 0;
     line-height:1.5;
+    word-break:break-word;
 }
 
 .status{
@@ -142,6 +147,11 @@ button{
 .cancelled{
     background:#f8d7da;
     color:#842029;
+}
+
+.available{
+    background:#d1e7dd;
+    color:#0f5132;
 }
 
 .action-buttons{
@@ -209,6 +219,25 @@ button{
     color:#dc3545;
 }
 
+.firebase-error{
+    background:#fff3cd;
+    color:#664d03;
+    padding:15px;
+    border-radius:10px;
+    margin-top:15px;
+    line-height:1.6;
+}
+
+.count-box{
+    display:inline-block;
+    background:white;
+    padding:8px 14px;
+    border-radius:20px;
+    margin-left:8px;
+    font-size:14px;
+    color:#198754;
+}
+
 @media(max-width:600px){
 
     header h1{
@@ -227,6 +256,12 @@ button{
     button{
         padding:9px 11px;
     }
+
+    .logout-btn{
+        float:none;
+        display:block;
+        margin-left:auto;
+    }
 }
 </style>
 </head>
@@ -239,7 +274,9 @@ button{
 
 <div class="container">
 
-<!-- LOGIN -->
+<!-- =========================
+     LOGIN
+========================= -->
 
 <div class="login-box" id="loginBox">
 
@@ -249,12 +286,14 @@ button{
         type="email"
         id="email"
         placeholder="Admin Email"
+        autocomplete="email"
     >
 
     <input
         type="password"
         id="password"
         placeholder="Password"
+        autocomplete="current-password"
     >
 
     <button
@@ -269,7 +308,9 @@ button{
 </div>
 
 
-<!-- DASHBOARD -->
+<!-- =========================
+     DASHBOARD
+========================= -->
 
 <div
     class="dashboard"
@@ -284,16 +325,20 @@ button{
     Logout
 </button>
 
-
 <h2>📊 Admin Dashboard</h2>
 
 
-<!-- BOOKINGS -->
+<!-- =========================
+     BOOKINGS
+========================= -->
 
 <div class="section">
 
     <div class="section-title">
         📋 Booking Dashboard
+        <span class="count-box" id="bookingCount">
+            0
+        </span>
     </div>
 
     <br>
@@ -312,12 +357,17 @@ button{
 </div>
 
 
-<!-- CARS -->
+<!-- =========================
+     CARS
+========================= -->
 
 <div class="section">
 
     <div class="section-title car-title">
         🚗 Added Cars
+        <span class="count-box" id="carCount">
+            0
+        </span>
     </div>
 
     <br>
@@ -342,11 +392,14 @@ button{
 
 <script type="module">
 
+/* =========================
+   FIREBASE IMPORTS
+========================= */
+
 import {
     initializeApp
 }
 from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
-
 
 import {
     getAuth,
@@ -356,12 +409,9 @@ import {
 }
 from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
 
-
 import {
     getFirestore,
     collection,
-    query,
-    orderBy,
     getDocs,
     doc,
     updateDoc,
@@ -396,6 +446,10 @@ const firebaseConfig = {
 };
 
 
+/* =========================
+   INITIALIZE FIREBASE
+========================= */
+
 const app =
     initializeApp(firebaseConfig);
 
@@ -404,6 +458,27 @@ const auth =
 
 const db =
     getFirestore(app);
+
+
+/* =========================
+   HTML ESCAPE
+========================= */
+
+function escapeHTML(value){
+
+    if(value === null ||
+       value === undefined){
+
+        return "";
+    }
+
+    return String(value)
+        .replace(/&/g,"&amp;")
+        .replace(/</g,"&lt;")
+        .replace(/>/g,"&gt;")
+        .replace(/"/g,"&quot;")
+        .replace(/'/g,"&#039;");
+}
 
 
 /* =========================
@@ -425,7 +500,8 @@ window.adminLogin = async function(){
 
     error.innerText = "";
 
-    if(email === "" || password === ""){
+    if(email === "" ||
+       password === ""){
 
         error.innerText =
         "Email और Password भरें।";
@@ -446,8 +522,33 @@ window.adminLogin = async function(){
 
         console.error(e);
 
-        error.innerText =
-        "Login failed: Email या Password गलत है।";
+        if(e.code ===
+           "auth/invalid-credential"){
+
+            error.innerText =
+            "❌ Email या Password गलत है।";
+
+        }
+        else if(e.code ===
+                "auth/user-not-found"){
+
+            error.innerText =
+            "❌ Admin user नहीं मिला।";
+
+        }
+        else if(e.code ===
+                "auth/wrong-password"){
+
+            error.innerText =
+            "❌ Password गलत है।";
+
+        }
+        else{
+
+            error.innerText =
+            "❌ Login failed: " +
+            e.message;
+        }
     }
 };
 
@@ -458,8 +559,16 @@ window.adminLogin = async function(){
 
 window.adminLogout = async function(){
 
-    await signOut(auth);
+    try{
 
+        await signOut(auth);
+
+    }
+    catch(e){
+
+        console.error(e);
+
+    }
 };
 
 
@@ -513,69 +622,139 @@ window.loadBookings = async function(){
             "bookingList"
         );
 
+    const count =
+        document.getElementById(
+            "bookingCount"
+        );
+
     list.innerHTML =
-        '<div class="loading">⏳ Bookings loading...</div>';
+    '<div class="loading">⏳ Bookings loading...</div>';
 
     try{
 
-        const q =
-            query(
-                collection(db,"bookings"),
-                orderBy(
-                    "createdAt",
-                    "desc"
+        /*
+         * orderBy हटाया गया है।
+         *
+         * इससे createdAt field missing होने पर
+         * भी bookings load होंगी।
+         */
+
+        const snapshot =
+            await getDocs(
+                collection(
+                    db,
+                    "bookings"
                 )
             );
 
-        const snapshot =
-            await getDocs(q);
+        count.innerText =
+            snapshot.size;
 
         if(snapshot.empty){
 
             list.innerHTML =
-            '<div class="empty">अभी कोई booking नहीं है।</div>';
+            '<div class="empty">' +
+            'अभी कोई booking नहीं है।' +
+            '</div>';
 
             return;
         }
 
-        list.innerHTML = "";
+
+        let bookings = [];
 
         snapshot.forEach(
             bookingDoc => {
 
+                bookings.push({
+
+                    id:bookingDoc.id,
+
+                    data:bookingDoc.data()
+
+                });
+
+            }
+        );
+
+
+        /*
+         * createdAt मौजूद हो तो newest पहले
+         */
+
+        bookings.sort(
+            (a,b) => {
+
+                const aTime =
+                    getTime(
+                        a.data.createdAt
+                    );
+
+                const bTime =
+                    getTime(
+                        b.data.createdAt
+                    );
+
+                return bTime - aTime;
+
+            }
+        );
+
+
+        list.innerHTML = "";
+
+
+        bookings.forEach(
+            booking => {
+
                 const data =
-                    bookingDoc.data();
+                    booking.data;
 
                 const id =
-                    bookingDoc.id;
+                    booking.id;
+
 
                 const status =
-                    data.status || "Pending";
+                    data.status ||
+                    "Pending";
+
 
                 let statusClass =
                     "pending";
 
+
                 if(status === "Confirmed"){
+
                     statusClass =
                     "confirmed";
+
                 }
+
 
                 if(status === "Cancelled"){
+
                     statusClass =
                     "cancelled";
+
                 }
 
+
                 const card =
-                    document.createElement("div");
+                    document.createElement(
+                        "div"
+                    );
 
                 card.className =
                     "booking-card";
+
 
                 card.innerHTML = `
 
                     <h3>
                         🚗 ${escapeHTML(
-                            data.car || "Car"
+                            data.car ||
+                            data.carName ||
+                            "Car"
                         )}
                     </h3>
 
@@ -587,72 +766,99 @@ window.loadBookings = async function(){
                     <div class="info">
                         👤 <b>Customer:</b>
                         ${escapeHTML(
-                            data.customer || "-"
+                            data.customer ||
+                            data.name ||
+                            "-"
                         )}
                     </div>
 
                     <div class="info">
                         📞 <b>Mobile:</b>
                         ${escapeHTML(
-                            data.phone || "-"
+                            data.phone ||
+                            data.mobile ||
+                            "-"
                         )}
                     </div>
 
                     <div class="info">
                         📍 <b>From:</b>
                         ${escapeHTML(
-                            data.pickup || "-"
+                            data.pickup ||
+                            data.from ||
+                            "-"
                         )}
                     </div>
 
                     <div class="info">
                         🏁 <b>To:</b>
                         ${escapeHTML(
-                            data.drop || "-"
+                            data.drop ||
+                            data.to ||
+                            "-"
                         )}
                     </div>
 
                     <div class="info">
                         📅 <b>Date:</b>
                         ${escapeHTML(
-                            data.date || "-"
+                            data.date ||
+                            "-"
                         )}
                     </div>
 
                     <div class="info">
                         ⏰ <b>Time:</b>
                         ${escapeHTML(
-                            data.time || "-"
+                            data.time ||
+                            "-"
                         )}
                     </div>
 
                     <div class="info">
-                        💰 <b>Advance:</b>
-                        ₹${Number(
-                            data.advance || 0
+                        💰 <b>Total Amount:</b>
+                        ₹${escapeHTML(
+                            data.total ||
+                            data.amount ||
+                            data.rent ||
+                            "0"
+                        )}
+                    </div>
+
+                    <div class="info">
+                        💵 <b>Advance:</b>
+                        ₹${escapeHTML(
+                            data.advance ||
+                            "0"
                         )}
                     </div>
 
                     <div class="info">
                         👨‍✈️ <b>Driver:</b>
                         ${escapeHTML(
-                            data.driver || "Pending"
+                            data.driver ||
+                            data.driverName ||
+                            "Pending"
                         )}
                     </div>
 
                     <div class="info">
                         🚘 <b>Owner:</b>
                         ${escapeHTML(
-                            data.owner || "Pending"
+                            data.owner ||
+                            data.ownerName ||
+                            "Pending"
                         )}
                     </div>
 
                     <div class="info">
+
                         <b>Status:</b>
 
                         <span class="status ${statusClass}">
                             ${escapeHTML(status)}
                         </span>
+
                     </div>
 
                     <div class="action-buttons">
@@ -660,7 +866,7 @@ window.loadBookings = async function(){
                         <button
                             class="confirm-btn"
                             onclick="updateStatus(
-                                '${id}',
+                                '${escapeHTML(id)}',
                                 'Confirmed'
                             )"
                         >
@@ -670,7 +876,7 @@ window.loadBookings = async function(){
                         <button
                             class="cancel-btn"
                             onclick="updateStatus(
-                                '${id}',
+                                '${escapeHTML(id)}',
                                 'Cancelled'
                             )"
                         >
@@ -680,7 +886,7 @@ window.loadBookings = async function(){
                         <button
                             class="delete-btn"
                             onclick="deleteBooking(
-                                '${id}'
+                                '${escapeHTML(id)}'
                             )"
                         >
                             🗑 Delete
@@ -688,6 +894,7 @@ window.loadBookings = async function(){
 
                     </div>
                 `;
+
 
                 list.appendChild(card);
 
@@ -697,13 +904,32 @@ window.loadBookings = async function(){
     }
     catch(error){
 
-        console.error(error);
+        console.error(
+            "BOOKING ERROR:",
+            error
+        );
+
+        count.innerText = "0";
 
         list.innerHTML =
-        `<div class="empty">
-            ❌ Booking load नहीं हुई।<br><br>
-            Firestore Rules या createdAt field check करें।
-        </div>`;
+        `
+        <div class="firebase-error">
+
+            ❌ <b>Booking load नहीं हुई।</b>
+
+            <br><br>
+
+            Error:
+            ${escapeHTML(error.message)}
+
+            <br><br>
+
+            Firestore में
+            <b>bookings</b>
+            collection और Rules check करें।
+
+        </div>
+        `;
 
     }
 };
@@ -720,58 +946,113 @@ window.loadCars = async function(){
             "carList"
         );
 
+    const count =
+        document.getElementById(
+            "carCount"
+        );
+
     list.innerHTML =
-        '<div class="loading">⏳ Cars loading...</div>';
+    '<div class="loading">⏳ Cars loading...</div>';
 
     try{
 
         /*
          * IMPORTANT:
-         * यह cars collection पढ़ेगा
+         *
+         * यहाँ orderBy इस्तेमाल नहीं किया गया।
+         *
+         * इसलिए अगर createdAt field नहीं है
+         * तब भी cars दिखेंगी।
          */
 
-        const q =
-            query(
-                collection(db,"cars"),
-                orderBy(
-                    "createdAt",
-                    "desc"
+        const snapshot =
+            await getDocs(
+                collection(
+                    db,
+                    "cars"
                 )
             );
 
-        const snapshot =
-            await getDocs(q);
+
+        count.innerText =
+            snapshot.size;
+
 
         if(snapshot.empty){
 
             list.innerHTML =
-            `<div class="empty">
+            `
+            <div class="empty">
+
                 🚗 अभी कोई car add नहीं हुई है।
+
                 <br><br>
+
                 AddCar.html से car add करके
                 यहाँ Refresh Cars दबाएँ।
-            </div>`;
+
+            </div>
+            `;
 
             return;
         }
 
-        list.innerHTML = "";
+
+        let cars = [];
+
 
         snapshot.forEach(
             carDoc => {
 
+                cars.push({
+
+                    id:carDoc.id,
+
+                    data:carDoc.data()
+
+                });
+
+            }
+        );
+
+
+        /*
+         * createdAt हो तो नई car पहले
+         */
+
+        cars.sort(
+            (a,b) => {
+
+                const aTime =
+                    getTime(
+                        a.data.createdAt
+                    );
+
+                const bTime =
+                    getTime(
+                        b.data.createdAt
+                    );
+
+                return bTime - aTime;
+
+            }
+        );
+
+
+        list.innerHTML = "";
+
+
+        cars.forEach(
+            car => {
+
                 const data =
-                    carDoc.data();
+                    car.data;
 
                 const id =
-                    carDoc.id;
+                    car.id;
 
 
-                /*
-                 * अलग-अलग AddCar versions में
-                 * field names अलग हो सकते हैं।
-                 * इसलिए कई possible names check किए गए हैं।
-                 */
+                /* CAR NAME */
 
                 const carName =
                     data.carName ||
@@ -781,12 +1062,16 @@ window.loadCars = async function(){
                     "Car";
 
 
+                /* OWNER */
+
                 const owner =
                     data.ownerName ||
                     data.owner ||
                     data.owner_name ||
                     "-";
 
+
+                /* OWNER PHONE */
 
                 const ownerPhone =
                     data.ownerPhone ||
@@ -796,238 +1081,34 @@ window.loadCars = async function(){
                     "-";
 
 
+                /* DRIVER */
+
                 const driver =
                     data.driverName ||
                     data.driver ||
                     "-";
 
 
+                /* DRIVER PHONE */
+
                 const driverPhone =
                     data.driverPhone ||
                     data.driverMobile ||
+                    data.driverPhoneNumber ||
                     "-";
 
+
+                /* CAR NUMBER */
 
                 const carNumber =
                     data.carNumber ||
                     data.number ||
                     data.vehicleNumber ||
+                    data.registrationNumber ||
                     "Not Available";
 
 
+                /* CAR TYPE */
+
                 const carType =
-                    data.carType ||
-                    data.type ||
-                    "-";
-
-
-                const localRate =
-                    data.localRate ||
-                    data.local_rate ||
-                    data.localPrice ||
-                    data.localRent ||
-                    "";
-
-
-                const outstationRate =
-                    data.outstationRate ||
-                    data.outstation_rate ||
-                    data.outstationPrice ||
-                    data.outstationRent ||
-                    "";
-
-
-                const perKm =
-                    data.perKm ||
-                    data.ratePerKm ||
-                    data.rateKm ||
-                    data.kmRate ||
-                    "";
-
-
-                const commission =
-                    data.commission ||
-                    data.commissionPercent ||
-                    data.commissionRate ||
-                    "";
-
-
-                const status =
-                    data.status ||
-                    "Available";
-
-
-                const card =
-                    document.createElement("div");
-
-                card.className =
-                    "car-card";
-
-
-                card.innerHTML = `
-
-                    <h3>
-                        🚗 ${escapeHTML(carName)}
-                    </h3>
-
-                    <div class="info">
-                        <b>Car ID:</b>
-                        ${escapeHTML(id)}
-                    </div>
-
-                    <div class="info">
-                        🚘 <b>Car Number:</b>
-                        ${escapeHTML(carNumber)}
-                    </div>
-
-                    <div class="info">
-                        🚙 <b>Car Type:</b>
-                        ${escapeHTML(carType)}
-                    </div>
-
-                    <div class="info">
-                        👤 <b>Owner:</b>
-                        ${escapeHTML(owner)}
-                    </div>
-
-                    <div class="info">
-                        📞 <b>Owner Mobile:</b>
-                        ${escapeHTML(ownerPhone)}
-                    </div>
-
-                    <div class="info">
-                        👨‍✈️ <b>Driver:</b>
-                        ${escapeHTML(driver)}
-                    </div>
-
-                    <div class="info">
-                        📞 <b>Driver Mobile:</b>
-                        ${escapeHTML(driverPhone)}
-                    </div>
-
-                    <div class="info">
-                        🏠 <b>Local Rate:</b>
-                        ${localRate !== ""
-                            ? "₹" + escapeHTML(localRate)
-                            : "-"
-                        }
-                    </div>
-
-                    <div class="info">
-                        🛣️ <b>Outstation Rate:</b>
-                        ${outstationRate !== ""
-                            ? "₹" + escapeHTML(outstationRate)
-                            : "-"
-                        }
-                    </div>
-
-                    <div class="info">
-                        📏 <b>Rate / KM:</b>
-                        ${perKm !== ""
-                            ? "₹" + escapeHTML(perKm)
-                            : "-"
-                        }
-                    </div>
-
-                    <div class="info">
-                        💼 <b>Commission:</b>
-                        ${commission !== ""
-                            ? escapeHTML(commission) + "%"
-                            : "-"
-                        }
-                    </div>
-
-                    <div class="info">
-                        📌 <b>Status:</b>
-                        ${escapeHTML(status)}
-                    </div>
-
-                    <div class="action-buttons">
-
-                        <button
-                            class="delete-btn"
-                            onclick="deleteCar('${id}')"
-                        >
-                            🗑 Delete Car
-                        </button>
-
-                    </div>
-
-                `;
-
-                list.appendChild(card);
-
-            }
-        );
-
-    }
-    catch(error){
-
-        console.error(error);
-
-        list.innerHTML =
-        `<div class="empty">
-            ❌ Cars load नहीं हुईं।<br><br>
-
-            संभव कारण:<br>
-            1. Firestore में "cars" collection नहीं है।<br>
-            2. Firestore Rules read की अनुमति नहीं दे रहे हैं।<br>
-            3. createdAt field मौजूद नहीं है।
-        </div>`;
-
-    }
-};
-
-
-/* =========================
-   UPDATE BOOKING STATUS
-========================= */
-
-window.updateStatus =
-async function(id,status){
-
-    try{
-
-        await updateDoc(
-
-            doc(
-                db,
-                "bookings",
-                id
-            ),
-
-            {
-                status:status
-            }
-
-        );
-
-        alert(
-            "Booking status: " + status
-        );
-
-        loadBookings();
-
-    }
-    catch(error){
-
-        console.error(error);
-
-        alert(
-            "Status update नहीं हुआ।"
-        );
-
-    }
-
-};
-
-
-/* =========================
-   DELETE BOOKING
-========================= */
-
-window.deleteBooking =
-async function(id){
-
-    const ok =
-        confirm(
+ 
