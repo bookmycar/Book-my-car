@@ -4,152 +4,247 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Book My Car</title>
+<title>Book My Car - Cab Booking</title>
 
-<link
-  rel="stylesheet"
-  href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"
-/>
+<link rel="stylesheet"
+href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"/>
 
 <style>
 *{
-  box-sizing:border-box;
+    box-sizing:border-box;
 }
 
 body{
-  margin:0;
-  font-family:Arial,sans-serif;
-  background:#f4f7fb;
-  color:#222;
+    margin:0;
+    font-family:Arial,sans-serif;
+    background:#f4f6f8;
+    color:#111;
 }
 
 header{
-  background:linear-gradient(135deg,#0066ff,#00a8ff);
-  color:white;
-  padding:22px 15px;
-  text-align:center;
+    background:#111;
+    color:white;
+    padding:15px 20px;
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    position:sticky;
+    top:0;
+    z-index:999;
 }
 
-header h1{
-  margin:0;
-  font-size:30px;
+.logo{
+    font-size:22px;
+    font-weight:bold;
 }
 
-header p{
-  margin:7px 0 0;
+.logo span{
+    color:#00d084;
+}
+
+.header-btn{
+    background:#00d084;
+    color:#111;
+    border:0;
+    padding:10px 15px;
+    border-radius:8px;
+    font-weight:bold;
+}
+
+.hero{
+    background:linear-gradient(135deg,#111,#252525);
+    color:white;
+    padding:25px 18px 30px;
+}
+
+.hero h1{
+    margin:0 0 8px;
+    font-size:30px;
+}
+
+.hero p{
+    margin:0;
+    color:#ddd;
 }
 
 .container{
-  width:94%;
-  max-width:1100px;
-  margin:20px auto;
+    max-width:1000px;
+    margin:auto;
+    padding:15px;
 }
 
-.card{
-  background:white;
-  border-radius:15px;
-  padding:20px;
-  margin-bottom:20px;
-  box-shadow:0 5px 20px rgba(0,0,0,.08);
-}
-
-h2{
-  margin-top:0;
-  color:#075edb;
+.booking-card{
+    background:white;
+    margin-top:-5px;
+    border-radius:18px;
+    padding:18px;
+    box-shadow:0 5px 25px rgba(0,0,0,.12);
 }
 
 label{
-  display:block;
-  font-weight:bold;
-  margin-top:12px;
-  margin-bottom:6px;
+    display:block;
+    font-size:14px;
+    font-weight:bold;
+    margin-bottom:6px;
 }
 
-input,select,button{
-  width:100%;
-  padding:13px;
-  border-radius:9px;
-  border:1px solid #ccc;
-  font-size:16px;
+input,select{
+    width:100%;
+    padding:13px;
+    border:1px solid #ddd;
+    border-radius:10px;
+    font-size:15px;
+    outline:none;
+}
+
+input:focus,select:focus{
+    border-color:#00a86b;
+}
+
+.location-row{
+    display:grid;
+    grid-template-columns:1fr 1fr;
+    gap:12px;
+}
+
+.location-box{
+    margin-bottom:14px;
+}
+
+.map{
+    height:300px;
+    border-radius:14px;
+    overflow:hidden;
+    margin-top:15px;
 }
 
 button{
-  border:0;
-  background:#0066ff;
-  color:white;
-  font-weight:bold;
-  cursor:pointer;
-  margin-top:15px;
+    cursor:pointer;
 }
 
-button:hover{
-  background:#004dcc;
+.primary{
+    width:100%;
+    padding:15px;
+    border:0;
+    border-radius:12px;
+    background:#00d084;
+    color:#111;
+    font-size:17px;
+    font-weight:bold;
+    margin-top:15px;
 }
 
-#map{
-  height:350px;
-  width:100%;
-  border-radius:12px;
-  margin-top:15px;
-}
-
-.location-buttons{
-  display:grid;
-  grid-template-columns:1fr 1fr;
-  gap:10px;
+.primary:disabled{
+    opacity:.5;
 }
 
 .info{
-  background:#eef6ff;
-  padding:15px;
-  border-radius:10px;
-  margin-top:15px;
+    margin-top:15px;
+    padding:14px;
+    background:#f1f7f4;
+    border-radius:12px;
 }
 
-.car-list{
-  display:grid;
-  grid-template-columns:repeat(auto-fit,minmax(220px,1fr));
-  gap:15px;
+.fare{
+    font-size:25px;
+    font-weight:bold;
+    margin-top:5px;
+}
+
+.cars{
+    display:grid;
+    grid-template-columns:repeat(3,1fr);
+    gap:12px;
+    margin-top:15px;
 }
 
 .car{
-  border:1px solid #ddd;
-  border-radius:12px;
-  padding:15px;
+    border:2px solid #eee;
+    border-radius:14px;
+    padding:15px;
+    background:white;
+    cursor:pointer;
+}
+
+.car.active{
+    border-color:#00c878;
+    background:#f0fff8;
+}
+
+.car-icon{
+    font-size:35px;
 }
 
 .car h3{
-  margin-top:0;
+    margin:8px 0 4px;
 }
 
-.price{
-  font-size:20px;
-  font-weight:bold;
-  color:#087b32;
+.car p{
+    margin:4px 0;
+    color:#666;
+    font-size:13px;
 }
 
-.success{
-  display:none;
-  background:#dff7e6;
-  color:#11652b;
-  padding:15px;
-  border-radius:10px;
-  margin-top:15px;
+.car-price{
+    font-size:18px;
+    font-weight:bold;
 }
 
-.error{
-  display:none;
-  background:#ffe4e4;
-  color:#9b111e;
-  padding:15px;
-  border-radius:10px;
-  margin-top:15px;
+.status{
+    display:none;
+    margin-top:15px;
+    padding:15px;
+    border-radius:12px;
+    background:#111;
+    color:white;
+}
+
+.status strong{
+    color:#00d084;
+}
+
+.booking-details{
+    display:none;
+    margin-top:15px;
+    background:#fff;
+    border-radius:15px;
+    padding:18px;
+    box-shadow:0 3px 15px rgba(0,0,0,.1);
+}
+
+.booking-id{
+    font-size:18px;
+    font-weight:bold;
+}
+
+.small{
+    font-size:13px;
+    color:#777;
 }
 
 footer{
-  text-align:center;
-  padding:25px;
-  color:#666;
+    text-align:center;
+    padding:30px 15px;
+    color:#777;
+}
+
+@media(max-width:700px){
+
+    .location-row{
+        grid-template-columns:1fr;
+    }
+
+    .cars{
+        grid-template-columns:1fr;
+    }
+
+    .hero h1{
+        font-size:25px;
+    }
+
+    .map{
+        height:260px;
+    }
 }
 </style>
 </head>
@@ -157,284 +252,481 @@ footer{
 <body>
 
 <header>
-  <h1>🚗 Book My Car</h1>
-  <p>अपनी पसंद की कार आसानी से बुक करें</p>
+
+<div class="logo">
+🚕 Book <span>My Car</span>
+</div>
+
+<button class="header-btn"
+onclick="showBookings()">
+My Bookings
+</button>
+
 </header>
+
+
+<section class="hero">
 
 <div class="container">
 
-  <!-- Cars -->
-  <div class="card">
-    <h2>🚘 उपलब्ध Cars</h2>
+<h1>अपनी सवारी अभी बुक करें 🚕</h1>
 
-    <div id="carList" class="car-list">
-      <p>Cars loading...</p>
-    </div>
-  </div>
-
-  <!-- Booking -->
-  <div class="card">
-
-    <h2>📋 Booking Details</h2>
-
-    <label>Customer Name</label>
-    <input
-      type="text"
-      id="customerName"
-      placeholder="अपना नाम लिखें"
-    >
-
-    <label>Mobile Number</label>
-    <input
-      type="tel"
-      id="customerPhone"
-      maxlength="10"
-      placeholder="10 digit mobile number"
-    >
-
-    <label>Select Car</label>
-    <select id="carSelect">
-      <option value="">Car चुनें</option>
-    </select>
-
-    <label>Booking Date</label>
-    <input type="date" id="bookingDate">
-
-    <label>Pickup Time</label>
-    <input type="time" id="bookingTime">
-
-    <label>Pickup Location</label>
-    <input
-      type="text"
-      id="pickup"
-      placeholder="Pickup location"
-    >
-
-    <label>Drop Location</label>
-    <input
-      type="text"
-      id="drop"
-      placeholder="Drop location"
-    >
-
-    <div class="location-buttons">
-      <button type="button" onclick="findPickup()">
-        📍 Pickup Map पर खोजें
-      </button>
-
-      <button type="button" onclick="findDrop()">
-        📍 Drop Map पर खोजें
-      </button>
-    </div>
-
-    <div id="map"></div>
-
-    <div class="info">
-      <b>📏 Distance:</b>
-      <span id="distance">0 km</span>
-      <br><br>
-
-      <b>💰 Estimated Fare:</b>
-      <span id="fare">₹0</span>
-    </div>
-
-    <button onclick="submitBooking()">
-      🚗 BOOK CAR NOW
-    </button>
-
-    <div id="success" class="success"></div>
-    <div id="error" class="error"></div>
-
-  </div>
+<p>Pickup और Drop location डालें और अपनी पसंद की कार चुनें।</p>
 
 </div>
 
+</section>
+
+
+<div class="container">
+
+<div class="booking-card">
+
+<h2>🚕 Car Booking</h2>
+
+<div class="location-row">
+
+<div class="location-box">
+
+<label>Pickup Location</label>
+
+<input
+id="pickup"
+type="text"
+placeholder="Pickup location लिखें">
+
+</div>
+
+
+<div class="location-box">
+
+<label>Drop Location</label>
+
+<input
+id="drop"
+type="text"
+placeholder="Drop location लिखें">
+
+</div>
+
+</div>
+
+
+<div class="location-row">
+
+<div>
+
+<label>Travel Date</label>
+
+<input
+id="travelDate"
+type="date">
+
+</div>
+
+<div>
+
+<label>Travel Time</label>
+
+<input
+id="travelTime"
+type="time">
+
+</div>
+
+</div>
+
+
+<div class="map" id="map"></div>
+
+
+<div class="info">
+
+<div>📏 अनुमानित दूरी</div>
+
+<div class="fare" id="distance">
+0 KM
+</div>
+
+</div>
+
+
+<h3>अपनी कार चुनें</h3>
+
+<div class="cars">
+
+<div class="car active"
+data-type="Sedan"
+data-rate="15"
+onclick="selectCar(this)">
+
+<div class="car-icon">🚗</div>
+
+<h3>Sedan</h3>
+
+<p>4 + 1 Seats</p>
+
+<div class="car-price">
+₹15 / KM
+</div>
+
+</div>
+
+
+<div class="car"
+data-type="SUV"
+data-rate="20"
+onclick="selectCar(this)">
+
+<div class="car-icon">🚙</div>
+
+<h3>SUV</h3>
+
+<p>6 + 1 Seats</p>
+
+<div class="car-price">
+₹20 / KM
+</div>
+
+</div>
+
+
+<div class="car"
+data-type="Premium"
+data-rate="28"
+onclick="selectCar(this)">
+
+<div class="car-icon">🚘</div>
+
+<h3>Premium</h3>
+
+<p>4 + 1 Seats</p>
+
+<div class="car-price">
+₹28 / KM
+</div>
+
+</div>
+
+</div>
+
+
+<div class="info">
+
+<div>💰 अनुमानित किराया</div>
+
+<div class="fare">
+₹<span id="fare">0</span>
+</div>
+
+<div class="small">
+* Final fare booking confirmation के समय तय किया जा सकता है।
+</div>
+
+</div>
+
+
+<h3>Customer Details</h3>
+
+<input
+id="customerName"
+type="text"
+placeholder="आपका नाम"
+style="margin-bottom:10px;">
+
+<input
+id="customerPhone"
+type="tel"
+placeholder="मोबाइल नंबर"
+maxlength="10">
+
+
+<button
+class="primary"
+onclick="bookRide()">
+
+🚕 Book My Car
+
+</button>
+
+
+<div class="status" id="status">
+
+Booking Status:
+<strong id="statusText">
+Pending
+</strong>
+
+</div>
+
+</div>
+
+
+<div class="booking-details"
+id="bookingDetails">
+
+<h2>✅ Booking Submitted</h2>
+
+<div class="booking-id">
+Booking ID:
+<span id="bookingId"></span>
+</div>
+
+<p>
+Customer:
+<span id="showName"></span>
+</p>
+
+<p>
+Pickup:
+<span id="showPickup"></span>
+</p>
+
+<p>
+Drop:
+<span id="showDrop"></span>
+</p>
+
+<p>
+Car:
+<span id="showCar"></span>
+</p>
+
+<p>
+Estimated Fare:
+₹<span id="showFare"></span>
+</p>
+
+<p class="small">
+Driver/Car owner booking accept करने के बाद details दिखाई जाएंगी।
+</p>
+
+</div>
+
+</div>
+
+
 <footer>
-  Created by Arvind Mehar
+
+<strong>Book My Car</strong><br>
+Local Cab & Car Booking Service<br><br>
+Created by Arvind Mehar
+
 </footer>
+
+
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+
 
 <script type="module">
 
 import {
-  initializeApp
-} from "https://www.gstatic.com/firebasejs/12.1.0/firebase-app.js";
+initializeApp
+}
+from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
+
 
 import {
-  getFirestore,
-  collection,
-  addDoc,
-  getDocs
-} from "https://www.gstatic.com/firebasejs/12.1.0/firebase-firestore.js";
+getFirestore,
+collection,
+addDoc,
+serverTimestamp
+}
+from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
 
-/* ================================
-   FIREBASE CONFIG
-   ================================ */
+
+// ============================================
+// FIREBASE CONFIG
+// ============================================
+//
+// यहां अपने Firebase Console का वही config रखें
+// जो आपके पुराने Book My Car project में है.
+//
 
 const firebaseConfig = {
-  apiKey: "YOUR_API_KEY",
-  authDomain: "YOUR_PROJECT.firebaseapp.com",
-  projectId: "YOUR_PROJECT_ID",
-  storageBucket: "YOUR_PROJECT.firebasestorage.app",
-  messagingSenderId: "YOUR_MESSAGING_SENDER_ID",
-  appId: "YOUR_APP_ID"
+
+apiKey: "YOUR_API_KEY",
+
+authDomain: "YOUR_PROJECT.firebaseapp.com",
+
+projectId: "YOUR_PROJECT_ID",
+
+storageBucket: "YOUR_PROJECT.firebasestorage.app",
+
+messagingSenderId: "YOUR_MESSAGING_SENDER_ID",
+
+appId: "YOUR_APP_ID"
+
 };
 
+
 const app = initializeApp(firebaseConfig);
+
 const db = getFirestore(app);
 
 
-/* ================================
-   MAP
-   ================================ */
+// ============================================
+// MAP
+// ============================================
 
-let map;
+let map = L.map("map").setView(
+[21.6458, 83.3958],
+10
+);
+
+
+L.tileLayer(
+"https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png",
+{
+maxZoom:19,
+attribution:"© OpenStreetMap"
+}
+).addTo(map);
+
+
 let pickupMarker = null;
 let dropMarker = null;
 
-let pickupCoords = null;
-let dropCoords = null;
 
-let routeLine = null;
+// ============================================
+// MAP CLICK
+// ============================================
 
-window.addEventListener("load", () => {
+let clickMode = "pickup";
 
-  map = L.map("map").setView(
-    [21.6458, 83.3961],
-    10
-  );
 
-  L.tileLayer(
-    "https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png",
-    {
-      attribution:
-        '&copy; OpenStreetMap contributors'
-    }
-  ).addTo(map);
+map.on("click",function(e){
+
+if(clickMode === "pickup"){
+
+if(pickupMarker)
+map.removeLayer(pickupMarker);
+
+pickupMarker =
+L.marker(e.latlng)
+.addTo(map)
+.bindPopup("Pickup")
+.openPopup();
+
+document.getElementById("pickup").value =
+e.latlng.lat.toFixed(5)+", "+
+e.latlng.lng.toFixed(5);
+
+clickMode = "drop";
+
+}else{
+
+if(dropMarker)
+map.removeLayer(dropMarker);
+
+dropMarker =
+L.marker(e.latlng)
+.addTo(map)
+.bindPopup("Drop")
+.openPopup();
+
+document.getElementById("drop").value =
+e.latlng.lat.toFixed(5)+", "+
+e.latlng.lng.toFixed(5);
+
+clickMode = "pickup";
+
+calculateDistance();
+
+}
 
 });
 
 
-/* ================================
-   LOCATION SEARCH
-   ================================ */
+// ============================================
+// CAR SELECT
+// ============================================
 
-async function searchLocation(query){
+window.selectCar = function(element){
 
-  if(!query){
-    alert("Location लिखें");
-    return null;
-  }
+document
+.querySelectorAll(".car")
+.forEach(c =>
+c.classList.remove("active")
+);
 
-  try{
+element.classList.add("active");
 
-    const url =
-      "https://nominatim.openstreetmap.org/search" +
-      "?format=json&limit=1&q=" +
-      encodeURIComponent(query);
+calculateFare();
 
-    const response = await fetch(url);
+};
 
-    const data = await response.json();
 
-    if(!data.length){
+// ============================================
+// DISTANCE
+// ============================================
 
-      alert("Location नहीं मिली");
+function calculateDistance(){
 
-      return null;
-    }
+if(!pickupMarker || !dropMarker){
 
-    return {
-      lat:parseFloat(data[0].lat),
-      lon:parseFloat(data[0].lon),
-      name:data[0].display_name
-    };
+document.getElementById("distance")
+.innerText = "0 KM";
 
-  }catch(error){
+return;
 
-    console.error(error);
+}
 
-    alert("Location search में समस्या हुई");
+let p =
+pickupMarker.getLatLng();
 
-    return null;
-  }
+let d =
+dropMarker.getLatLng();
+
+
+let distance =
+map.distance(p,d)/1000;
+
+
+// Minimum local distance
+distance =
+Math.max(1,Math.round(distance));
+
+
+document.getElementById("distance")
+.innerText =
+distance+" KM";
+
+
+calculateFare();
+
 }
 
 
-/* ================================
-   PICKUP
-   ================================ */
+// ============================================
+// FARE
+// ============================================
 
-window.findPickup = async function(){
+function calculateFare(){
 
-  const location =
-    document.getElementById("pickup").value.trim();
+let distanceText =
+document.getElementById("distance")
+.innerText;
 
-  const result =
-    await searchLocation(location);
-
-  if(!result) return;
-
-  pickupCoords = result;
-
-  if(pickupMarker){
-
-    map.removeLayer(pickupMarker);
-  }
-
-  pickupMarker =
-    L.marker([
-      result.lat,
-      result.lon
-    ])
-    .addTo(map)
-    .bindPopup("📍 Pickup")
-    .openPopup();
-
-  map.setView([
-    result.lat,
-    result.lon
-  ],13);
-
-  calculateRoute();
-
-};
+let distance =
+parseFloat(distanceText);
 
 
-/* ================================
-   DROP
-   ================================ */
-
-window.findDrop = async function(){
-
-  const location =
-    document.getElementById("drop").value.trim();
-
-  const result =
-    await searchLocation(location);
-
-  if(!result) return;
-
-  dropCoords = result;
-
-  if(dropMarker){
-
-    map.removeLayer(dropMarker);
-  }
-
-  dropMarker =
-    L.marker([
-      result.lat,
-      result.lon
-    ])
-    .addTo(map)
-    .bindPopup("📍 Drop")
-    .openPopup();
-
-  calculateRoute();
-
-};
+if(isNaN(distance))
+distance = 0;
 
 
-/* ================================
-   ROUTE + DISTANCE
-  
+let activeCar =
+document.querySelector(".car.active");
+
+
+let rate =
+parseFloat(
+activeCar.dataset.rate
+);
+
+
+let baseFare = 100;
+
+let fare =
+baseFare
