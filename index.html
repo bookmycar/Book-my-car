@@ -4,176 +4,152 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Book My Car - Car Booking</title>
+<title>Book My Car</title>
+
+<link
+  rel="stylesheet"
+  href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"
+/>
 
 <style>
 *{
-    box-sizing:border-box;
+  box-sizing:border-box;
 }
 
 body{
-    margin:0;
-    font-family:Arial,sans-serif;
-    background:#f2f6ff;
-    color:#222;
+  margin:0;
+  font-family:Arial,sans-serif;
+  background:#f4f7fb;
+  color:#222;
 }
 
 header{
-    background:linear-gradient(135deg,#0066ff,#00a8ff);
-    color:white;
-    text-align:center;
-    padding:30px 15px;
+  background:linear-gradient(135deg,#0066ff,#00a8ff);
+  color:white;
+  padding:22px 15px;
+  text-align:center;
 }
 
 header h1{
-    margin:0;
-    font-size:34px;
+  margin:0;
+  font-size:30px;
 }
 
 header p{
-    margin:8px 0 0;
+  margin:7px 0 0;
 }
 
 .container{
-    max-width:900px;
-    margin:25px auto;
-    padding:0 15px;
+  width:94%;
+  max-width:1100px;
+  margin:20px auto;
 }
 
 .card{
-    background:white;
-    border-radius:18px;
-    padding:22px;
-    box-shadow:0 6px 25px rgba(0,0,0,.10);
+  background:white;
+  border-radius:15px;
+  padding:20px;
+  margin-bottom:20px;
+  box-shadow:0 5px 20px rgba(0,0,0,.08);
 }
 
 h2{
-    color:#0066ff;
-    text-align:center;
+  margin-top:0;
+  color:#075edb;
 }
 
 label{
-    display:block;
-    font-weight:bold;
-    margin-top:15px;
-    margin-bottom:6px;
+  display:block;
+  font-weight:bold;
+  margin-top:12px;
+  margin-bottom:6px;
 }
 
-input,
-select{
-    width:100%;
-    padding:13px;
-    border:1px solid #d2dbea;
-    border-radius:9px;
-    font-size:16px;
+input,select,button{
+  width:100%;
+  padding:13px;
+  border-radius:9px;
+  border:1px solid #ccc;
+  font-size:16px;
 }
 
 button{
-    width:100%;
-    margin-top:20px;
-    padding:15px;
-    border:0;
-    border-radius:10px;
-    background:#0066ff;
-    color:white;
-    font-size:17px;
-    font-weight:bold;
-    cursor:pointer;
+  border:0;
+  background:#0066ff;
+  color:white;
+  font-weight:bold;
+  cursor:pointer;
+  margin-top:15px;
 }
 
 button:hover{
-    background:#004dcc;
+  background:#004dcc;
 }
 
-.car-list{
-    display:grid;
-    grid-template-columns:repeat(auto-fit,minmax(220px,1fr));
-    gap:12px;
-    margin-top:15px;
+#map{
+  height:350px;
+  width:100%;
+  border-radius:12px;
+  margin-top:15px;
 }
 
-.car{
-    border:1px solid #dce5f5;
-    border-radius:12px;
-    padding:15px;
-    background:#f9fbff;
-    cursor:pointer;
-}
-
-.car:hover{
-    border-color:#0066ff;
-}
-
-.car-name{
-    font-size:19px;
-    font-weight:bold;
-    color:#0066ff;
-}
-
-.car-price{
-    margin-top:8px;
-    font-weight:bold;
+.location-buttons{
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:10px;
 }
 
 .info{
-    margin-top:15px;
-    background:#eef5ff;
-    padding:12px;
-    border-radius:9px;
-    font-size:14px;
+  background:#eef6ff;
+  padding:15px;
+  border-radius:10px;
+  margin-top:15px;
+}
+
+.car-list{
+  display:grid;
+  grid-template-columns:repeat(auto-fit,minmax(220px,1fr));
+  gap:15px;
+}
+
+.car{
+  border:1px solid #ddd;
+  border-radius:12px;
+  padding:15px;
+}
+
+.car h3{
+  margin-top:0;
+}
+
+.price{
+  font-size:20px;
+  font-weight:bold;
+  color:#087b32;
 }
 
 .success{
-    display:none;
-    margin-top:15px;
-    background:#e8f7ed;
-    color:#176b32;
-    padding:15px;
-    border-radius:10px;
+  display:none;
+  background:#dff7e6;
+  color:#11652b;
+  padding:15px;
+  border-radius:10px;
+  margin-top:15px;
 }
 
 .error{
-    display:none;
-    margin-top:15px;
-    background:#ffecec;
-    color:#a00000;
-    padding:15px;
-    border-radius:10px;
-}
-
-.links{
-    display:flex;
-    gap:10px;
-    margin-top:20px;
-}
-
-.links a{
-    flex:1;
-    text-align:center;
-    text-decoration:none;
-    padding:12px;
-    background:#eef5ff;
-    color:#0066ff;
-    border-radius:8px;
-    font-weight:bold;
+  display:none;
+  background:#ffe4e4;
+  color:#9b111e;
+  padding:15px;
+  border-radius:10px;
+  margin-top:15px;
 }
 
 footer{
-    text-align:center;
-    color:#777;
-    padding:25px;
-}
-
-@media(max-width:600px){
-
-    header h1{
-        font-size:28px;
-    }
-
-    .links{
-        flex-direction:column;
-    }
-
+  text-align:center;
+  padding:25px;
+  color:#666;
 }
 </style>
 </head>
@@ -181,593 +157,284 @@ footer{
 <body>
 
 <header>
-
-<h1>🚗 Book My Car</h1>
-
-<p>आपकी यात्रा, हमारी जिम्मेदारी</p>
-
+  <h1>🚗 Book My Car</h1>
+  <p>अपनी पसंद की कार आसानी से बुक करें</p>
 </header>
-
 
 <div class="container">
 
-<div class="card">
+  <!-- Cars -->
+  <div class="card">
+    <h2>🚘 उपलब्ध Cars</h2>
 
-<h2>🚘 Available Cars</h2>
+    <div id="carList" class="car-list">
+      <p>Cars loading...</p>
+    </div>
+  </div>
 
-<div id="carList" class="car-list">
+  <!-- Booking -->
+  <div class="card">
 
-लोड हो रहा है...
+    <h2>📋 Booking Details</h2>
 
-</div>
+    <label>Customer Name</label>
+    <input
+      type="text"
+      id="customerName"
+      placeholder="अपना नाम लिखें"
+    >
 
+    <label>Mobile Number</label>
+    <input
+      type="tel"
+      id="customerPhone"
+      maxlength="10"
+      placeholder="10 digit mobile number"
+    >
 
-<h2 style="margin-top:30px;">
-📝 Car Booking
-</h2>
+    <label>Select Car</label>
+    <select id="carSelect">
+      <option value="">Car चुनें</option>
+    </select>
 
+    <label>Booking Date</label>
+    <input type="date" id="bookingDate">
 
-<label>
-Customer Name *
-</label>
+    <label>Pickup Time</label>
+    <input type="time" id="bookingTime">
 
-<input
-id="customerName"
-type="text"
-placeholder="अपना नाम"
->
+    <label>Pickup Location</label>
+    <input
+      type="text"
+      id="pickup"
+      placeholder="Pickup location"
+    >
 
+    <label>Drop Location</label>
+    <input
+      type="text"
+      id="drop"
+      placeholder="Drop location"
+    >
 
-<label>
-Mobile Number *
-</label>
+    <div class="location-buttons">
+      <button type="button" onclick="findPickup()">
+        📍 Pickup Map पर खोजें
+      </button>
 
-<input
-id="customerPhone"
-type="tel"
-maxlength="10"
-placeholder="10 अंकों का मोबाइल नंबर"
->
+      <button type="button" onclick="findDrop()">
+        📍 Drop Map पर खोजें
+      </button>
+    </div>
 
+    <div id="map"></div>
 
-<label>
-Pickup Location *
-</label>
+    <div class="info">
+      <b>📏 Distance:</b>
+      <span id="distance">0 km</span>
+      <br><br>
 
-<input
-id="pickup"
-type="text"
-placeholder="जैसे - सारंगढ़"
->
+      <b>💰 Estimated Fare:</b>
+      <span id="fare">₹0</span>
+    </div>
 
+    <button onclick="submitBooking()">
+      🚗 BOOK CAR NOW
+    </button>
 
-<label>
-Drop Location *
-</label>
+    <div id="success" class="success"></div>
+    <div id="error" class="error"></div>
 
-<input
-id="drop"
-type="text"
-placeholder="जैसे - रायगढ़"
->
-
-
-<label>
-Booking Date *
-</label>
-
-<input
-id="bookingDate"
-type="date"
->
-
-
-<label>
-Booking Time *
-</label>
-
-<input
-id="bookingTime"
-type="time"
->
-
-
-<label>
-Select Car *
-</label>
-
-<select id="carSelect">
-
-<option value="">
-पहले Car चुनें
-</option>
-
-</select>
-
-
-<label>
-Advance Amount ₹
-</label>
-
-<input
-id="advance"
-type="number"
-min="0"
-placeholder="Advance राशि"
->
-
-
-<div class="info">
-
-🔒 Car Owner का mobile number booking से पहले customer को नहीं दिखाया जाएगा।
+  </div>
 
 </div>
-
-
-<button id="bookButton">
-
-🚗 BOOK NOW
-
-</button>
-
-
-<div id="success" class="success"></div>
-
-<div id="error" class="error"></div>
-
-
-<div class="links">
-
-<a href="AddCar.html">
-🚘 अपनी Car Add करें
-</a>
-
-<a href="Admin.html">
-🔐 Admin Panel
-</a>
-
-</div>
-
-</div>
-
-</div>
-
 
 <footer>
-
-Created by Arvind Mehar
-
-<br>
-
-© 2026 Book My Car
-
+  Created by Arvind Mehar
 </footer>
-
 
 <script type="module">
 
 import {
-initializeApp
-}
-from
-"https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
-
+  initializeApp
+} from "https://www.gstatic.com/firebasejs/12.1.0/firebase-app.js";
 
 import {
-getFirestore,
-collection,
-getDocs,
-addDoc,
-serverTimestamp
-}
-from
-"https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
+  getFirestore,
+  collection,
+  addDoc,
+  getDocs
+} from "https://www.gstatic.com/firebasejs/12.1.0/firebase-firestore.js";
 
-
-/* Firebase Configuration */
+/* ================================
+   FIREBASE CONFIG
+   ================================ */
 
 const firebaseConfig = {
-
-apiKey:
-"AIzaSyDD-jSNG_HfhW4aTXtdf0kpdclaDVbgrNA",
-
-authDomain:
-"book-my-car-a97cf.firebaseapp.com",
-
-projectId:
-"book-my-car-a97cf",
-
-storageBucket:
-"book-my-car-a97cf.firebasestorage.app",
-
-messagingSenderId:
-"546652899903",
-
-appId:
-"1:546652899903:web:c280a58db101e01d1d468a"
-
+  apiKey: "YOUR_API_KEY",
+  authDomain: "YOUR_PROJECT.firebaseapp.com",
+  projectId: "YOUR_PROJECT_ID",
+  storageBucket: "YOUR_PROJECT.firebasestorage.app",
+  messagingSenderId: "YOUR_MESSAGING_SENDER_ID",
+  appId: "YOUR_APP_ID"
 };
 
-
-const app =
-initializeApp(firebaseConfig);
-
-const db =
-getFirestore(app);
+const app = initializeApp(firebaseConfig);
+const db = getFirestore(app);
 
 
-let cars = [];
+/* ================================
+   MAP
+   ================================ */
 
+let map;
+let pickupMarker = null;
+let dropMarker = null;
 
-const carList =
-document.getElementById("carList");
+let pickupCoords = null;
+let dropCoords = null;
 
-const carSelect =
-document.getElementById("carSelect");
+let routeLine = null;
 
+window.addEventListener("load", () => {
 
-/* Load Cars */
+  map = L.map("map").setView(
+    [21.6458, 83.3961],
+    10
+  );
 
-async function loadCars(){
-
-try{
-
-const snapshot =
-await getDocs(
-collection(db,"cars")
-);
-
-cars=[];
-
-carList.innerHTML="";
-
-carSelect.innerHTML=
-'<option value="">Car चुनें</option>';
-
-
-snapshot.forEach(doc=>{
-
-const car={
-
-id:doc.id,
-
-...doc.data()
-
-};
-
-
-if(car.available === false){
-
-return;
-
-}
-
-
-cars.push(car);
-
-
-/* Dropdown */
-
-const option =
-document.createElement("option");
-
-option.value =
-car.id;
-
-option.textContent =
-`${car.carName} - ${car.seats || ""} Seater`;
-
-carSelect.appendChild(option);
-
-
-/* Card */
-
-const div =
-document.createElement("div");
-
-div.className="car";
-
-div.innerHTML=`
-
-<div class="car-name">
-
-🚗 ${car.carName || "Car"}
-
-</div>
-
-<div>
-
-${car.carType || ""}
-
-</div>
-
-<div>
-
-${car.seats || ""} Seater
-
-</div>
-
-<div class="car-price">
-
-Local ₹${car.localRate || 0}/day
-
-<br>
-
-Outstation ₹${car.outstationRate || 0}/km
-
-</div>
-
-`;
-
-div.onclick=()=>{
-
-carSelect.value=car.id;
-
-};
-
-
-carList.appendChild(div);
+  L.tileLayer(
+    "https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png",
+    {
+      attribution:
+        '&copy; OpenStreetMap contributors'
+    }
+  ).addTo(map);
 
 });
 
 
-if(cars.length===0){
+/* ================================
+   LOCATION SEARCH
+   ================================ */
 
-carList.innerHTML=
-"अभी कोई Available Car नहीं है।";
+async function searchLocation(query){
 
-}
+  if(!query){
+    alert("Location लिखें");
+    return null;
+  }
 
-}catch(error){
+  try{
 
-console.error(error);
+    const url =
+      "https://nominatim.openstreetmap.org/search" +
+      "?format=json&limit=1&q=" +
+      encodeURIComponent(query);
 
-carList.innerHTML=
-"Cars load नहीं हो पाईं। Firebase Rules check करें।";
+    const response = await fetch(url);
 
-}
+    const data = await response.json();
 
-}
+    if(!data.length){
 
+      alert("Location नहीं मिली");
 
-loadCars();
+      return null;
+    }
 
+    return {
+      lat:parseFloat(data[0].lat),
+      lon:parseFloat(data[0].lon),
+      name:data[0].display_name
+    };
 
-/* Booking */
+  }catch(error){
 
-document
-.getElementById("bookButton")
-.addEventListener("click",async()=>{
+    console.error(error);
 
+    alert("Location search में समस्या हुई");
 
-const name =
-document
-.getElementById("customerName")
-.value.trim();
-
-
-const phone =
-document
-.getElementById("customerPhone")
-.value.trim();
-
-
-const pickup =
-document
-.getElementById("pickup")
-.value.trim();
-
-
-const drop =
-document
-.getElementById("drop")
-.value.trim();
-
-
-const date =
-document
-.getElementById("bookingDate")
-.value;
-
-
-const time =
-document
-.getElementById("bookingTime")
-.value;
-
-
-const carId =
-carSelect.value;
-
-
-const advance =
-Number(
-document
-.getElementById("advance")
-.value
-) || 0;
-
-
-const car =
-cars.find(c=>c.id===carId);
-
-
-const success =
-document.getElementById("success");
-
-
-const errorBox =
-document.getElementById("error");
-
-
-success.style.display="none";
-
-errorBox.style.display="none";
-
-
-if(
-!name ||
-!pickup ||
-!drop ||
-!date ||
-!time ||
-!car
-){
-
-errorBox.innerText=
-"कृपया सभी जरूरी जानकारी भरें।";
-
-errorBox.style.display="block";
-
-return;
-
+    return null;
+  }
 }
 
 
-if(
-!/^[6-9][0-9]{9}$/.test(phone)
-){
+/* ================================
+   PICKUP
+   ================================ */
 
-errorBox.innerText=
-"कृपया सही 10 अंकों का mobile number डालें।";
+window.findPickup = async function(){
 
-errorBox.style.display="block";
+  const location =
+    document.getElementById("pickup").value.trim();
 
-return;
+  const result =
+    await searchLocation(location);
 
-}
+  if(!result) return;
 
+  pickupCoords = result;
 
-const button =
-document.getElementById("bookButton");
+  if(pickupMarker){
 
-button.disabled=true;
+    map.removeLayer(pickupMarker);
+  }
 
-button.innerText=
-"⏳ Booking Save हो रही है...";
+  pickupMarker =
+    L.marker([
+      result.lat,
+      result.lon
+    ])
+    .addTo(map)
+    .bindPopup("📍 Pickup")
+    .openPopup();
 
+  map.setView([
+    result.lat,
+    result.lon
+  ],13);
 
-try{
-
-
-const bookingData={
-
-customer:name,
-
-phone:phone,
-
-pickup:pickup,
-
-drop:drop,
-
-date:date,
-
-time:time,
-
-advance:advance,
-
-carId:car.id,
-
-car:car.carName || "",
-
-owner:car.ownerName || "",
-
-driver:car.driverName || "",
-
-status:"Pending",
-
-createdAt:
-serverTimestamp()
+  calculateRoute();
 
 };
 
 
-const bookingRef =
-await addDoc(
-collection(db,"bookings"),
-bookingData
-);
+/* ================================
+   DROP
+   ================================ */
+
+window.findDrop = async function(){
+
+  const location =
+    document.getElementById("drop").value.trim();
+
+  const result =
+    await searchLocation(location);
+
+  if(!result) return;
+
+  dropCoords = result;
+
+  if(dropMarker){
+
+    map.removeLayer(dropMarker);
+  }
+
+  dropMarker =
+    L.marker([
+      result.lat,
+      result.lon
+    ])
+    .addTo(map)
+    .bindPopup("📍 Drop")
+    .openPopup();
+
+  calculateRoute();
+
+};
 
 
-success.innerHTML=`
-
-✅ <b>Booking Successfully Sent!</b>
-
-<br><br>
-
-Booking ID:
-
-<b>${bookingRef.id}</b>
-
-<br><br>
-
-Status:
-
-<b>Pending</b>
-
-<br><br>
-
-Admin confirmation के बाद आपको booking status बताया जाएगा।
-
-`;
-
-
-success.style.display="block";
-
-
-document
-.getElementById("customerName")
-.value="";
-
-document
-.getElementById("customerPhone")
-.value="";
-
-document
-.getElementById("pickup")
-.value="";
-
-document
-.getElementById("drop")
-.value="";
-
-document
-.getElementById("bookingDate")
-.value="";
-
-document
-.getElementById("bookingTime")
-.value="";
-
-document
-.getElementById("advance")
-.value="";
-
-
-carSelect.value="";
-
-
-}catch(err){
-
-console.error(err);
-
-errorBox.innerText=
-"❌ Booking save नहीं हुई: "+err.message;
-
-errorBox.style.display="block";
-
-}
-
-
-button.disabled=false;
-
-button.innerText=
-"🚗 BOOK NOW";
-
-
-});
-
-</script>
-
-</body>
-</html>
+/* ================================
+   ROUTE + DISTANCE
+  
