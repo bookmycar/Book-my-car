@@ -7,6 +7,7 @@
 <title>Book My Car - Add Car</title>
 
 <style>
+
 *{
     box-sizing:border-box;
 }
@@ -14,47 +15,47 @@
 body{
     margin:0;
     font-family:Arial,sans-serif;
-    background:#f2f5f9;
+    background:#f2f6ff;
     color:#222;
 }
 
-.header{
-    background:linear-gradient(135deg,#0d47a1,#1976d2);
+header{
+    background:linear-gradient(135deg,#0066ff,#00a8ff);
     color:white;
-    padding:22px 15px;
     text-align:center;
+    padding:28px 15px;
 }
 
-.header h1{
+header h1{
     margin:0;
-    font-size:28px;
+    font-size:32px;
 }
 
-.header p{
-    margin:7px 0 0;
-    font-size:14px;
+header p{
+    margin:8px 0 0;
 }
 
 .container{
-    max-width:650px;
-    margin:20px auto;
-    padding:0 14px;
+    max-width:750px;
+    margin:25px auto;
+    padding:0 15px;
 }
 
 .card{
     background:white;
-    border-radius:15px;
-    padding:20px;
-    box-shadow:0 4px 18px rgba(0,0,0,0.08);
+    border-radius:18px;
+    padding:22px;
+    box-shadow:0 6px 25px rgba(0,0,0,.10);
 }
 
 .section-title{
-    font-size:19px;
-    font-weight:bold;
-    color:#0d47a1;
-    margin:20px 0 12px;
-    border-bottom:2px solid #e5e5e5;
+    margin-top:22px;
+    margin-bottom:12px;
     padding-bottom:8px;
+    border-bottom:2px solid #eef2f8;
+    color:#0066ff;
+    font-size:20px;
+    font-weight:bold;
 }
 
 .section-title:first-child{
@@ -64,8 +65,8 @@ body{
 label{
     display:block;
     font-weight:bold;
-    margin:12px 0 6px;
-    font-size:14px;
+    margin-top:14px;
+    margin-bottom:6px;
 }
 
 input,
@@ -73,22 +74,20 @@ select,
 textarea{
     width:100%;
     padding:13px;
-    border:1px solid #ccd3dc;
+    border:1px solid #ccd7e5;
     border-radius:9px;
-    font-size:15px;
+    font-size:16px;
     outline:none;
-    background:#fff;
 }
 
 input:focus,
 select:focus,
 textarea:focus{
-    border-color:#1976d2;
-    box-shadow:0 0 0 2px rgba(25,118,210,.10);
+    border-color:#0066ff;
 }
 
 textarea{
-    min-height:80px;
+    min-height:90px;
     resize:vertical;
 }
 
@@ -98,90 +97,108 @@ textarea{
     gap:12px;
 }
 
-.rate-box{
-    background:#f7faff;
-    border:1px solid #dbe8f7;
-    padding:12px;
-    border-radius:10px;
-    margin-top:10px;
-}
-
 button{
     width:100%;
-    border:0;
+    margin-top:22px;
     padding:15px;
+    border:0;
     border-radius:10px;
-    background:#0d47a1;
+    background:#0066ff;
     color:white;
     font-size:17px;
     font-weight:bold;
     cursor:pointer;
-    margin-top:20px;
 }
 
 button:hover{
-    background:#083477;
+    background:#004dcc;
 }
 
 button:disabled{
-    background:#999;
-    cursor:not-allowed;
+    background:#888;
 }
 
 .message{
     display:none;
     margin-top:15px;
-    padding:13px;
-    border-radius:9px;
-    text-align:center;
+    padding:15px;
+    border-radius:10px;
     font-weight:bold;
 }
 
 .success{
     display:block;
-    background:#e8f5e9;
-    color:#1b5e20;
-    border:1px solid #a5d6a7;
+    background:#e8f7ed;
+    color:#176b32;
 }
 
 .error{
     display:block;
-    background:#ffebee;
-    color:#b71c1c;
-    border:1px solid #ef9a9a;
+    background:#ffecec;
+    color:#a00000;
 }
 
-.small{
-    color:#666;
-    font-size:12px;
-    margin-top:5px;
+.note{
+    margin-top:15px;
+    background:#eef5ff;
+    padding:12px;
+    border-radius:9px;
+    font-size:14px;
+    color:#334;
 }
 
-.footer{
+.links{
+    display:flex;
+    gap:10px;
+    margin-top:20px;
+}
+
+.links a{
+    flex:1;
+    text-align:center;
+    text-decoration:none;
+    padding:12px;
+    border-radius:9px;
+    background:#eef5ff;
+    color:#0066ff;
+    font-weight:bold;
+}
+
+footer{
     text-align:center;
     color:#777;
-    font-size:12px;
-    padding:20px;
+    padding:25px;
 }
 
-@media(max-width:500px){
+@media(max-width:600px){
+
     .row{
         grid-template-columns:1fr;
     }
 
-    .header h1{
-        font-size:24px;
+    header h1{
+        font-size:27px;
     }
+
+    .links{
+        flex-direction:column;
+    }
+
 }
+
 </style>
 </head>
 
 <body>
 
-<div class="header">
-    <h1>🚗 Book My Car</h1>
-    <p>Car Owner Registration</p>
-</div>
+<header>
+
+<h1>🚘 Book My Car</h1>
+
+<p>Car Owner Registration</p>
+
+</header>
+
 
 <div class="container">
 
@@ -189,497 +206,808 @@ button:disabled{
 
 <form id="carForm">
 
-<!-- CAR DETAILS -->
-<div class="section-title">🚗 Car Details</div>
 
-<label>Car Name / Model *</label>
+<div class="section-title">
+🚗 Car Details
+</div>
+
+
+<label>
+Car Name / Model *
+</label>
+
 <input
-    type="text"
-    id="carName"
-    placeholder="जैसे Swift Dzire"
-    required
+id="carName"
+type="text"
+placeholder="जैसे Swift Dzire"
+required
 >
 
-<label>Car Type *</label>
+
+<label>
+Car Type *
+</label>
+
 <select id="carType" required>
-    <option value="">Select Car Type</option>
-    <option value="Sedan">Sedan</option>
-    <option value="Hatchback">Hatchback</option>
-    <option value="SUV">SUV</option>
-    <option value="MUV">MUV</option>
-    <option value="Innova">Innova</option>
-    <option value="Tempo Traveller">Tempo Traveller</option>
-    <option value="Other">Other</option>
+
+<option value="">
+Select Car Type
+</option>
+
+<option>
+Sedan
+</option>
+
+<option>
+Hatchback
+</option>
+
+<option>
+SUV
+</option>
+
+<option>
+MUV
+</option>
+
+<option>
+Innova
+</option>
+
+<option>
+Tempo Traveller
+</option>
+
+<option>
+Other
+</option>
+
 </select>
+
 
 <div class="row">
 
 <div>
-<label>Car Number *</label>
+
+<label>
+Car Number *
+</label>
+
 <input
-    type="text"
-    id="carNumber"
-    placeholder="CGXX XX1234"
-    required
+id="carNumber"
+type="text"
+placeholder="CGXX XX1234"
+required
 >
+
 </div>
+
 
 <div>
-<label>Seating Capacity *</label>
+
+<label>
+Seating Capacity *
+</label>
+
 <select id="seats" required>
-    <option value="">Select</option>
-    <option value="4">4 Seater</option>
-    <option value="5">5 Seater</option>
-    <option value="6">6 Seater</option>
-    <option value="7">7 Seater</option>
-    <option value="8">8 Seater</option>
-    <option value="9">9 Seater</option>
-    <option value="12">12 Seater</option>
-    <option value="17">17 Seater</option>
-    <option value="20">20 Seater</option>
+
+<option value="">
+Select
+</option>
+
+<option value="4">
+4 Seater
+</option>
+
+<option value="5">
+5 Seater
+</option>
+
+<option value="6">
+6 Seater
+</option>
+
+<option value="7">
+7 Seater
+</option>
+
+<option value="8">
+8 Seater
+</option>
+
+<option value="9">
+9 Seater
+</option>
+
+<option value="12">
+12 Seater
+</option>
+
+<option value="17">
+17 Seater
+</option>
+
+<option value="20">
+20 Seater
+</option>
+
 </select>
-</div>
 
 </div>
-
-
-<!-- OWNER -->
-<div class="section-title">👤 Owner Details</div>
-
-<label>Owner Name *</label>
-<input
-    type="text"
-    id="ownerName"
-    placeholder="Car owner का नाम"
-    required
->
-
-<label>Owner Mobile Number *</label>
-<input
-    type="tel"
-    id="ownerPhone"
-    placeholder="10 digit mobile number"
-    maxlength="10"
-    inputmode="numeric"
-    required
->
-
-<div class="small">
-Owner का mobile number customer को booking से पहले नहीं दिखाया जाएगा।
-</div>
-
-
-<!-- DRIVER -->
-<div class="section-title">👨‍✈️ Driver Details</div>
-
-<label>Driver Name *</label>
-<input
-    type="text"
-    id="driverName"
-    placeholder="Driver का नाम"
-    required
->
-
-<label>Driver Mobile Number</label>
-<input
-    type="tel"
-    id="driverPhone"
-    placeholder="10 digit mobile number"
-    maxlength="10"
-    inputmode="numeric"
->
-
-
-<!-- LOCATION -->
-<div class="section-title">📍 Location Details</div>
-
-<label>Car Available City / Location *</label>
-<input
-    type="text"
-    id="location"
-    placeholder="जैसे Sarangarh"
-    required
->
-
-<label>Pickup Area / Address</label>
-<textarea
-    id="address"
-    placeholder="Car कहाँ से उपलब्ध होगी?"
-></textarea>
-
-
-<!-- RATES -->
-<div class="section-title">💰 Car Rates</div>
-
-<div class="rate-box">
-
-<label>Local Rate - Per Day (₹) *</label>
-<input
-    type="number"
-    id="localRate"
-    placeholder="जैसे 2500"
-    min="0"
-    required
->
-
-<label>Outstation Rate - Per KM (₹) *</label>
-<input
-    type="number"
-    id="outstationRate"
-    placeholder="जैसे 14"
-    min="0"
-    step="0.01"
-    required
->
-
-<label>Driver Allowance - Per Day (₹)</label>
-<input
-    type="number"
-    id="driverAllowance"
-    placeholder="जैसे 300"
-    min="0"
-    value="0"
->
 
 </div>
 
 
-<!-- SERVICE -->
-<div class="section-title">🛣️ Service Details</div>
 
-<label>Available For *</label>
+<div class="section-title">
+👤 Owner Details
+</div>
+
+
+<label>
+Owner Name *
+</label>
+
+<input
+id="ownerName"
+type="text"
+placeholder="Owner का नाम"
+required
+>
+
+
+<label>
+Owner Mobile *
+</label>
+
+<input
+id="ownerPhone"
+type="tel"
+maxlength="10"
+inputmode="numeric"
+placeholder="10 अंकों का mobile"
+required
+>
+
+
+<div class="note">
+
+🔒 Owner का mobile number customer को booking से पहले नहीं दिखाया जाएगा।
+
+</div>
+
+
+
+<div class="section-title">
+👨‍✈️ Driver Details
+</div>
+
+
+<label>
+Driver Name *
+</label>
+
+<input
+id="driverName"
+type="text"
+placeholder="Driver का नाम"
+required
+>
+
+
+<label>
+Driver Mobile
+</label>
+
+<input
+id="driverPhone"
+type="tel"
+maxlength="10"
+inputmode="numeric"
+placeholder="Driver mobile"
+>
+
+
+
+<div class="section-title">
+📍 Location & Service
+</div>
+
+
+<label>
+Available Location *
+</label>
+
+<input
+id="location"
+type="text"
+placeholder="जैसे सारंगढ़"
+required
+>
+
+
+<label>
+Service Type *
+</label>
+
 <select id="serviceType" required>
-    <option value="">Select Service</option>
-    <option value="Local">Local</option>
-    <option value="Outstation">Outstation</option>
-    <option value="Both">Local + Outstation</option>
+
+<option value="">
+Select Service
+</option>
+
+<option value="Local">
+Local
+</option>
+
+<option value="Outstation">
+Outstation
+</option>
+
+<option value="Both">
+Local + Outstation
+</option>
+
 </select>
 
-<label>Additional Information</label>
-<textarea
-    id="description"
-    placeholder="AC, luggage space, special information आदि"
-></textarea>
 
 
-<!-- COMMISSION -->
-<div class="section-title">💼 Commission</div>
-
-<label>Book My Car Commission (%)</label>
-<input
-    type="number"
-    id="commission"
-    value="10"
-    min="0"
-    max="100"
-    step="0.1"
->
-
-<div class="small">
-Commission केवल admin/owner system के लिए रखा गया है।
+<div class="section-title">
+💰 Car Rates
 </div>
 
 
-<!-- SUBMIT -->
-<button type="submit" id="saveBtn">
-    🚗 Save Car
+<div class="row">
+
+<div>
+
+<label>
+Local Rate ₹ / Day *
+</label>
+
+<input
+id="localRate"
+type="number"
+min="0"
+placeholder="जैसे 2500"
+required
+>
+
+</div>
+
+
+<div>
+
+<label>
+Outstation Rate ₹ / KM *
+</label>
+
+<input
+id="outstationRate"
+type="number"
+min="0"
+step="0.01"
+placeholder="जैसे 15"
+required
+>
+
+</div>
+
+</div>
+
+
+<label>
+Driver Allowance ₹ / Day
+</label>
+
+<input
+id="driverAllowance"
+type="number"
+min="0"
+value="0"
+>
+
+
+<div class="section-title">
+💼 Commission
+</div>
+
+
+<label>
+Book My Car Commission %
+</label>
+
+<input
+id="commission"
+type="number"
+min="0"
+max="100"
+step="0.1"
+value="10"
+>
+
+
+<div class="note">
+
+💡 Commission Admin के लिए record होगी। Customer को commission अलग से नहीं दिखाया जाएगा।
+
+</div>
+
+
+
+<div class="section-title">
+📝 Additional Information
+</div>
+
+
+<label>
+Car / Trip Rules
+</label>
+
+<textarea
+id="description"
+placeholder="AC, luggage space, toll, diesel/petrol आदि की जानकारी"
+></textarea>
+
+
+
+<button
+id="saveButton"
+type="submit"
+>
+
+🚗 SAVE CAR
+
 </button>
 
-<div id="message" class="message"></div>
+
+<div
+id="message"
+class="message"
+></div>
+
 
 </form>
 
+
+<div class="links">
+
+<a href="index.html">
+🏠 Booking Website
+</a>
+
+<a href="Admin.html">
+🔐 Admin Panel
+</a>
+
 </div>
 
-<div class="footer">
-    Created by Arvind Mehar<br>
-    © 2026 Book My Car
 </div>
 
 </div>
 
 
-<!-- Firebase -->
+<footer>
+
+Created by Arvind Mehar
+
+<br>
+
+© 2026 Book My Car
+
+</footer>
+
+
+
 <script type="module">
 
-import { initializeApp }
-from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
 
 import {
-    getFirestore,
-    collection,
-    addDoc,
-    serverTimestamp
+
+initializeApp
+
 }
-from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
+
+from
+
+"https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
 
 
-// ===============================
-// FIREBASE CONFIGURATION
-// ===============================
+
+import {
+
+getFirestore,
+collection,
+addDoc,
+serverTimestamp
+
+}
+
+from
+
+"https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
+
+
+
+/* =========================
+   FIREBASE CONFIG
+========================= */
 
 const firebaseConfig = {
 
-    apiKey: "AIzaSyDD-jSNG_HfhW4aTXtdf0kpdclaDVbgrNA",
+apiKey:
+"AIzaSyDD-jSNG_HfhW4aTXtdf0kpdclaDVbgrNA",
 
-    authDomain: "book-my-car-a97cf.firebaseapp.com",
+authDomain:
+"book-my-car-a97cf.firebaseapp.com",
 
-    projectId: "book-my-car-a97cf",
+projectId:
+"book-my-car-a97cf",
 
-    storageBucket: "book-my-car-a97cf.firebasestorage.app",
+storageBucket:
+"book-my-car-a97cf.firebasestorage.app",
 
-    messagingSenderId: "546652899903",
+messagingSenderId:
+"546652899903",
 
-    appId: "1:546652899903:web:c280a58db101e011d468a"
+appId:
+"1:546652899903:web:c280a58db101e01d1d468a"
+
 };
 
 
-// ===============================
-// INITIALIZE FIREBASE
-// ===============================
 
-const app = initializeApp(firebaseConfig);
-
-const db = getFirestore(app);
+const app =
+initializeApp(firebaseConfig);
 
 
-// ===============================
-// FORM
-// ===============================
-
-const carForm = document.getElementById("carForm");
-
-const saveBtn = document.getElementById("saveBtn");
-
-const message = document.getElementById("message");
+const db =
+getFirestore(app);
 
 
-// ===============================
-// MESSAGE FUNCTION
-// ===============================
 
-function showMessage(text, type){
+/* =========================
+   FORM
+========================= */
 
-    message.textContent = text;
+const form =
+document.getElementById("carForm");
 
-    message.className = "message " + type;
+
+const saveButton =
+document.getElementById("saveButton");
+
+
+const message =
+document.getElementById("message");
+
+
+
+form.addEventListener(
+"submit",
+async function(event){
+
+event.preventDefault();
+
+
+message.className="message";
+
+message.style.display="none";
+
+
+const ownerPhone =
+document
+.getElementById("ownerPhone")
+.value
+.trim();
+
+
+const driverPhone =
+document
+.getElementById("driverPhone")
+.value
+.trim();
+
+
+
+/* Mobile Validation */
+
+if(
+!/^[6-9][0-9]{9}$/.test(ownerPhone)
+){
+
+message.innerText=
+"❌ कृपया सही Owner mobile number डालें।";
+
+message.className=
+"message error";
+
+return;
 
 }
 
 
-// ===============================
-// SAVE CAR
-// ===============================
 
-carForm.addEventListener("submit", async function(e){
+if(
+driverPhone &&
+!/^[6-9][0-9]{9}$/.test(driverPhone)
+){
 
-    e.preventDefault();
+message.innerText=
+"❌ कृपया सही Driver mobile number डालें।";
 
-    showMessage("", "");
+message.className=
+"message error";
 
-    saveBtn.disabled = true;
+return;
 
-    saveBtn.textContent = "⏳ Saving...";
+}
 
 
-    try{
 
-        // Get values
+saveButton.disabled=true;
 
-        const carName =
-            document.getElementById("carName").value.trim();
+saveButton.innerText=
+"⏳ Car Save हो रही है...";
 
-        const carType =
-            document.getElementById("carType").value;
 
-        const carNumber =
-            document.getElementById("carNumber").value.trim().toUpperCase();
 
-        const seats =
-            document.getElementById("seats").value;
+try{
 
-        const ownerName =
-            document.getElementById("ownerName").value.trim();
 
-        const ownerPhone =
-            document.getElementById("ownerPhone").value.trim();
+/* =========================
+   CAR DATA
+========================= */
 
-        const driverName =
-            document.getElementById("driverName").value.trim();
+const carData={
 
-        const driverPhone =
-            document.getElementById("driverPhone").value.trim();
 
-        const location =
-            document.getElementById("location").value.trim();
+carName:
 
-        const address =
-            document.getElementById("address").value.trim();
+document
+.getElementById("carName")
+.value
+.trim(),
 
-        const localRate =
-            Number(document.getElementById("localRate").value);
 
-        const outstationRate =
-            Number(document.getElementById("outstationRate").value);
+carType:
 
-        const driverAllowance =
-            Number(document.getElementById("driverAllowance").value || 0);
+document
+.getElementById("carType")
+.value,
 
-        const serviceType =
-            document.getElementById("serviceType").value;
 
-        const description =
-            document.getElementById("description").value.trim();
+carNumber:
 
-        const commission =
-            Number(document.getElementById("commission").value || 0);
+document
+.getElementById("carNumber")
+.value
+.trim()
+.toUpperCase(),
 
 
-        // ===============================
-        // MOBILE VALIDATION
-        // ===============================
+seats:
 
-        if(!/^[6-9][0-9]{9}$/.test(ownerPhone)){
+Number(
+document
+.getElementById("seats")
+.value
+),
 
-            throw new Error(
-                "कृपया सही 10 digit Owner mobile number डालें।"
-            );
 
-        }
+ownerName:
 
+document
+.getElementById("ownerName")
+.value
+.trim(),
 
-        if(
-            driverPhone !== "" &&
-            !/^[6-9][0-9]{9}$/.test(driverPhone)
-        ){
 
-            throw new Error(
-                "कृपया सही 10 digit Driver mobile number डालें।"
-            );
+ownerPhone:
 
-        }
+ownerPhone,
 
 
-        // ===============================
-        // FIRESTORE DATA
-        // ===============================
+driverName:
 
-        const carData = {
+document
+.getElementById("driverName")
+.value
+.trim(),
 
-            // Car
-            carName: carName,
-            carType: carType,
-            carNumber: carNumber,
-            seats: Number(seats),
 
-            // Owner
-            ownerName: ownerName,
-            ownerPhone: ownerPhone,
+driverPhone:
 
-            // Driver
-            driverName: driverName,
-            driverPhone: driverPhone,
+driverPhone,
 
-            // Location
-            location: location,
-            address: address,
 
-            // Rates
-            localRate: localRate,
-            outstationRate: outstationRate,
-            driverAllowance: driverAllowance,
+location:
 
-            // Service
-            serviceType: serviceType,
-            description: description,
+document
+.getElementById("location")
+.value
+.trim(),
 
-            // Commission
-            commission: commission,
 
-            // Status
-            status: "Pending",
-            available: true,
+serviceType:
 
-            // Date
-            createdAt: serverTimestamp(),
+document
+.getElementById("serviceType")
+.value,
 
-            // Source
-            source: "AddCar"
 
-        };
+localRate:
 
+Number(
+document
+.getElementById("localRate")
+.value
+),
 
-        // ===============================
-        // ADD TO FIRESTORE
-        // ===============================
 
-        const docRef = await addDoc(
-            collection(db, "cars"),
-            carData
-        );
+outstationRate:
 
+Number(
+document
+.getElementById("outstationRate")
+.value
+),
 
-        console.log(
-            "Car saved with ID:",
-            docRef.id
-        );
 
+driverAllowance:
 
-        // ===============================
-        // SUCCESS
-        // ===============================
+Number(
+document
+.getElementById("driverAllowance")
+.value
+) || 0,
 
-        showMessage(
-            "✅ Car successfully Firebase में save हो गई!",
-            "success"
-        );
 
-        carForm.reset();
+commission:
 
-        document.getElementById("commission").value = "10";
+Number(
+document
+.getElementById("commission")
+.value
+) || 0,
 
-    }
 
-    catch(error){
+description:
 
-        console.error(
-            "Car Save Error:",
-            error
-        );
+document
+.getElementById("description")
+.value
+.trim(),
 
 
-        // Firebase permission error
-        if(error.code === "permission-denied"){
+/* Important */
 
-            showMessage(
-                "❌ Firebase permission denied. Firestore Rules check करें।",
-                "error"
-            );
+status:
+"Pending",
 
-        }
 
-        else{
+available:
+true,
 
-            showMessage(
-                "❌ Car save नहीं हो पाई: " + error.message,
-                "error"
-            );
 
-        }
+createdAt:
+serverTimestamp(),
 
-    }
 
-    finally{
+source:
+"Book My Car"
 
-        saveBtn.disabled = false;
+};
 
-        saveBtn.textContent = "🚗 Save Car";
 
-    }
+
+/* =========================
+   SAVE TO FIRESTORE
+========================= */
+
+const carRef =
+await addDoc(
+collection(db,"cars"),
+carData
+);
+
+
+
+/* SUCCESS */
+
+message.innerHTML=`
+
+✅ <b>Car Successfully Saved!</b>
+
+<br><br>
+
+Car ID:
+
+<b>${carRef.id}</b>
+
+<br><br>
+
+Admin Panel में car दिखाई देगी।
+
+<br><br>
+
+Status:
+
+<b>Pending</b>
+
+`;
+
+
+message.className=
+"message success";
+
+
+message.style.display=
+"block";
+
+
+
+/* Reset */
+
+form.reset();
+
+
+document
+.getElementById("commission")
+.value="10";
+
+
+
+}
+catch(error){
+
+console.error(
+"Firebase Error:",
+error
+);
+
+
+message.innerHTML=`
+
+❌ <b>Car Save नहीं हो पाई।</b>
+
+<br><br>
+
+${error.message}
+
+<br><br>
+
+Firebase Firestore Rules check करें।
+
+`;
+
+
+message.className=
+"message error";
+
+
+message.style.display=
+"block";
+
+
+
+}
+finally{
+
+
+saveButton.disabled=false;
+
+saveButton.innerText=
+"🚗 SAVE CAR";
+
+
+}
 
 });
 
+
 </script>
+
 
 </body>
 </html>
