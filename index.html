@@ -3,13 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1.0">
-
 <title>Book My Car</title>
-
-<link
- rel="stylesheet"
- href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"
-/>
 
 <style>
 *{box-sizing:border-box}
@@ -30,20 +24,17 @@ header{
  align-items:center;
  position:sticky;
  top:0;
- z-index:1000;
+ z-index:100;
  box-shadow:0 3px 12px #0003;
 }
 
-.logo{
- font-size:21px;
- font-weight:bold;
-}
+.logo{font-size:21px;font-weight:bold}
 
 .header-btn{
  border:0;
  background:#fff;
  color:#0057d9;
- padding:10px 14px;
+ padding:10px 13px;
  border-radius:10px;
  font-weight:bold;
  cursor:pointer;
@@ -55,19 +46,9 @@ header{
  padding:14px;
 }
 
-.hero{
- text-align:center;
- padding:18px 5px;
-}
-
-.hero h1{
- color:#0057d9;
- margin:5px;
-}
-
-.hero p{
- color:#666;
-}
+.hero{text-align:center;padding:18px 5px}
+.hero h1{color:#0057d9;margin:5px}
+.hero p{color:#666}
 
 .card{
  background:#fff;
@@ -77,10 +58,7 @@ header{
  box-shadow:0 5px 18px #00000012;
 }
 
-.card h2{
- margin-top:0;
- font-size:20px;
-}
+.card h2{margin-top:0;font-size:20px}
 
 label{
  display:block;
@@ -100,7 +78,6 @@ input,select{
 input:focus,select:focus{
  outline:none;
  border-color:#06f;
- box-shadow:0 0 0 3px #0066ff14;
 }
 
 .row{
@@ -109,13 +86,15 @@ input:focus,select:focus{
  gap:12px;
 }
 
-.trip-buttons{
+.trip-buttons,
+.journey-buttons{
  display:grid;
  grid-template-columns:1fr 1fr;
  gap:10px;
 }
 
-.trip-btn{
+.trip-btn,
+.journey-btn{
  padding:13px;
  border:2px solid #d9e1ee;
  border-radius:10px;
@@ -124,18 +103,11 @@ input:focus,select:focus{
  cursor:pointer;
 }
 
-.trip-btn.active{
+.trip-btn.active,
+.journey-btn.active{
  background:#06f;
  color:#fff;
  border-color:#06f;
-}
-
-#map{
- height:280px;
- margin-top:15px;
- border-radius:13px;
- overflow:hidden;
- border:1px solid #ddd;
 }
 
 .distance-box{
@@ -151,13 +123,12 @@ input:focus,select:focus{
  font-size:29px;
  font-weight:bold;
  color:#0057d9;
- margin:5px;
+ margin:6px;
 }
 
-.small{
- font-size:12px;
- color:#777;
- line-height:1.5;
+.distance-sub{
+ font-size:13px;
+ color:#555;
 }
 
 .btn{
@@ -178,7 +149,7 @@ input:focus,select:focus{
 }
 
 .btn:disabled{
- background:#aaa;
+ background:#999;
  cursor:not-allowed;
 }
 
@@ -193,36 +164,17 @@ input:focus,select:focus{
  border-radius:14px;
  padding:14px;
  cursor:pointer;
- background:#fff;
 }
 
 .car.selected{
  border-color:#06f;
  background:#f1f7ff;
- box-shadow:0 4px 12px #06f2;
 }
 
-.car-icon{
- font-size:35px;
-}
-
-.car-name{
- font-size:18px;
- font-weight:bold;
- margin-top:5px;
-}
-
-.car-info{
- font-size:13px;
- color:#666;
- margin-top:5px;
-}
-
-.car-price{
- font-weight:bold;
- color:#06f;
- margin-top:9px;
-}
+.car-icon{font-size:34px}
+.car-name{font-size:18px;font-weight:bold;margin-top:5px}
+.car-info{font-size:13px;color:#666;margin-top:5px}
+.car-price{font-weight:bold;color:#06f;margin-top:9px}
 
 .fare{
  background:#f7f9fc;
@@ -253,16 +205,25 @@ input:focus,select:focus{
  border-radius:10px;
  margin-top:12px;
  font-weight:bold;
+ line-height:1.5;
 }
 
 .success{
+ display:block;
  background:#e8fff0;
  color:#08752c;
 }
 
 .error{
+ display:block;
  background:#fff0f0;
  color:#b00020;
+}
+
+.info{
+ display:block;
+ background:#eef6ff;
+ color:#0057d9;
 }
 
 .booking-result{
@@ -303,6 +264,13 @@ input:focus,select:focus{
  padding:20px;
 }
 
+.small{
+ font-size:12px;
+ color:#777;
+ line-height:1.5;
+ margin-top:8px;
+}
+
 footer{
  text-align:center;
  padding:25px 10px;
@@ -311,24 +279,11 @@ footer{
 }
 
 @media(max-width:650px){
-
- .row,
- .cars{
+ .row,.cars{
   grid-template-columns:1fr;
  }
-
- .container{
-  padding:11px;
- }
-
- .card{
-  padding:15px;
- }
-
- #map{
-  height:250px;
- }
-
+ .container{padding:11px}
+ .card{padding:15px}
 }
 </style>
 </head>
@@ -336,197 +291,142 @@ footer{
 <body>
 
 <header>
+<div class="logo">🚕 Book My Car</div>
 
-<div class="logo">
-🚕 Book My Car
-</div>
-
-<button
- class="header-btn"
- onclick="showBookings()">
+<button class="header-btn" id="myBookingsBtn">
 📋 My Bookings
 </button>
-
 </header>
-
 
 <div class="container">
 
 <div class="hero">
-
-<h1>
-अपनी सवारी अभी बुक करें 🚕
-</h1>
-
-<p>
-Pickup और Drop डालें और अपनी कार चुनें।
-</p>
-
+<h1>अपनी सवारी अभी बुक करें 🚕</h1>
+<p>Pickup और Drop डालें और अपनी कार चुनें।</p>
 </div>
 
 
-<!-- LOCATION -->
-
+<!-- TRIP DETAILS -->
 <div class="card">
 
 <h2>📍 Trip Details</h2>
 
-<label>
-Pickup Location
-</label>
+<label>Pickup Location</label>
+<input id="pickup" placeholder="जैसे Sarangarh">
 
-<input
- id="pickup"
- type="text"
- placeholder="जैसे Sarangarh"
->
-
-<label>
-Drop Location
-</label>
-
-<input
- id="drop"
- type="text"
- placeholder="जैसे Raigarh"
->
+<label>Drop Location</label>
+<input id="drop" placeholder="जैसे Raigarh">
 
 
 <div class="row">
 
 <div>
-
-<label>
-Travel Date
-</label>
-
-<input
- id="travelDate"
- type="date"
->
-
+<label>Travel Date</label>
+<input type="date" id="travelDate">
 </div>
-
 
 <div>
-
-<label>
-Travel Time
-</label>
-
-<input
- id="travelTime"
- type="time"
->
-
+<label>Travel Time</label>
+<input type="time" id="travelTime">
 </div>
 
 </div>
 
 
-<label>
-Trip Type
-</label>
+<label>Trip Type</label>
 
 <div class="trip-buttons">
 
-<button
- type="button"
- id="localBtn"
- class="trip-btn active"
- onclick="setTripType('local')">
-
+<button type="button"
+class="trip-btn active"
+id="localBtn">
 🏙️ Local
-
 </button>
 
-
-<button
- type="button"
- id="outstationBtn"
- class="trip-btn"
- onclick="setTripType('outstation')">
-
+<button type="button"
+class="trip-btn"
+id="outstationBtn">
 🛣️ Outstation
-
 </button>
 
 </div>
 
 
-<div id="map"></div>
+<label>Journey Type</label>
+
+<div class="journey-buttons">
+
+<button type="button"
+class="journey-btn active"
+id="oneWayBtn">
+➡️ One Way
+</button>
+
+<button type="button"
+class="journey-btn"
+id="roundTripBtn">
+🔄 Round Trip
+</button>
+
+</div>
 
 
 <div class="distance-box">
 
-<div>
-📏 Road Distance
-</div>
+<div>📏 अनुमानित Road Distance</div>
 
-<div
- class="distance"
- id="distance">
-
+<div class="distance" id="distance">
 0 KM
-
 </div>
 
-<div
- class="small"
- id="distanceMessage">
-
-Pickup और Drop डालने के बाद
-Distance Calculate करें।
-
+<div class="distance-sub" id="distanceMessage">
+Pickup और Drop डालकर Distance Calculate करें।
 </div>
 
 </div>
 
 
 <button
- class="btn"
- id="calculateBtn"
- onclick="calculateDistance()">
-
-📍 Road Distance Calculate करें
-
+type="button"
+class="btn"
+id="calculateBtn">
+📍 Distance Calculate करें
 </button>
+
+<div id="distanceStatus" class="status"></div>
 
 </div>
 
 
 <!-- CARS -->
-
 <div class="card">
 
-<h2>
-🚗 Available Cars
-</h2>
+<h2>🚗 Available Cars</h2>
 
 <div id="carsContainer">
-
 <div class="empty">
-⏳ Firebase से cars load हो रही हैं...
+⏳ Cars load हो रही हैं...
 </div>
-
 </div>
 
 </div>
 
 
 <!-- FARE -->
-
 <div class="card">
 
-<h2>
-💰 Estimated Fare
-</h2>
+<h2>💰 Estimated Fare</h2>
 
 <div class="fare">
 
 <div class="fare-line">
 <span>Car</span>
 <strong id="fareCar">-</strong>
+</div>
+
+<div class="fare-line">
+<span>Journey</span>
+<strong id="fareJourney">One Way</strong>
 </div>
 
 <div class="fare-line">
@@ -557,215 +457,125 @@ Distance Calculate करें।
 </div>
 
 <div class="small">
-
-Local में minimum 100 KM लागू है।
-Outstation में road distance के अनुसार
-Rate/KM calculate होगा।
-
+Local में minimum 100 KM One Way और 200 KM Round Trip रखा गया है।
+Outstation में road distance के अनुसार calculation होगा।
 </div>
 
 </div>
 
 
 <!-- CUSTOMER -->
-
 <div class="card">
 
-<h2>
-👤 Customer Details
-</h2>
+<h2>👤 Customer Details</h2>
 
-<label>
-आपका नाम
-</label>
+<label>आपका नाम</label>
+<input id="customerName" placeholder="पूरा नाम">
 
+<label>मोबाइल नंबर</label>
 <input
- id="customerName"
- placeholder="पूरा नाम"
->
+id="customerPhone"
+type="tel"
+maxlength="10"
+inputmode="numeric"
+placeholder="10 digit mobile number">
 
-
-<label>
-मोबाइल नंबर
-</label>
-
-<input
- id="customerPhone"
- type="tel"
- maxlength="10"
- inputmode="numeric"
- placeholder="10 digit mobile number"
->
-
-
-<label>
-Passengers
-</label>
+<label>Passengers</label>
 
 <select id="passengers">
-
-<option value="1">
-1 Passenger
-</option>
-
-<option value="2">
-2 Passengers
-</option>
-
-<option value="3">
-3 Passengers
-</option>
-
-<option value="4">
-4 Passengers
-</option>
-
-<option value="5">
-5 Passengers
-</option>
-
-<option value="6">
-6 Passengers
-</option>
-
-<option value="7">
-7 Passengers
-</option>
-
-<option value="8">
-8 Passengers
-</option>
-
+<option value="1">1 Passenger</option>
+<option value="2">2 Passengers</option>
+<option value="3">3 Passengers</option>
+<option value="4">4 Passengers</option>
+<option value="5">5 Passengers</option>
+<option value="6">6 Passengers</option>
+<option value="7">7 Passengers</option>
+<option value="8">8 Passengers</option>
 </select>
 
-
 <button
- class="btn green"
- id="bookButton"
- onclick="bookCar()">
-
+type="button"
+class="btn green"
+id="bookButton">
 🚕 Book My Car
-
 </button>
 
-
-<div
- id="status"
- class="status">
-</div>
+<div id="status" class="status"></div>
 
 </div>
 
 
-<!-- RESULT -->
-
+<!-- BOOKING RESULT -->
 <div
- class="card booking-result"
- id="bookingResult">
+class="card booking-result"
+id="bookingResult">
 
-<h2>
-✅ Booking Submitted
-</h2>
+<h2>✅ Booking Submitted</h2>
 
 <div class="booking-id">
-
 Booking ID:
-
-<div id="resultBookingId">
--
+<div id="resultBookingId">-</div>
 </div>
-
-</div>
-
 
 <div class="booking-card">
 
-<p>
-<b>Customer:</b>
-<span id="resultCustomer"></span>
-</p>
+<p><b>Customer:</b>
+<span id="resultCustomer"></span></p>
 
-<p>
-<b>Mobile:</b>
-<span id="resultPhone"></span>
-</p>
+<p><b>Mobile:</b>
+<span id="resultPhone"></span></p>
 
-<p>
-<b>Pickup:</b>
-<span id="resultPickup"></span>
-</p>
+<p><b>Pickup:</b>
+<span id="resultPickup"></span></p>
 
-<p>
-<b>Drop:</b>
-<span id="resultDrop"></span>
-</p>
+<p><b>Drop:</b>
+<span id="resultDrop"></span></p>
 
-<p>
-<b>Car:</b>
-<span id="resultCar"></span>
-</p>
+<p><b>Trip:</b>
+<span id="resultTrip"></span></p>
 
-<p>
-<b>Trip:</b>
-<span id="resultTrip"></span>
-</p>
+<p><b>Journey:</b>
+<span id="resultJourney"></span></p>
 
-<p>
-<b>Distance:</b>
-<span id="resultDistance"></span>
-KM
-</p>
+<p><b>Car:</b>
+<span id="resultCar"></span></p>
 
-<p>
-<b>Travel:</b>
-<span id="resultTravel"></span>
-</p>
+<p><b>Distance:</b>
+<span id="resultDistance"></span> KM</p>
 
-<p>
-<b>Estimated Fare:</b>
-₹<span id="resultFare">0</span>
-</p>
+<p><b>Travel:</b>
+<span id="resultTravel"></span></p>
+
+<p><b>Estimated Fare:</b>
+₹<span id="resultFare">0</span></p>
 
 <p>
 <b>Status:</b>
-
-<span class="badge">
-Pending
-</span>
-
+<span class="badge">Pending</span>
 </p>
 
 <hr>
 
 <div class="small">
-
-🔐 Driver/Car Owner की private details
-booking accept होने के बाद ही दिखाई जाएंगी।
-
+🔐 Driver/Car Owner की private details booking accept होने के बाद ही दिखाई जाएंगी।
 </div>
 
 </div>
-
 </div>
 
 
 <!-- MY BOOKINGS -->
-
 <div
- class="card"
- id="myBookings"
- style="display:none">
+class="card"
+id="myBookings"
+style="display:none">
 
-<h2>
-📋 मेरी Bookings
-</h2>
+<h2>📋 मेरी Bookings</h2>
 
 <div id="bookingsList">
-
 <div class="empty">
 अभी कोई booking नहीं मिली।
 </div>
-
 </div>
 
 </div>
@@ -774,27 +584,21 @@ booking accept होने के बाद ही दिखाई जाएं
 
 
 <footer>
-
 Book My Car<br>
 Local Cab & Car Booking Service<br>
 Created by Arvind Mehar
-
 </footer>
-
-
-<script
- src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js">
-</script>
 
 
 <script type="module">
 
+/* =====================================
+ FIREBASE
+===================================== */
+
 import {
  initializeApp
-}
-from
-"https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
-
+} from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
 
 import {
  getFirestore,
@@ -802,34 +606,23 @@ import {
  addDoc,
  getDocs,
  serverTimestamp
-}
-from
-"https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
+} from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
 
-
-/* =====================================
- FIREBASE
-===================================== */
 
 const firebaseConfig={
-
- apiKey:
- "AIzaSyDD-jSNG_HfhW4aTXtdf0kpdclaDVbgrNA",
-
- authDomain:
- "book-my-car-a97cf.firebaseapp.com",
-
- projectId:
- "book-my-car-a97cf"
-
+ apiKey:"AIzaSyDD-jSNG_HfhW4aTXtdf0kpdclaDVbgrNA",
+ authDomain:"book-my-car-a97cf.firebaseapp.com",
+ projectId:"book-my-car-a97cf"
 };
 
+let db=null;
 
-const app=
-initializeApp(firebaseConfig);
-
-const db=
-getFirestore(app);
+try{
+ const app=initializeApp(firebaseConfig);
+ db=getFirestore(app);
+}catch(error){
+ console.error("Firebase:",error);
+}
 
 
 /* =====================================
@@ -837,89 +630,108 @@ getFirestore(app);
 ===================================== */
 
 let cars=[];
-
 let selectedCar=null;
 
+let tripType="local";
+let journeyType="oneway";
+
+let currentOneWayDistance=0;
 let currentDistance=0;
 
-let tripType="local";
 
-let map;
+/* =====================================
+ ELEMENTS
+===================================== */
 
-let pickupMarker=null;
-
-let dropMarker=null;
-
-let routeLine=null;
+const $=id=>document.getElementById(id);
 
 
 /* =====================================
  DATE
 ===================================== */
 
-const dateInput=
-document.getElementById("travelDate");
+const dateInput=$("travelDate");
 
 const today=
-new Date()
-.toISOString()
-.split("T")[0];
+new Date().toISOString().split("T")[0];
 
 dateInput.min=today;
-
 dateInput.value=today;
 
 
 /* =====================================
- MAP
+ TRIP BUTTONS
 ===================================== */
 
-map=L.map("map")
-.setView(
- [21.64,83.40],
- 8
-);
+$("localBtn").onclick=()=>{
+ tripType="local";
 
-
-L.tileLayer(
- "https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png",
- {
-  maxZoom:19,
-  attribution:
-  "&copy; OpenStreetMap contributors"
- }
-).addTo(map);
-
-
-/* =====================================
- TRIP TYPE
-===================================== */
-
-window.setTripType=function(type){
-
- tripType=type;
-
- document
- .getElementById("localBtn")
- .classList.toggle(
-  "active",
-  type==="local"
- );
-
- document
- .getElementById("outstationBtn")
- .classList.toggle(
-  "active",
-  type==="outstation"
- );
+ $("localBtn").classList.add("active");
+ $("outstationBtn").classList.remove("active");
 
  calculateFare();
+};
 
+$("outstationBtn").onclick=()=>{
+ tripType="outstation";
+
+ $("outstationBtn").classList.add("active");
+ $("localBtn").classList.remove("active");
+
+ calculateFare();
 };
 
 
 /* =====================================
- GEOCODING
+ JOURNEY BUTTONS
+===================================== */
+
+$("oneWayBtn").onclick=()=>{
+ journeyType="oneway";
+
+ $("oneWayBtn").classList.add("active");
+ $("roundTripBtn").classList.remove("active");
+
+ if(currentOneWayDistance>0){
+  updateJourneyDistance();
+ }
+
+ calculateFare();
+};
+
+
+$("roundTripBtn").onclick=()=>{
+ journeyType="roundtrip";
+
+ $("roundTripBtn").classList.add("active");
+ $("oneWayBtn").classList.remove("active");
+
+ if(currentOneWayDistance>0){
+  updateJourneyDistance();
+ }
+
+ calculateFare();
+};
+
+
+/* =====================================
+ DISTANCE STATUS
+===================================== */
+
+function distanceMessage(message,type){
+
+ const box=$("distanceStatus");
+
+ box.innerText=message;
+
+ box.className="status "+type;
+
+ box.style.display="block";
+}
+
+
+/* =====================================
+ GEOCODE
 ===================================== */
 
 async function geocode(place){
@@ -929,320 +741,338 @@ async function geocode(place){
  "?format=json"+
  "&limit=1"+
  "&countrycodes=in"+
- "&q="+
- encodeURIComponent(place);
+ "&q="+encodeURIComponent(place);
 
+ const controller=
+ new AbortController();
 
- const response=
- await fetch(url);
+ const timeout=
+ setTimeout(
+  ()=>controller.abort(),
+  10000
+ );
 
+ try{
 
- if(!response.ok){
-
-  throw new Error(
-   "Location service unavailable"
+  const response=
+  await fetch(
+   url,
+   {
+    signal:controller.signal,
+    headers:{
+     "Accept":"application/json"
+    }
+   }
   );
 
+  if(!response.ok){
+   throw new Error(
+    "Location service error"
+   );
+  }
+
+  const data=
+  await response.json();
+
+  if(!data.length){
+   throw new Error(
+    "Location नहीं मिली"
+   );
+  }
+
+  return{
+   lat:Number(data[0].lat),
+   lon:Number(data[0].lon),
+   name:data[0].display_name
+  };
+
+ }finally{
+  clearTimeout(timeout);
  }
-
-
- const data=
- await response.json();
-
-
- if(!data.length){
-
-  throw new Error(
-   "Location not found: "+place
-  );
-
- }
-
-
- return{
-
-  lat:
-  Number(data[0].lat),
-
-  lon:
-  Number(data[0].lon),
-
-  name:
-  data[0].display_name
-
- };
 
 }
 
 
 /* =====================================
- ROAD ROUTE
+ ROAD DISTANCE
 ===================================== */
 
-async function getRoadRoute(pickup,drop){
+async function roadDistance(a,b){
 
  const url=
  "https://router.project-osrm.org/route/v1/driving/"+
- pickup.lon+","+pickup.lat+
+ a.lon+","+a.lat+
  ";"+
- drop.lon+","+drop.lat+
- "?overview=full&geometries=geojson";
+ b.lon+","+b.lat+
+ "?overview=false";
 
+ const controller=
+ new AbortController();
 
- const response=
- await fetch(url);
+ const timeout=
+ setTimeout(
+  ()=>controller.abort(),
+  15000
+ );
 
+ try{
 
- if(!response.ok){
-
-  throw new Error(
-   "Road routing failed"
+  const response=
+  await fetch(
+   url,
+   {
+    signal:controller.signal
+   }
   );
 
+  if(!response.ok){
+   throw new Error(
+    "Road routing service error"
+   );
+  }
+
+  const data=
+  await response.json();
+
+  if(
+   data.code!=="Ok" ||
+   !data.routes ||
+   !data.routes.length
+  ){
+   throw new Error(
+    "Road route नहीं मिली"
+   );
+  }
+
+  return data.routes[0].distance/1000;
+
+ }finally{
+  clearTimeout(timeout);
  }
-
-
- const data=
- await response.json();
-
-
- if(
-  data.code!=="Ok" ||
-  !data.routes ||
-  !data.routes.length
- ){
-
-  throw new Error(
-   "Road route नहीं मिली"
-  );
-
- }
-
-
- return data.routes[0];
 
 }
 
 
 /* =====================================
- CALCULATE DISTANCE
+ FALLBACK STRAIGHT DISTANCE
 ===================================== */
 
-window.calculateDistance=
+function straightDistance(a,b){
+
+ const R=6371;
+
+ const lat1=a.lat*Math.PI/180;
+ const lat2=b.lat*Math.PI/180;
+
+ const dLat=
+ (b.lat-a.lat)*Math.PI/180;
+
+ const dLon=
+ (b.lon-a.lon)*Math.PI/180;
+
+ const x=
+ Math.sin(dLat/2)**2+
+ Math.cos(lat1)*
+ Math.cos(lat2)*
+ Math.sin(dLon/2)**2;
+
+ return R*2*Math.atan2(
+  Math.sqrt(x),
+  Math.sqrt(1-x)
+ );
+
+}
+
+
+/* =====================================
+ DISTANCE BUTTON
+===================================== */
+
+$("calculateBtn").onclick=
 async function(){
 
- const pickupText=
- document
- .getElementById("pickup")
- .value
- .trim();
+ distanceMessage(
+  "⏳ Location search और road distance calculate हो रही है...",
+  "info"
+ );
+
+ const pickup=
+ $("pickup").value.trim();
+
+ const drop=
+ $("drop").value.trim();
 
 
- const dropText=
- document
- .getElementById("drop")
- .value
- .trim();
+ if(!pickup||!drop){
 
-
- if(!pickupText||!dropText){
-
-  showStatus(
-   "पहले Pickup और Drop location डालें।",
+  distanceMessage(
+   "❌ पहले Pickup और Drop दोनों डालें।",
    "error"
   );
 
   return;
-
  }
 
 
- const button=
- document
- .getElementById("calculateBtn");
-
+ const button=$("calculateBtn");
 
  button.disabled=true;
 
  button.innerText=
- "⏳ Road distance calculate हो रही है...";
+ "⏳ Calculate हो रहा है...";
 
 
  try{
 
-  const pickup=
-  await geocode(pickupText);
+  const p=
+  await geocode(pickup);
 
+  const d=
+  await geocode(drop);
 
-  const drop=
-  await geocode(dropText);
+  let distance;
 
+  try{
 
-  const route=
-  await getRoadRoute(
-   pickup,
-   drop
-  );
+   distance=
+   await roadDistance(p,d);
 
+  }catch(routeError){
 
-  /*
-   OSRM distance meters में देता है।
-   KM में convert किया गया।
-  */
+   console.warn(routeError);
 
-  let roadDistance=
-  route.distance/1000;
+   /*
+    Road API unavailable होने पर
+    straight distance fallback।
+   */
 
+   distance=
+   straightDistance(p,d);
 
-  roadDistance=
-  Math.ceil(roadDistance);
-
-
-  if(roadDistance<1){
-
-   roadDistance=1;
-
-  }
-
-
-  /*
-   Local minimum 100 KM
-  */
-
-  if(
-   tripType==="local" &&
-   roadDistance<100
-  ){
-
-   currentDistance=100;
-
-   document
-   .getElementById(
-    "distanceMessage"
-   )
-   .innerText=
-   "Local booking में minimum 100 KM लागू है। वास्तविक road distance "+
-   roadDistance+
-   " KM है।";
-
-  }else{
-
-   currentDistance=
-   roadDistance;
-
-   document
-   .getElementById(
-    "distanceMessage"
-   )
-   .innerText=
-   "🚗 Road route के अनुसार distance।";
-
-  }
-
-
-  document
-  .getElementById("distance")
-  .innerText=
-  currentDistance+
-  " KM";
-
-
-  /*
-   MAP MARKERS
-  */
-
-  if(pickupMarker){
-
-   map.removeLayer(
-    pickupMarker
+   distanceMessage(
+    "⚠️ Road service अभी उपलब्ध नहीं है। अनुमानित geographical distance दिखाई जा रही है।",
+    "info"
    );
 
   }
 
 
-  if(dropMarker){
-
-   map.removeLayer(
-    dropMarker
-   );
-
-  }
-
-
-  if(routeLine){
-
-   map.removeLayer(
-    routeLine
-   );
-
-  }
-
-
-  pickupMarker=
-  L.marker(
-   [pickup.lat,pickup.lon]
-  )
-  .addTo(map)
-  .bindPopup(
-   "📍 Pickup"
+  currentOneWayDistance=
+  Math.max(
+   1,
+   Math.ceil(distance)
   );
 
 
-  dropMarker=
-  L.marker(
-   [drop.lat,drop.lon]
-  )
-  .addTo(map)
-  .bindPopup(
-   "🏁 Drop"
-  );
-
-
-  routeLine=
-  L.geoJSON(
-   route.geometry
-  )
-  .addTo(map);
-
-
-  map.fitBounds(
-   routeLine.getBounds(),
-   {
-    padding:[25,25]
-   }
-  );
-
+  updateJourneyDistance();
 
   calculateFare();
 
 
-  showStatus(
-   "✅ Road distance calculate हो गई।",
-   "success"
-  );
+  if(journeyType==="roundtrip"){
+
+   distanceMessage(
+    "✅ Round Trip distance calculate हो गई: "+
+    currentDistance+
+    " KM",
+    "success"
+   );
+
+  }else{
+
+   distanceMessage(
+    "✅ One Way distance calculate हो गई: "+
+    currentDistance+
+    " KM",
+    "success"
+   );
+
+  }
 
 
  }catch(error){
 
   console.error(error);
 
+  if(error.name==="AbortError"){
 
-  showStatus(
-   "❌ Distance calculate नहीं हो सकी। Location का सही नाम डालें और दोबारा कोशिश करें।",
-   "error"
-  );
+   distanceMessage(
+    "❌ Location service ने समय पर जवाब नहीं दिया। कुछ देर बाद फिर कोशिश करें।",
+    "error"
+   );
 
+  }else{
+
+   distanceMessage(
+    "❌ Location नहीं मिली। उदाहरण के लिए Sarangarh, Raigarh जैसे पूरा स्थान नाम डालें।",
+    "error"
+   );
+
+  }
 
  }finally{
 
   button.disabled=false;
 
   button.innerText=
-  "📍 Road Distance Calculate करें";
+  "📍 Distance Calculate करें";
 
  }
 
 };
+
+
+/* =====================================
+ JOURNEY DISTANCE
+===================================== */
+
+function updateJourneyDistance(){
+
+ if(currentOneWayDistance<=0){
+  currentDistance=0;
+  $("distance").innerText="0 KM";
+  return;
+ }
+
+
+ let distance;
+
+ if(journeyType==="roundtrip"){
+  distance=currentOneWayDistance*2;
+ }else{
+  distance=currentOneWayDistance;
+ }
+
+
+ /*
+  Local minimum:
+  One Way = 100 KM
+  Round Trip = 200 KM
+ */
+
+ if(tripType==="local"){
+
+  if(journeyType==="roundtrip"){
+   distance=Math.max(200,distance);
+  }else{
+   distance=Math.max(100,distance);
+  }
+
+ }
+
+
+ currentDistance=distance;
+
+ $("distance").innerText=
+ currentDistance+" KM";
+
+
+ $("distanceMessage").innerText=
+ journeyType==="roundtrip"
+ ? "🔄 Round Trip: Pickup → Drop → Pickup"
+ : "➡️ One Way: Pickup → Drop";
+
+}
 
 
 /* =====================================
@@ -1252,9 +1082,17 @@ async function(){
 async function loadCars(){
 
  const container=
- document.getElementById(
-  "carsContainer"
- );
+ $("carsContainer");
+
+ if(!db){
+
+  container.innerHTML=
+  `<div class="empty">
+  ❌ Firebase initialize नहीं हुआ।
+  </div>`;
+
+  return;
+ }
 
 
  try{
@@ -1271,7 +1109,6 @@ async function loadCars(){
   snapshot.forEach(doc=>{
 
    const d=doc.data();
-
 
    const car={
 
@@ -1329,8 +1166,7 @@ async function loadCars(){
 
 
    const status=
-   String(car.status)
-   .toLowerCase();
+   String(car.status).toLowerCase();
 
 
    if(
@@ -1348,25 +1184,15 @@ async function loadCars(){
 
   renderCars();
 
-
  }catch(error){
 
   console.error(error);
 
-
-  container.innerHTML=`
-
-  <div class="empty">
-
-  ❌ Cars load नहीं हो सकीं।
-
-  <br><br>
-
+  container.innerHTML=
+  `<div class="empty">
+  ❌ Cars load नहीं हो सकीं।<br>
   Firebase Firestore Rules check करें।
-
-  </div>
-
-  `;
+  </div>`;
 
  }
 
@@ -1380,77 +1206,69 @@ async function loadCars(){
 function renderCars(){
 
  const container=
- document.getElementById(
-  "carsContainer"
- );
-
+ $("carsContainer");
 
  if(!cars.length){
 
-  container.innerHTML=`
-
-  <div class="empty">
-
+  container.innerHTML=
+  `<div class="empty">
   🚗 अभी कोई car available नहीं है।
-
-  <br>
-
-  पहले Admin/Owner Panel से car add करें।
-
-  </div>
-
-  `;
+  </div>`;
 
   return;
-
  }
 
 
- container.innerHTML=`
+ container.innerHTML=
+ `<div class="cars">
 
- <div class="cars">
-
- ${cars.map(
- (car,index)=>`
+ ${cars.map((car,index)=>`
 
  <div
  class="car"
- data-index="${index}"
- onclick="selectCar(${index})">
+ data-index="${index}">
 
- <div class="car-icon">
- 🚗
- </div>
+ <div class="car-icon">🚗</div>
 
  <div class="car-name">
  ${escapeHtml(car.carName)}
  </div>
 
  <div class="car-info">
- 👥 ${escapeHtml(
-  String(car.seats)
- )}
- Seats
+ 👥 ${escapeHtml(String(car.seats))} Seats
  </div>
 
  <div class="car-price">
-
  ${
   car.rateKm>0
   ? "₹"+car.rateKm+" / KM"
   : "Rent ₹"+car.rent
  }
-
  </div>
 
  </div>
 
- `
- ).join("")}
+ `).join("")}
 
- </div>
+ </div>`;
 
- `;
+
+ document
+ .querySelectorAll(".car")
+ .forEach(element=>{
+
+  element.onclick=()=>{
+
+   const index=
+   Number(
+    element.dataset.index
+   );
+
+   selectCar(index);
+
+  };
+
+ });
 
 }
 
@@ -1459,43 +1277,28 @@ function renderCars(){
  SELECT CAR
 ===================================== */
 
-window.selectCar=
-function(index){
+function selectCar(index){
 
- selectedCar=
- cars[index];
-
+ selectedCar=cars[index];
 
  document
  .querySelectorAll(".car")
- .forEach(
-  el=>
-  el.classList.remove(
-   "selected"
-  )
- );
-
+ .forEach(el=>{
+  el.classList.remove("selected");
+ });
 
  const element=
  document.querySelector(
-  '.car[data-index="'+
-  index+
-  '"]'
+  `.car[data-index="${index}"]`
  );
 
-
  if(element){
-
-  element.classList.add(
-   "selected"
-  );
-
+  element.classList.add("selected");
  }
-
 
  calculateFare();
 
-};
+}
 
 
 /* =====================================
@@ -1504,73 +1307,34 @@ function(index){
 
 function calculateFare(){
 
- const fareCar=
- document.getElementById(
-  "fareCar"
- );
-
-
- const fareDistance=
- document.getElementById(
-  "fareDistance"
- );
-
-
- const fareRate=
- document.getElementById(
-  "fareRate"
- );
-
-
- const fareRent=
- document.getElementById(
-  "fareRent"
- );
-
-
- const fareCommission=
- document.getElementById(
-  "fareCommission"
- );
-
-
- const totalFare=
- document.getElementById(
-  "totalFare"
- );
-
-
  if(!selectedCar){
 
-  fareCar.innerText="-";
+  $("fareCar").innerText="-";
+  $("fareJourney").innerText=
+  journeyType==="roundtrip"
+  ?"Round Trip"
+  :"One Way";
 
-  fareDistance.innerText=
+  $("fareDistance").innerText=
   currentDistance+" KM";
 
-  fareRate.innerText="₹0";
-
-  fareRent.innerText="₹0";
-
-  fareCommission.innerText="₹0";
-
-  totalFare.innerText="₹0";
+  $("fareRate").innerText="₹0";
+  $("fareRent").innerText="₹0";
+  $("fareCommission").innerText="₹0";
+  $("totalFare").innerText="₹0";
 
   return;
-
  }
 
 
  const distance=
  Number(currentDistance)||0;
 
-
  const rent=
  Number(selectedCar.rent)||0;
 
-
  const rate=
  Number(selectedCar.rateKm)||0;
-
 
  const commission=
  Number(selectedCar.commission)||0;
@@ -1580,223 +1344,59 @@ function calculateFare(){
 
 
  /*
-  Local:
-  Rate/KM apply नहीं।
-  Base rent रहेगा।
-
   Outstation:
-  Rent + distance × rate
+  Rent + Distance × Rate/KM
+
+  Local:
+  केवल Base Rent
  */
 
  if(tripType==="outstation"){
 
   baseFare=
-  rent+
-  distance*rate;
+  rent+(distance*rate);
 
  }
 
 
  const commissionAmount=
  Math.round(
-  baseFare*
-  commission/
-  100
+  baseFare*commission/100
  );
 
 
  const total=
  Math.round(
-  baseFare+
-  commissionAmount
+  baseFare+commissionAmount
  );
 
 
- fareCar.innerText=
+ $("fareCar").innerText=
  selectedCar.carName;
 
 
- fareDistance.innerText=
+ $("fareJourney").innerText=
+ journeyType==="roundtrip"
+ ?"Round Trip"
+ :"One Way";
+
+
+ $("fareDistance").innerText=
  distance+" KM";
 
 
- fareRate.innerText=
+ $("fareRate").innerText=
  tripType==="local"
- ? "Local"
- : "₹"+rate;
+ ?"Local"
+ :"₹"+rate;
 
 
- fareRent.innerText=
+ $("fareRent").innerText=
  "₹"+rent;
 
 
- fareCommission.innerText=
+ $("fareCommission").innerText=
  commission>0
- ? "₹"+commissionAmount+
-   " ("+commission+"%)"
- : "₹0";
-
-
- totalFare.innerText=
- "₹"+total;
-
-}
-
-
-/* =====================================
- BOOK CAR
-===================================== */
-
-window.bookCar=
-async function(){
-
- const name=
- document
- .getElementById("customerName")
- .value
- .trim();
-
-
- const phone=
- document
- .getElementById("customerPhone")
- .value
- .trim();
-
-
- const pickup=
- document
- .getElementById("pickup")
- .value
- .trim();
-
-
- const drop=
- document
- .getElementById("drop")
- .value
- .trim();
-
-
- const date=
- document
- .getElementById("travelDate")
- .value;
-
-
- const time=
- document
- .getElementById("travelTime")
- .value;
-
-
- const passengers=
- Number(
-  document
-  .getElementById("passengers")
-  .value
- );
-
-
- if(!name){
-
-  showStatus(
-   "अपना नाम डालें।",
-   "error"
-  );
-
-  return;
-
- }
-
-
- if(!/^[0-9]{10}$/.test(phone)){
-
-  showStatus(
-   "सही 10 digit mobile number डालें।",
-   "error"
-  );
-
-  return;
-
- }
-
-
- if(!pickup||!drop){
-
-  showStatus(
-   "Pickup और Drop डालें।",
-   "error"
-  );
-
-  return;
-
- }
-
-
- if(!date||!time){
-
-  showStatus(
-   "Travel Date और Time चुनें।",
-   "error"
-  );
-
-  return;
-
- }
-
-
- if(!selectedCar){
-
-  showStatus(
-   "पहले car select करें।",
-   "error"
-  );
-
-  return;
-
- }
-
-
- if(currentDistance<=0){
-
-  showStatus(
-   "पहले Road Distance Calculate करें।",
-   "error"
-  );
-
-  return;
-
- }
-
-
- const button=
- document.getElementById(
-  "bookButton"
- );
-
-
- button.disabled=true;
-
- button.innerText=
- "⏳ Booking save हो रही है...";
-
-
- try{
-
-  const total=
-  Number(
-   document
-   .getElementById(
-    "totalFare"
-   )
-   .innerText
-   .replace(/[₹,]/g,"")
-  )||0;
-
-
-  const bookingId=
-  "BMC-"+Date.now();
-
-
-  const boo
+ ?"₹"+commissionAmount+
+ " ("+commission+"%)"
+ :"
