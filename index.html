@@ -2,334 +2,256 @@
 <html lang="hi">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
 
-<title>Book My Car - Car Booking</title>
+<title>Book My Car</title>
 
 <style>
-*{
-    box-sizing:border-box;
-}
+*{box-sizing:border-box}
 
 body{
-    margin:0;
-    font-family:Arial,sans-serif;
-    background:#f3f7ff;
-    color:#222;
+ margin:0;
+ font-family:Arial,sans-serif;
+ background:#f3f7ff;
+ color:#222
 }
 
 header{
-    background:linear-gradient(135deg,#0066ff,#0047b3);
-    color:white;
-    padding:18px 15px;
-    display:flex;
-    justify-content:space-between;
-    align-items:center;
-    position:sticky;
-    top:0;
-    z-index:100;
-    box-shadow:0 3px 12px rgba(0,0,0,.18);
+ background:linear-gradient(135deg,#0066ff,#0047b3);
+ color:#fff;
+ padding:16px;
+ display:flex;
+ justify-content:space-between;
+ align-items:center;
+ position:sticky;
+ top:0;
+ z-index:99;
+ box-shadow:0 3px 12px #0003
 }
 
-.logo{
-    font-size:22px;
-    font-weight:bold;
-}
+.logo{font-size:21px;font-weight:bold}
 
 .header-btn{
-    border:0;
-    background:white;
-    color:#0057d9;
-    padding:10px 14px;
-    border-radius:10px;
-    font-weight:bold;
-    cursor:pointer;
+ border:0;
+ background:#fff;
+ color:#0057d9;
+ padding:10px 13px;
+ border-radius:9px;
+ font-weight:bold
 }
 
 .container{
-    max-width:850px;
-    margin:auto;
-    padding:18px;
+ max-width:850px;
+ margin:auto;
+ padding:15px
 }
 
-.hero{
-    text-align:center;
-    padding:18px 5px;
-}
-
-.hero h1{
-    margin:5px 0;
-    color:#0057d9;
-}
-
-.hero p{
-    color:#666;
-    margin:8px 0;
-}
+.hero{text-align:center;padding:18px 5px}
+.hero h1{color:#0057d9;margin:5px}
+.hero p{color:#666}
 
 .card{
-    background:white;
-    border-radius:18px;
-    padding:20px;
-    margin-bottom:18px;
-    box-shadow:0 5px 20px rgba(0,0,0,.08);
+ background:#fff;
+ padding:18px;
+ margin-bottom:16px;
+ border-radius:17px;
+ box-shadow:0 5px 18px #00000012
 }
 
-.card h2{
-    margin-top:0;
-    font-size:20px;
-}
+.card h2{margin-top:0;font-size:20px}
 
 label{
-    display:block;
-    font-weight:bold;
-    margin-top:14px;
-    margin-bottom:6px;
+ display:block;
+ font-weight:bold;
+ margin:13px 0 6px
 }
 
 input,select{
-    width:100%;
-    padding:13px;
-    border:1px solid #ccd5e3;
-    border-radius:10px;
-    font-size:15px;
-    outline:none;
-    background:white;
+ width:100%;
+ padding:13px;
+ border:1px solid #ccd5e3;
+ border-radius:10px;
+ font-size:15px;
+ background:#fff
 }
 
 input:focus,select:focus{
-    border-color:#0066ff;
-    box-shadow:0 0 0 3px rgba(0,102,255,.08);
+ outline:none;
+ border-color:#06f;
+ box-shadow:0 0 0 3px #0066ff14
 }
 
 .row{
-    display:grid;
-    grid-template-columns:1fr 1fr;
-    gap:12px;
+ display:grid;
+ grid-template-columns:1fr 1fr;
+ gap:12px
 }
 
 .trip-buttons{
-    display:grid;
-    grid-template-columns:1fr 1fr;
-    gap:10px;
-    margin-top:8px;
+ display:grid;
+ grid-template-columns:1fr 1fr;
+ gap:10px
 }
 
 .trip-btn{
-    padding:13px;
-    border:2px solid #d9e1ee;
-    background:white;
-    border-radius:10px;
-    font-weight:bold;
-    cursor:pointer;
+ padding:13px;
+ border:2px solid #d9e1ee;
+ border-radius:10px;
+ background:#fff;
+ font-weight:bold
 }
 
 .trip-btn.active{
-    background:#0066ff;
-    color:white;
-    border-color:#0066ff;
+ background:#06f;
+ border-color:#06f;
+ color:#fff
 }
 
 .distance-box{
-    background:#eef6ff;
-    border:1px solid #cfe2ff;
-    border-radius:12px;
-    padding:15px;
-    margin-top:15px;
-    text-align:center;
+ margin-top:15px;
+ padding:15px;
+ text-align:center;
+ background:#eef6ff;
+ border:1px solid #cfe2ff;
+ border-radius:12px
 }
 
 .distance{
-    font-size:27px;
-    font-weight:bold;
-    color:#0057d9;
-}
-
-.loading{
-    text-align:center;
-    padding:20px;
-    color:#666;
-}
-
-.cars{
-    display:grid;
-    grid-template-columns:repeat(2,1fr);
-    gap:12px;
-}
-
-.car{
-    border:2px solid #e1e7f0;
-    border-radius:14px;
-    padding:15px;
-    cursor:pointer;
-    transition:.2s;
-    background:white;
-}
-
-.car:hover{
-    transform:translateY(-2px);
-}
-
-.car.selected{
-    border-color:#0066ff;
-    background:#f1f7ff;
-    box-shadow:0 4px 14px rgba(0,102,255,.12);
-}
-
-.car-icon{
-    font-size:35px;
-}
-
-.car-name{
-    font-size:18px;
-    font-weight:bold;
-    margin-top:5px;
-}
-
-.car-info{
-    color:#666;
-    font-size:13px;
-    margin-top:5px;
-    line-height:1.5;
-}
-
-.car-price{
-    margin-top:10px;
-    font-weight:bold;
-    color:#0066ff;
-}
-
-.fare{
-    background:#f7f9fc;
-    border-radius:12px;
-    padding:15px;
-    margin-top:15px;
-}
-
-.fare-line{
-    display:flex;
-    justify-content:space-between;
-    padding:6px 0;
-}
-
-.total{
-    border-top:1px solid #ddd;
-    margin-top:8px;
-    padding-top:12px;
-    font-size:21px;
-    font-weight:bold;
-    color:#0057d9;
-}
-
-.book-btn{
-    width:100%;
-    margin-top:18px;
-    padding:15px;
-    border:0;
-    border-radius:12px;
-    background:linear-gradient(135deg,#00a83b,#00852f);
-    color:white;
-    font-size:17px;
-    font-weight:bold;
-    cursor:pointer;
-}
-
-.book-btn:disabled{
-    background:#aaa;
-    cursor:not-allowed;
-}
-
-.status{
-    padding:12px;
-    border-radius:10px;
-    margin-top:12px;
-    display:none;
-    font-weight:bold;
-}
-
-.success{
-    background:#e8fff0;
-    color:#08752c;
-}
-
-.error{
-    background:#fff0f0;
-    color:#b00020;
-}
-
-.booking-result{
-    display:none;
-}
-
-.booking-id{
-    background:#eef6ff;
-    padding:13px;
-    border-radius:10px;
-    font-size:18px;
-    font-weight:bold;
-    color:#0057d9;
-    text-align:center;
-}
-
-.booking-card{
-    border:1px solid #ddd;
-    border-radius:12px;
-    padding:14px;
-    margin-top:10px;
-    background:#fff;
-}
-
-.badge{
-    display:inline-block;
-    padding:5px 9px;
-    border-radius:20px;
-    background:#fff3cd;
-    color:#856404;
-    font-size:12px;
-    font-weight:bold;
-}
-
-.empty{
-    text-align:center;
-    color:#777;
-    padding:20px;
+ font-size:28px;
+ font-weight:bold;
+ color:#0057d9;
+ margin:5px
 }
 
 .small{
-    font-size:12px;
-    color:#777;
-    margin-top:7px;
-    line-height:1.5;
+ font-size:12px;
+ color:#777;
+ line-height:1.5
+}
+
+.btn{
+ width:100%;
+ border:0;
+ border-radius:11px;
+ padding:14px;
+ color:#fff;
+ font-size:16px;
+ font-weight:bold;
+ margin-top:15px;
+ background:#06f
+}
+
+.btn.green{
+ background:linear-gradient(135deg,#00a83b,#00852f)
+}
+
+.btn:disabled{
+ background:#aaa
+}
+
+.cars{
+ display:grid;
+ grid-template-columns:repeat(2,1fr);
+ gap:12px
+}
+
+.car{
+ border:2px solid #e1e7f0;
+ border-radius:14px;
+ padding:14px;
+ cursor:pointer
+}
+
+.car.selected{
+ border-color:#06f;
+ background:#f1f7ff
+}
+
+.car-icon{font-size:35px}
+.car-name{font-size:18px;font-weight:bold;margin-top:5px}
+.car-info{font-size:13px;color:#666;margin-top:5px}
+.car-price{font-weight:bold;color:#06f;margin-top:9px}
+
+.fare{
+ background:#f7f9fc;
+ border-radius:12px;
+ padding:14px
+}
+
+.fare-line{
+ display:flex;
+ justify-content:space-between;
+ padding:7px 0
+}
+
+.total{
+ border-top:1px solid #ddd;
+ margin-top:7px;
+ padding-top:12px;
+ font-size:21px;
+ font-weight:bold;
+ color:#0057d9;
+ display:flex;
+ justify-content:space-between
+}
+
+.status{
+ display:none;
+ padding:12px;
+ border-radius:10px;
+ margin-top:12px;
+ font-weight:bold
+}
+
+.success{background:#e8fff0;color:#08752c}
+.error{background:#fff0f0;color:#b00020}
+
+.booking-result{display:none}
+
+.booking-id{
+ background:#eef6ff;
+ padding:13px;
+ border-radius:10px;
+ text-align:center;
+ color:#0057d9;
+ font-size:18px;
+ font-weight:bold
+}
+
+.booking-card{
+ border:1px solid #ddd;
+ border-radius:12px;
+ padding:14px;
+ margin-top:12px
+}
+
+.badge{
+ display:inline-block;
+ background:#fff3cd;
+ color:#856404;
+ padding:5px 9px;
+ border-radius:20px;
+ font-size:12px;
+ font-weight:bold
+}
+
+.empty{
+ text-align:center;
+ color:#777;
+ padding:20px
 }
 
 footer{
-    text-align:center;
-    padding:25px 10px;
-    color:#777;
-    font-size:13px;
+ text-align:center;
+ padding:25px 10px;
+ color:#777;
+ font-size:13px
 }
 
 @media(max-width:650px){
-    .row,
-    .cars{
-        grid-template-columns:1fr;
-    }
-
-    header{
-        padding:14px 12px;
-    }
-
-    .logo{
-        font-size:19px;
-    }
-
-    .container{
-        padding:12px;
-    }
-
-    .card{
-        padding:15px;
-    }
+ .row,.cars{grid-template-columns:1fr}
+ .container{padding:11px}
+ .card{padding:15px}
 }
 </style>
 </head>
@@ -337,34 +259,29 @@ footer{
 <body>
 
 <header>
-    <div class="logo">🚕 Book My Car</div>
-    <button class="header-btn" onclick="showBookings()">My Bookings</button>
+ <div class="logo">🚕 Book My Car</div>
+ <button class="header-btn" onclick="showBookings()">
+  My Bookings
+ </button>
 </header>
 
 <div class="container">
 
 <div class="hero">
-    <h1>अपनी सवारी अभी बुक करें 🚕</h1>
-    <p>Pickup और Drop location डालें और उपलब्ध कार चुनें।</p>
+ <h1>अपनी सवारी अभी बुक करें 🚕</h1>
+ <p>Pickup और Drop डालें और अपनी कार चुनें।</p>
 </div>
 
+<!-- TRIP -->
 <div class="card">
 
-<h2>🚕 Car Booking</h2>
+<h2>📍 Trip Details</h2>
 
 <label>Pickup Location</label>
-<input
-    type="text"
-    id="pickup"
-    placeholder="Pickup location लिखें"
->
+<input id="pickup" placeholder="जैसे Sarangarh">
 
 <label>Drop Location</label>
-<input
-    type="text"
-    id="drop"
-    placeholder="Drop location लिखें"
->
+<input id="drop" placeholder="जैसे Raigarh">
 
 <div class="row">
 
@@ -384,22 +301,16 @@ footer{
 
 <div class="trip-buttons">
 
-<button
-    type="button"
-    class="trip-btn active"
-    id="localBtn"
-    onclick="setTripType('local')"
->
-    🏙️ Local
+<button class="trip-btn active"
+ id="localBtn"
+ onclick="setTripType('local')">
+🏙️ Local
 </button>
 
-<button
-    type="button"
-    class="trip-btn"
-    id="outstationBtn"
-    onclick="setTripType('outstation')"
->
-    🛣️ Outstation
+<button class="trip-btn"
+ id="outstationBtn"
+ onclick="setTripType('outstation')">
+🛣️ Outstation
 </button>
 
 </div>
@@ -413,42 +324,34 @@ footer{
 </div>
 
 <div class="small" id="distanceMessage">
-Pickup और Drop डालने के बाद दूरी calculate होगी।
+Pickup और Drop डालने के बाद दूरी calculate करें।
 </div>
 
 </div>
 
-<button
-    type="button"
-    class="book-btn"
-    id="calculateBtn"
-    onclick="calculateDistance()"
-    style="background:#0066ff"
->
-    📍 दूरी Calculate करें
+<button class="btn"
+ id="calculateBtn"
+ onclick="calculateDistance()">
+📍 दूरी Calculate करें
 </button>
 
 </div>
 
-
+<!-- CARS -->
 <div class="card">
 
-<h2>🚗 उपलब्ध कार चुनें</h2>
+<h2>🚗 Available Cars</h2>
 
 <div id="carsContainer">
-
-<div class="loading">
-⏳ Firebase से cars load हो रही हैं...
+<div class="empty">⏳ Cars load हो रही हैं...</div>
 </div>
 
 </div>
 
-</div>
-
-
+<!-- FARE -->
 <div class="card">
 
-<h2>💰 अनुमानित किराया</h2>
+<h2>💰 Estimated Fare</h2>
 
 <div class="fare">
 
@@ -468,7 +371,7 @@ Pickup और Drop डालने के बाद दूरी calculate ह�
 </div>
 
 <div class="fare-line">
-<span>Base / Rent</span>
+<span>Base Rent</span>
 <strong id="fareRent">₹0</strong>
 </div>
 
@@ -478,64 +381,59 @@ Pickup और Drop डालने के बाद दूरी calculate ह�
 </div>
 
 <div class="total">
-<span>Estimated Fare</span>
-<span style="float:right" id="totalFare">₹0</span>
+<span>Total</span>
+<span id="totalFare">₹0</span>
 </div>
 
 </div>
 
-<div class="small">
-* Final fare booking confirmation के समय admin/owner द्वारा तय किया जा सकता है।
-</div>
+<p class="small">
+Local trip में minimum 100 KM लागू है। Final fare admin द्वारा
+booking confirmation के समय बदला जा सकता है।
+</p>
 
 </div>
 
-
+<!-- CUSTOMER -->
 <div class="card">
 
 <h2>👤 Customer Details</h2>
 
 <label>आपका नाम</label>
-<input
-    type="text"
-    id="customerName"
-    placeholder="पूरा नाम"
->
+<input id="customerName" placeholder="पूरा नाम">
 
 <label>मोबाइल नंबर</label>
 <input
-    type="tel"
-    id="customerPhone"
-    maxlength="10"
-    placeholder="10 digit mobile number"
->
+ id="customerPhone"
+ type="tel"
+ maxlength="10"
+ inputmode="numeric"
+ placeholder="10 digit mobile number">
 
 <label>Passengers</label>
+
 <select id="passengers">
-    <option value="1">1 Passenger</option>
-    <option value="2">2 Passengers</option>
-    <option value="3">3 Passengers</option>
-    <option value="4">4 Passengers</option>
-    <option value="5">5 Passengers</option>
-    <option value="6">6 Passengers</option>
-    <option value="7">7 Passengers</option>
-    <option value="8">8 Passengers</option>
+<option value="1">1 Passenger</option>
+<option value="2">2 Passengers</option>
+<option value="3">3 Passengers</option>
+<option value="4">4 Passengers</option>
+<option value="5">5 Passengers</option>
+<option value="6">6 Passengers</option>
+<option value="7">7 Passengers</option>
+<option value="8">8 Passengers</option>
 </select>
 
-<button
-    type="button"
-    class="book-btn"
-    id="bookButton"
-    onclick="bookCar()"
->
-    🚕 Book My Car
+<button class="btn green"
+ id="bookButton"
+ onclick="bookCar()">
+🚕 Book My Car
 </button>
 
 <div id="status" class="status"></div>
 
 </div>
 
-
+<!-- RESULT -->
 <div class="card booking-result" id="bookingResult">
 
 <h2>✅ Booking Submitted</h2>
@@ -547,60 +445,57 @@ Booking ID:
 
 <div class="booking-card">
 
-<p>
-<strong>Customer:</strong>
-<span id="resultCustomer"></span>
-</p>
+<p><b>Customer:</b>
+<span id="resultCustomer"></span></p>
 
-<p>
-<strong>Pickup:</strong>
-<span id="resultPickup"></span>
-</p>
+<p><b>Mobile:</b>
+<span id="resultPhone"></span></p>
 
-<p>
-<strong>Drop:</strong>
-<span id="resultDrop"></span>
-</p>
+<p><b>Pickup:</b>
+<span id="resultPickup"></span></p>
 
-<p>
-<strong>Car:</strong>
-<span id="resultCar"></span>
-</p>
+<p><b>Drop:</b>
+<span id="resultDrop"></span></p>
 
-<p>
-<strong>Travel:</strong>
-<span id="resultTravel"></span>
-</p>
+<p><b>Car:</b>
+<span id="resultCar"></span></p>
 
-<p>
-<strong>Estimated Fare:</strong>
+<p><b>Trip:</b>
+<span id="resultTrip"></span></p>
+
+<p><b>Distance:</b>
+<span id="resultDistance"></span> KM</p>
+
+<p><b>Travel:</b>
+<span id="resultTravel"></span></p>
+
+<p><b>Estimated Fare:</b>
 ₹<span id="resultFare">0</span>
 </p>
 
 <p>
-<strong>Status:</strong>
+<b>Status:</b>
 <span class="badge">Pending</span>
 </p>
 
 <hr>
 
-<p>
-🔐 Driver/Car owner की private details booking accept होने के बाद ही दिखाई जाएंगी।
+<p class="small">
+🔐 Driver/Owner की private details booking accept
+होने के बाद ही दिखाई जाएंगी।
 </p>
 
 </div>
 
 </div>
 
-
+<!-- BOOKINGS -->
 <div class="card" id="myBookings" style="display:none">
 
 <h2>📋 मेरी Bookings</h2>
 
 <div id="bookingsList">
-    <div class="empty">
-        अभी कोई booking नहीं मिली।
-    </div>
+<div class="empty">कोई booking नहीं मिली।</div>
 </div>
 
 </div>
@@ -608,39 +503,48 @@ Booking ID:
 </div>
 
 <footer>
-    Book My Car<br>
-    Local Cab & Car Booking Service<br>
-    Created by Arvind Mehar
+Book My Car<br>
+Local Cab & Car Booking Service<br>
+Created by Arvind Mehar
 </footer>
-
 
 <script type="module">
 
 import {
-    initializeApp
+ initializeApp
 } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
 
 import {
-    getFirestore,
-    collection,
-    addDoc,
-    getDocs,
-    query,
-    where,
-    orderBy,
-    limit,
-    serverTimestamp
+ getFirestore,
+ collection,
+ addDoc,
+ getDocs,
+ query,
+ where,
+ orderBy,
+ limit,
+ serverTimestamp
 } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
 
 
-/* =========================================
-   FIREBASE CONFIG
-========================================= */
+/* ================================
+ FIREBASE
+================================ */
 
 const firebaseConfig = {
-    apiKey: "AIzaSyDD-jSNG_HfhW4aTXtdf0kpdclaDVbgrNA",
-    authDomain: "book-my-car-a97cf.firebaseapp.com",
-    projectId: "book-my-car-a97cf"
+
+ apiKey:"AIzaSyDD-jSNG_HfhW4aTXtdf0kpdclaDVbgrNA",
+
+ authDomain:"book-my-car-a97cf.firebaseapp.com",
+
+ projectId:"book-my-car-a97cf",
+
+ storageBucket:"book-my-car-a97cf.firebasestorage.app",
+
+ messagingSenderId:"",
+
+ appId:""
+
 };
 
 const app = initializeApp(firebaseConfig);
@@ -648,516 +552,840 @@ const app = initializeApp(firebaseConfig);
 const db = getFirestore(app);
 
 
-/* =========================================
-   GLOBAL VARIABLES
-========================================= */
+/* ================================
+ VARIABLES
+================================ */
 
-let cars = [];
-
-let selectedCar = null;
-
-let currentDistance = 0;
-
-let tripType = "local";
+let cars=[];
+let selectedCar=null;
+let currentDistance=0;
+let tripType="local";
 
 
-/* =========================================
-   DATE SETUP
-========================================= */
+/* ================================
+ DATE
+================================ */
 
-const dateInput =
-    document.getElementById("travelDate");
+const dateInput=document.getElementById("travelDate");
 
-const today =
-    new Date().toISOString().split("T")[0];
+const today=
+new Date().toISOString().split("T")[0];
 
-dateInput.min = today;
-
-dateInput.value = today;
+dateInput.min=today;
+dateInput.value=today;
 
 
-/* =========================================
-   TRIP TYPE
-========================================= */
+/* ================================
+ TRIP TYPE
+================================ */
 
-window.setTripType = function(type){
+window.setTripType=function(type){
 
-    tripType = type;
+ tripType=type;
 
-    document
-        .getElementById("localBtn")
-        .classList.remove("active");
+ document
+ .getElementById("localBtn")
+ .classList.toggle("active",type==="local");
 
-    document
-        .getElementById("outstationBtn")
-        .classList.remove("active");
+ document
+ .getElementById("outstationBtn")
+ .classList.toggle("active",type==="outstation");
 
-    if(type === "local"){
-
-        document
-            .getElementById("localBtn")
-            .classList.add("active");
-
-    }else{
-
-        document
-            .getElementById("outstationBtn")
-            .classList.add("active");
-
-    }
-
-    calculateFare();
-
+ calculateFare();
 };
 
 
-/* =========================================
-   LOAD CARS FROM FIRESTORE
-========================================= */
+/* ================================
+ LOAD CARS
+================================ */
 
 async function loadCars(){
 
-    const container =
-        document.getElementById("carsContainer");
+ const container=
+ document.getElementById("carsContainer");
 
-    try{
+ try{
 
-        const snapshot =
-            await getDocs(collection(db,"cars"));
+  const snapshot=
+  await getDocs(collection(db,"cars"));
 
-        cars = [];
+  cars=[];
 
-        snapshot.forEach(doc => {
+  snapshot.forEach(doc=>{
 
-            const data = doc.data();
+   const d=doc.data();
 
-            /*
-              अलग-अलग पुराने field names
-              को भी support किया गया है।
-            */
+   const car={
 
-            cars.push({
-                id: doc.id,
+    id:doc.id,
 
-                carName:
-                    data.carName ||
-                    data.name ||
-                    data.car ||
-                    "Car",
+    carName:
+    d.carName ||
+    d.name ||
+    d.car ||
+    "Car",
 
-                ownerName:
-                    data.ownerName ||
-                    data.owner ||
-                    "",
+    ownerName:
+    d.ownerName ||
+    d.owner ||
+    "",
 
-                driverName:
-                    data.driverName ||
-                    data.driver ||
-                    "",
+    driverName:
+    d.driverName ||
+    d.driver ||
+    "",
 
-                rent:
-                    Number(
-                        data.rent ||
-                        data.baseRent ||
-                        data.price ||
-                        0
-                    ),
+    rent:Number(
+     d.rent ||
+     d.baseRent ||
+     d.price ||
+     0
+    ),
 
-                rateKm:
-                    Number(
-                        data.rateKm ||
-                        data.ratePerKm ||
-                        data.rate ||
-                        data.kmRate ||
-                        0
-                    ),
+    rateKm:Number(
+     d.rateKm ||
+     d.ratePerKm ||
+     d.rate ||
+     d.kmRate ||
+     0
+    ),
 
-                commission:
-                    Number(
-                        data.commission ||
-                        0
-                    ),
+    commission:Number(
+     d.commission || 0
+    ),
 
-                seats:
-                    data.seats ||
-                    data.capacity ||
-                    "4 + 1",
+    seats:
+    d.seats ||
+    d.capacity ||
+    "4 + 1",
 
-                status:
-                    data.status ||
-                    "available",
+    status:
+    d.status ||
+    "available",
 
-                active:
-                    data.active !== false
-            });
+    active:
+    d.active !== false
 
-        });
+   };
 
+   const status=
+   String(car.status).toLowerCase();
 
-        /*
-          केवल active / available cars
-        */
+   if(
+    car.active &&
+    status!=="inactive" &&
+    status!=="unavailable"
+   ){
+    cars.push(car);
+   }
 
-        cars = cars.filter(car => {
+  });
 
-            const status =
-                String(car.status).toLowerCase();
+  renderCars();
 
-            return car.active !== false &&
-                   status !== "inactive" &&
-                   status !== "unavailable";
-        });
+ }catch(error){
 
+  console.error(error);
 
-        renderCars();
+  container.innerHTML=`
+  <div class="empty">
+  ❌ Cars load नहीं हो सकीं।<br><br>
+  Firebase Firestore rules और connection check करें।
+  </div>`;
 
-
-    }catch(error){
-
-        console.error(error);
-
-        container.innerHTML = `
-            <div class="empty">
-                ❌ Cars load नहीं हो सकीं।<br><br>
-                Firebase Firestore connection/rules check करें।
-            </div>
-        `;
-
-    }
+ }
 
 }
 
 
-/* =========================================
-   RENDER CARS
-========================================= */
+/* ================================
+ RENDER CARS
+================================ */
 
 function renderCars(){
 
-    const container =
-        document.getElementById("carsContainer");
+ const container=
+ document.getElementById("carsContainer");
 
-    if(cars.length === 0){
+ if(!cars.length){
 
-        container.innerHTML = `
-            <div class="empty">
-                🚗 अभी कोई car available नहीं है।<br>
-                Admin/Owner Panel से पहले car add करें।
-            </div>
-        `;
+  container.innerHTML=`
+  <div class="empty">
+  🚗 अभी कोई car available नहीं है।
+  </div>`;
 
-        return;
-    }
+  return;
+ }
 
+ container.innerHTML=`
 
-    container.innerHTML = `
-        <div class="cars">
-            ${cars.map((car,index) => `
+ <div class="cars">
 
-                <div
-                    class="car"
-                    data-index="${index}"
-                    onclick="selectCar(${index})"
-                >
+ ${cars.map((car,i)=>`
 
-                    <div class="car-icon">
-                        🚗
-                    </div>
+ <div
+ class="car"
+ data-index="${i}"
+ onclick="selectCar(${i})">
 
-                    <div class="car-name">
-                        ${escapeHtml(car.carName)}
-                    </div>
+ <div class="car-icon">🚗</div>
 
-                    <div class="car-info">
-                        👥 ${escapeHtml(String(car.seats))} Seats
-                    </div>
+ <div class="car-name">
+ ${escapeHtml(car.carName)}
+ </div>
 
-                    <div class="car-price">
+ <div class="car-info">
+ 👥 ${escapeHtml(String(car.seats))} Seats
+ </div>
 
-                        ${car.rateKm > 0
-                            ? `₹${car.rateKm} / KM`
-                            : `Rent ₹${car.rent}`
-                        }
+ <div class="car-price">
 
-                    </div>
+ ${
+ car.rateKm>0
+ ? "₹"+car.rateKm+" / KM"
+ : "Rent ₹"+car.rent
+ }
 
-                    ${
-                        car.commission > 0
-                        ?
-                        `<div class="car-info">
-                            Service charge included
-                         </div>`
-                        :
-                        ""
-                    }
+ </div>
 
-                </div>
+ </div>
 
-            `).join("")}
-        </div>
-    `;
+ `).join("")}
+
+ </div>`;
 
 }
 
 
-/* =========================================
-   SELECT CAR
-========================================= */
+/* ================================
+ SELECT CAR
+================================ */
 
-window.selectCar = function(index){
+window.selectCar=function(index){
 
-    selectedCar = cars[index];
+ selectedCar=cars[index];
 
-    document
-        .querySelectorAll(".car")
-        .forEach(el => {
-            el.classList.remove("selected");
-        });
+ document
+ .querySelectorAll(".car")
+ .forEach(x=>x.classList.remove("selected"));
 
-    const selected =
-        document.querySelector(
-            `.car[data-index="${index}"]`
-        );
+ const el=
+ document.querySelector(
+ `.car[data-index="${index}"]`
+ );
 
-    if(selected){
-        selected.classList.add("selected");
-    }
+ if(el)el.classList.add("selected");
 
-    calculateFare();
+ calculateFare();
 
 };
 
 
-/* =========================================
-   GEOCODING
-========================================= */
+/* ================================
+ GEOCODE
+================================ */
 
 async function geocode(place){
 
-    const url =
-        "https://nominatim.openstreetmap.org/search?format=json&limit=1&q="
-        + encodeURIComponent(place);
+ const url=
+ "https://nominatim.openstreetmap.org/search"+
+ "?format=json&limit=1&countrycodes=in&q="+
+ encodeURIComponent(place);
 
-    const response =
-        await fetch(url,{
-            headers:{
-                "Accept":"application/json"
-            }
-        });
+ const response=
+ await fetch(url,{
+  headers:{
+   "Accept":"application/json"
+  }
+ });
 
-    if(!response.ok){
-        throw new Error("Geocoding failed");
-    }
+ if(!response.ok)
+ throw new Error("Geocoding failed");
 
-    const data =
-        await response.json();
+ const data=
+ await response.json();
 
-    if(!data.length){
-        throw new Error(
-            "Location नहीं मिली: " + place
-        );
-    }
+ if(!data.length)
+ throw new Error("Location not found");
 
-    return {
-        lat:Number(data[0].lat),
-        lon:Number(data[0].lon)
-    };
+ return{
+  lat:Number(data[0].lat),
+  lon:Number(data[0].lon)
+ };
 
 }
 
 
-/* =========================================
-   DISTANCE CALCULATION
-========================================= */
+/* ================================
+ HAVERSINE
+================================ */
 
 function haversine(lat1,lon1,lat2,lon2){
 
-    const R = 6371;
+ const R=6371;
 
-    const dLat =
-        (lat2-lat1) *
-        Math.PI/180;
+ const dLat=
+ (lat2-lat1)*Math.PI/180;
 
-    const dLon =
-        (lon2-lon1) *
-        Math.PI/180;
+ const dLon=
+ (lon2-lon1)*Math.PI/180;
 
-    const a =
-        Math.sin(dLat/2) *
-        Math.sin(dLat/2) +
+ const a=
+ Math.sin(dLat/2)**2+
+ Math.cos(lat1*Math.PI/180)*
+ Math.cos(lat2*Math.PI/180)*
+ Math.sin(dLon/2)**2;
 
-        Math.cos(lat1*Math.PI/180) *
-        Math.cos(lat2*Math.PI/180) *
-        Math.sin(dLon/2) *
-        Math.sin(dLon/2);
-
-    const c =
-        2 *
-        Math.atan2(
-            Math.sqrt(a),
-            Math.sqrt(1-a)
-        );
-
-    return R*c;
+ return R*
+ 2*
+ Math.atan2(
+  Math.sqrt(a),
+  Math.sqrt(1-a)
+ );
 
 }
 
 
-/* =========================================
-   CALCULATE DISTANCE
-========================================= */
+/* ================================
+ DISTANCE
+================================ */
 
-window.calculateDistance = async function(){
+window.calculateDistance=async function(){
 
-    const pickup =
-        document
-        .getElementById("pickup")
-        .value.trim();
+ const pickup=
+ document.getElementById("pickup").value.trim();
 
-    const drop =
-        document
-        .getElementById("drop")
-        .value.trim();
+ const drop=
+ document.getElementById("drop").value.trim();
 
-    if(!pickup || !drop){
+ if(!pickup||!drop){
 
-        showStatus(
-            "पहले Pickup और Drop location डालें।",
-            "error"
-        );
+  showStatus(
+   "पहले Pickup और Drop location डालें।",
+   "error"
+  );
 
-        return;
-    }
+  return;
+ }
 
+ const btn=
+ document.getElementById("calculateBtn");
 
-    const btn =
-        document.getElementById("calculateBtn");
+ btn.disabled=true;
 
-    btn.disabled = true;
+ btn.innerText=
+ "⏳ Distance calculate हो रही है...";
 
-    btn.innerText =
-        "⏳ Distance calculate हो रही है...";
+ try{
 
+  const p=await geocode(pickup);
 
-    try{
+  await new Promise(
+   r=>setTimeout(r,1200)
+  );
 
-        const p =
-            await geocode(pickup);
+  const d=await geocode(drop);
 
-        /*
-          Nominatim पर ज्यादा जल्दी requests
-          न भेजने के लिए छोटा delay।
-        */
+  let distance=
+  Math.ceil(
+   haversine(
+    p.lat,
+    p.lon,
+    d.lat,
+    d.lon
+   )
+  );
 
-        await new Promise(
-            resolve => setTimeout(resolve,1100)
-        );
+  if(distance<1)distance=1;
 
-        const d =
-            await geocode(drop);
+  if(
+   tripType==="local" &&
+   distance<100
+  ){
 
+   currentDistance=100;
 
-        currentDistance =
-            haversine(
-                p.lat,
-                p.lon,
-                d.lat,
-                d.lon
-            );
+   document
+   .getElementById("distanceMessage")
+   .innerText=
+   "Local booking में minimum 100 KM लागू है।";
 
+  }else{
 
-        /*
-          Round distance
-        */
+   currentDistance=distance;
 
-        currentDistance =
-            Math.ceil(currentDistance);
+   document
+   .getElementById("distanceMessage")
+   .innerText=
+   "Pickup और Drop के आधार पर अनुमानित दूरी।";
 
+  }
 
-        /*
-          Minimum local distance 100 KM
-          आपके पहले बताए rule के अनुसार।
-        */
+  document
+  .getElementById("distance")
+  .innerText=
+  currentDistance+" KM";
 
-        if(tripType === "local" &&
-           currentDistance < 100){
+  calculateFare();
 
-            currentDistance = 100;
+  showStatus(
+   "✅ Distance calculate हो गई।",
+   "success"
+  );
 
-            document
-                .getElementById("distanceMessage")
-                .innerText =
-                "Local booking के लिए minimum 100 KM लागू है।";
+ }catch(error){
 
-        }else{
+  console.error(error);
 
-            document
-                .getElementById("distanceMessage")
-                .innerText =
-                "Location के आधार पर अनुमानित दूरी।";
+  showStatus(
+   "❌ Location नहीं मिली। सही स्थान का नाम डालें।",
+   "error"
+  );
 
-        }
+ }finally{
 
+  btn.disabled=false;
 
-        document
-            .getElementById("distance")
-            .innerText =
-            currentDistance + " KM";
+  btn.innerText=
+  "📍 दूरी Calculate करें";
 
-
-        calculateFare();
-
-
-        showStatus(
-            "✅ Distance calculate हो गई।",
-            "success"
-        );
-
-
-    }catch(error){
-
-        console.error(error);
-
-        showStatus(
-            "❌ Location नहीं मिली। Pickup और Drop का सही नाम डालें।",
-            "error"
-        );
-
-    }finally{
-
-        btn.disabled = false;
-
-        btn.innerText =
-            "📍 दूरी Calculate करें";
-
-    }
+ }
 
 };
 
 
-/* =========================================
-   FARE CALCULATION
-========================================= */
+/* ================================
+ FARE
+================================ */
 
 function calculateFare(){
 
-    const fareCar =
-        document.getElementById("fareCar");
+ const fareCar=
+ document.getElementById("fareCar");
 
-    const fareDistance =
-        document.getElementById("fareDistance");
+ const fareDistance=
+ document.getElementById("fareDistance");
 
-    const fareRate =
-        document.getElementById("fareRate");
+ const fareRate=
+ document.getElementById("fareRate");
 
-    const fareRent =
-        document.getElementById("fareRent");
+ const fareRent=
+ document.getElementById("fareRent");
 
-    const fareCommission =
-        document.getElementById("fareCommission");
+ const fareCommission=
+ document.getElementById("fareCommission");
 
-    const totalFare =
-        document.getElementById("totalFare");
+ const totalFare=
+ document.getElementById("totalFare");
 
 
-    fareDistanc
+ if(!selectedCar){
+
+  fareCar.innerText="-";
+  fareDistance.innerText=currentDistance+" KM";
+  fareRate.innerText="₹0";
+  fareRent.innerText="₹0";
+  fareCommission.innerText="₹0";
+  totalFare.innerText="₹0";
+
+  return;
+ }
+
+
+ let distance=
+ currentDistance;
+
+ let rate=
+ Number(selectedCar.rateKm)||0;
+
+ let rent=
+ Number(selectedCar.rent)||0;
+
+ let commission=
+ Number(selectedCar.commission)||0;
+
+
+ /*
+  LOCAL:
+  minimum 100 KM
+  rate/km apply नहीं होगा।
+  केवल rent/base fare लिया जाएगा।
+ */
+
+ let baseFare=rent;
+
+ if(tripType==="outstation"){
+
+  baseFare=
+  rent+(distance*rate);
+
+ }else{
+
+  baseFare=rent;
+
+ }
+
+
+ /*
+  Commission percentage मानकर calculation
+ */
+
+ let commissionAmount=0;
+
+ if(commission>0){
+
+  commissionAmount=
+  Math.round(
+   baseFare*commission/100
+  );
+
+ }
+
+
+ const total=
+ Math.round(
+  baseFare+commissionAmount
+ );
+
+
+ fareCar.innerText=
+ selectedCar.carName;
+
+ fareDistance.innerText=
+ distance+" KM";
+
+ fareRate.innerText=
+ tripType==="local"
+ ? "Local"
+ : "₹"+rate;
+
+ fareRent.innerText=
+ "₹"+rent;
+
+ fareCommission.innerText=
+ commission>0
+ ? "₹"+commissionAmount+
+   " ("+commission+"%)"
+ : "₹0";
+
+ totalFare.innerText=
+ "₹"+total;
+
+}
+
+
+/* ================================
+ BOOK CAR
+================================ */
+
+window.bookCar=async function(){
+
+ const name=
+ document.getElementById("customerName")
+ .value.trim();
+
+ const phone=
+ document.getElementById("customerPhone")
+ .value.trim();
+
+ const pickup=
+ document.getElementById("pickup")
+ .value.trim();
+
+ const drop=
+ document.getElementById("drop")
+ .value.trim();
+
+ const date=
+ document.getElementById("travelDate")
+ .value;
+
+ const time=
+ document.getElementById("travelTime")
+ .value;
+
+ const passengers=
+ Number(
+  document.getElementById("passengers").value
+ );
+
+
+ if(!name){
+
+  showStatus(
+   "अपना नाम डालें।",
+   "error"
+  );
+
+  return;
+ }
+
+
+ if(!/^[0-9]{10}$/.test(phone)){
+
+  showStatus(
+   "सही 10 digit mobile number डालें।",
+   "error"
+  );
+
+  return;
+ }
+
+
+ if(!pickup||!drop){
+
+  showStatus(
+   "Pickup और Drop डालें।",
+   "error"
+  );
+
+  return;
+ }
+
+
+ if(!date||!time){
+
+  showStatus(
+   "Travel Date और Time चुनें।",
+   "error"
+  );
+
+  return;
+ }
+
+
+ if(!selectedCar){
+
+  showStatus(
+   "पहले कोई car select करें।",
+   "error"
+  );
+
+  return;
+ }
+
+
+ if(currentDistance<=0){
+
+  showStatus(
+   "पहले Distance Calculate करें।",
+   "error"
+  );
+
+  return;
+ }
+
+
+ const bookButton=
+ document.getElementById("bookButton");
+
+ bookButton.disabled=true;
+
+ bookButton.innerText=
+ "⏳ Booking save हो रही है...";
+
+
+ try{
+
+  const totalText=
+  document.getElementById("totalFare")
+  .innerText
+  .replace(/[₹,]/g,"");
+
+  const totalFare=
+  Number(totalText)||0;
+
+
+  const bookingId=
+  "BMC-"+Date.now();
+
+
+  const bookingData={
+
+   bookingId,
+
+   customerName:name,
+
+   customerPhone:phone,
+
+   passengers,
+
+   pickup,
+
+   drop,
+
+   travelDate:date,
+
+   travelTime:time,
+
+   tripType,
+
+   distance:Number(currentDistance),
+
+   carId:selectedCar.id,
+
+   carName:selectedCar.carName,
+
+   ownerName:selectedCar.ownerName,
+
+   driverName:selectedCar.driverName,
+
+   rent:Number(selectedCar.rent)||0,
+
+   rateKm:Number(selectedCar.rateKm)||0,
+
+   commission:Number(selectedCar.commission)||0,
+
+   estimatedFare:totalFare,
+
+   status:"Pending",
+
+   createdAt:serverTimestamp()
+
+  };
+
+
+  await addDoc(
+   collection(db,"bookings"),
+   bookingData
+  );
+
+
+  /*
+   Local browser में last phone save
+   ताकि My Bookings दिख सके।
+  */
+
+  localStorage.setItem(
+   "bmc_customer_phone",
+   phone
+  );
+
+
+  document
+  .getElementById("resultBookingId")
+  .innerText=bookingId;
+
+  document
+  .getElementById("resultCustomer")
+  .innerText=name;
+
+  document
+  .getElementById("resultPhone")
+  .innerText=phone;
+
+  document
+  .getElementById("resultPickup")
+  .innerText=pickup;
+
+  document
+  .getElementById("resultDrop")
+  .innerText=drop;
+
+  document
+  .getElementById("resultCar")
+  .innerText=selectedCar.carName;
+
+  document
+  .getElementById("resultTrip")
+  .innerText=
+  tripType==="local"
+  ? "Local"
+  : "Outstation";
+
+  document
+  .getElementById("resultDistance")
+  .innerText=currentDistance;
+
+  document
+  .getElementById("resultTravel")
+  .innerText=
+  date+" "+time;
+
+  document
+  .getElementById("resultFare")
+  .innerText=totalFare;
+
+
+  document
+  .getElementById("bookingResult")
+  .style.display="block";
+
+
+  showStatus(
+   "✅ Booking successfully submit हो गई। Booking ID: "+bookingId,
+   "success"
+  );
+
+
+  document
+  .getElementById("bookingResult")
+  .scrollIntoView({
+   behavior:"smooth"
+  });
+
+
+ }catch(error){
+
+  console.error(error);
+
+  showStatus(
+   "❌ Booking save नहीं हो सकी। Firebase Firestore Rules check करें।",
+   "error"
+  );
+
+ }finally{
+
+  bookButton.disabled=false;
+
+  bookButton.innerText=
+  "🚕 Book My Car";
+
+ }
+
+};
+
+
+/* ================================
+ MY BOOKINGS
+================================ */
+
+window.showBookings=async function(){
+
+ const box=
+ document.getElementById("myBookings");
+
+ box.style.display="block";
+
+ const list=
+ document.getElementById("bookingsList");
+
+ const phone=
+ localStorage.getItem(
+  "bmc_customer_phone"
+ );
+
+ if(!phone){
+
+  list.innerHTML=`
+  <div class="empty">
+  अभी कोई booking नहीं मिली।
+  </div>`;
+
+  box.scrollIntoView({
+   behavior:"smooth"
+  });
+
+  return;
+ }
+
+
+ list.innerHTML=
+ `<div class="empty">
+ ⏳ Bookings load हो रही हैं...
+ </div>`;
+
+
+ try{
+
+  cons
