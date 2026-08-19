@@ -1,0 +1,46 @@
+<!doctype html>
+<html lang="hi">
+<head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Book My Car - Customer Booking</title>
+<style>
+*{box-sizing:border-box}body{margin:0;font-family:Arial,sans-serif;background:#f3f6fb;color:#172033}header{background:linear-gradient(135deg,#075bd3,#003caa);color:#fff;padding:22px 16px;text-align:center}header h1{margin:0;font-size:28px}header p{margin:7px 0 0}.wrap{max-width:760px;margin:25px auto;padding:0 15px}.card{background:#fff;border-radius:16px;padding:22px;box-shadow:0 5px 20px #00000012;margin-bottom:18px}h2{margin-top:0;color:#075bd3}.grid{display:grid;grid-template-columns:1fr 1fr;gap:14px}.field{margin-bottom:4px}label{display:block;font-weight:700;margin-bottom:7px}input,select,textarea{width:100%;padding:13px;border:1px solid #ccd5e3;border-radius:9px;font-size:16px}textarea{min-height:90px;resize:vertical}button{width:100%;padding:14px;border:0;border-radius:9px;background:#075bd3;color:#fff;font-size:17px;font-weight:700;cursor:pointer;margin-top:8px}button:disabled{opacity:.6}.full{grid-column:1/-1}.msg{display:none;padding:13px;border-radius:9px;margin-bottom:14px;font-weight:700}.success{display:block;background:#dff7e6;color:#16733a}.error{display:block;background:#ffe1e1;color:#a50000}.note{font-size:13px;color:#667085}.back{display:inline-block;margin-top:15px;color:#075bd3;text-decoration:none;font-weight:700}@media(max-width:600px){.grid{grid-template-columns:1fr}.full{grid-column:auto}}
+</style>
+</head>
+<body>
+<header><h1>🚗 Book My Car</h1><p>Customer Booking</p></header>
+<div class="wrap">
+<div class="card">
+<h2>📋 अपनी Booking करें</h2>
+<div id="msg" class="msg"></div>
+<form id="bookingForm">
+<div class="grid">
+<div class="field"><label for="customerName">Customer Name *</label><input id="customerName" required placeholder="आपका नाम"></div>
+<div class="field"><label for="mobile">Mobile Number *</label><input id="mobile" required inputmode="numeric" pattern="[0-9]{10}" maxlength="10" placeholder="10 digit mobile"></div>
+<div class="field"><label for="carId">Car *</label><select id="carId" required><option value="">Car loading...</option></select></div>
+<div class="field"><label for="bookingDate">Booking Date *</label><input id="bookingDate" type="date" required></div>
+<div class="field"><label for="pickup">Pickup Location *</label><input id="pickup" required placeholder="Pickup location"></div>
+<div class="field"><label for="destination">Destination *</label><input id="destination" required placeholder="Destination"></div>
+<div class="field"><label for="pickupTime">Pickup Time *</label><input id="pickupTime" type="time" required></div>
+<div class="field"><label for="passengers">Passengers</label><input id="passengers" type="number" min="1" max="20" value="1"></div>
+<div class="field full"><label for="notes">Extra Requirement</label><textarea id="notes" placeholder="कोई खास जानकारी हो तो लिखें"></textarea></div>
+</div>
+<button id="bookBtn" type="submit">🚗 Booking Confirm करें</button>
+</form>
+<p class="note">Booking submit होने के बाद Admin Panel में request दिखाई देगी।</p>
+<a class="back" href="index.html">← Home पर वापस जाएँ</a>
+</div>
+</div>
+<script type="module">
+import {initializeApp} from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
+import {getFirestore,collection,getDocs,addDoc,serverTimestamp,query,where} from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
+const firebaseConfig={apiKey:"AIzaSyDD-jSNG_HfhW4aTXtdf0kpdclaDVbgrNA",authDomain:"book-my-car-a97cf.firebaseapp.com",projectId:"book-my-car-a97cf",storageBucket:"book-my-car-a97cf.firebasestorage.app",messagingSenderId:"546652899903",appId:"1:546652899903:web:c280a58db101e01d1d468a"};
+const app=initializeApp(firebaseConfig),db=getFirestore(app),form=document.getElementById('bookingForm'),carId=document.getElementById('carId'),msg=document.getElementById('msg'),btn=document.getElementById('bookBtn');
+const date=document.getElementById('bookingDate');date.min=new Date().toISOString().split('T')[0];
+function show(text,type){msg.textContent=text;msg.className='msg '+type}
+function safe(v){return String(v??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#039;'}[c]))}
+async function loadCars(){try{const snap=await getDocs(collection(db,'cars'));carId.innerHTML='<option value="">Car चुनें</option>';let count=0;snap.forEach(d=>{const c=d.data();if(c.status==='Rejected'||c.status==='rejected'||c.available===false)return;const o=document.createElement('option');o.value=d.id;o.textContent=`${safe(c.carName||'Car')} — ₹${Number(c.rent??c.localRate??0)}`;carId.appendChild(o);count++});if(!count)carId.innerHTML='<option value="">अभी कोई car उपलब्ध नहीं</option>'}catch(e){carId.innerHTML='<option value="">Cars load नहीं हुईं</option>';show('Cars load नहीं हो पाईं। Firebase rules check करें।','error')}}
+form.addEventListener('submit',async e=>{e.preventDefault();const mobile=document.getElementById('mobile').value.trim();if(!/^[0-9]{10}$/.test(mobile)){show('कृपया 10 digit mobile number डालें।','error');return}if(!carId.value){show('कृपया car चुनें।','error');return}btn.disabled=true;btn.textContent='⏳ Booking save हो रही है...';try{const selected=carId.options[carId.selectedIndex];await addDoc(collection(db,'bookings'),{customerName:document.getElementById('customerName').value.trim(),mobile,carId:carId.value,carName:selected.textContent,pickup:document.getElementById('pickup').value.trim(),destination:document.getElementById('destination').value.trim(),date:date.value,pickupTime:document.getElementById('pickupTime').value,passengers:Number(document.getElementById('passengers').value||1),notes:document.getElementById('notes').value.trim(),status:'Pending',createdAt:serverTimestamp()});form.reset();date.min=new Date().toISOString().split('T')[0];show('✅ Booking successfully submit हो गई। Admin इसे देख सकता है।','success')}catch(e){console.error(e);show('❌ Booking submit नहीं हुई: '+e.message,'error')}finally{btn.disabled=false;btn.textContent='🚗 Booking Confirm करें'}});
+loadCars();
+</script>
+</body></html>
