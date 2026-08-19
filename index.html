@@ -2,90 +2,71 @@
 <html lang="hi">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
 
 <title>Book My Car</title>
 
 <style>
-*{
-  box-sizing:border-box;
-}
+*{box-sizing:border-box}
 
 body{
   margin:0;
-  font-family:Arial, sans-serif;
+  font-family:Arial,sans-serif;
   background:#f3f7ff;
-  color:#222;
+  color:#222
 }
 
 header{
   background:linear-gradient(135deg,#0066ff,#00a8ff);
-  color:white;
-  padding:22px 15px;
+  color:#fff;
   text-align:center;
+  padding:22px 15px
 }
 
-header h1{
-  margin:0;
-  font-size:28px;
-}
-
-header p{
-  margin:7px 0 0;
-}
+header h1{margin:0;font-size:28px}
+header p{margin:7px 0 0}
 
 .container{
   width:94%;
   max-width:850px;
-  margin:20px auto;
+  margin:20px auto
 }
 
 .card{
-  background:white;
-  border-radius:16px;
+  background:#fff;
   padding:20px;
   margin-bottom:18px;
-  box-shadow:0 5px 20px rgba(0,0,0,.08);
+  border-radius:16px;
+  box-shadow:0 5px 20px rgba(0,0,0,.08)
 }
 
-h2{
-  margin-top:0;
-  font-size:21px;
-}
+h2{margin-top:0;font-size:21px}
 
 label{
   display:block;
   font-weight:bold;
-  margin-top:13px;
-  margin-bottom:6px;
+  margin:13px 0 6px
 }
 
-input,
-select{
+input,select{
   width:100%;
   padding:13px;
   border:1px solid #ccd5e2;
   border-radius:9px;
-  font-size:16px;
-  outline:none;
-}
-
-input:focus,
-select:focus{
-  border-color:#007bff;
+  font-size:16px
 }
 
 .row{
   display:grid;
   grid-template-columns:1fr 1fr;
-  gap:12px;
+  gap:12px
 }
 
 .buttons{
   display:flex;
   gap:10px;
   flex-wrap:wrap;
-  margin-top:12px;
+  margin-top:10px
 }
 
 button{
@@ -94,133 +75,114 @@ button{
   border-radius:9px;
   cursor:pointer;
   font-size:15px;
-  font-weight:bold;
+  font-weight:bold
 }
 
 .tripBtn{
   background:#e8eef7;
-  color:#222;
+  color:#222
 }
 
 .tripBtn.active{
   background:#007bff;
-  color:white;
+  color:#fff
 }
 
 .primary{
   width:100%;
   margin-top:16px;
   background:#007bff;
-  color:white;
-  font-size:17px;
+  color:#fff;
+  font-size:17px
 }
 
-.success{
-  background:#0b9b55;
-  color:white;
-}
+.success{background:#0b9b55;color:#fff}
 
 .distanceBox{
   text-align:center;
   background:#eef6ff;
   border-radius:12px;
   padding:18px;
-  margin-top:15px;
+  margin-top:15px
 }
 
 .distance{
   font-size:32px;
   font-weight:bold;
   color:#0066ff;
+  margin:5px
 }
 
 .status{
-  margin-top:10px;
   font-size:14px;
-  color:#555;
+  color:#555
 }
 
 .car{
   border:2px solid #e1e7f0;
   border-radius:12px;
   padding:15px;
-  margin:10px 0;
-  cursor:pointer;
+  margin:10px 0
 }
 
 .car.selected{
   border-color:#007bff;
-  background:#eef6ff;
+  background:#eef6ff
 }
 
-.car h3{
-  margin:0 0 8px;
-}
+.car h3{margin:0 0 8px}
+.car p{margin:5px 0}
 
-.car p{
-  margin:5px 0;
-}
-
-.car button{
+.selectCar{
   background:#007bff;
-  color:white;
+  color:#fff;
   width:100%;
-  margin-top:8px;
+  margin-top:8px
 }
 
 .fare{
   background:#f7f9fc;
   border-radius:12px;
-  padding:15px;
+  padding:15px
 }
 
 .fareRow{
   display:flex;
   justify-content:space-between;
-  padding:8px 0;
-  border-bottom:1px solid #e5e8ed;
+  padding:9px 0;
+  border-bottom:1px solid #e5e8ed
 }
 
 .total{
   font-size:23px;
-  font-weight:bold;
-  color:#087d42;
+  color:#087d42
 }
 
 .message{
+  display:none;
   padding:12px;
   border-radius:9px;
-  margin-top:10px;
-  display:none;
+  margin-top:10px
 }
 
-.error{
-  background:#ffe9e9;
-  color:#a30000;
-}
+.error{background:#ffe9e9;color:#a30000}
+.ok{background:#e8fff2;color:#087d42}
 
-.ok{
-  background:#e8fff2;
-  color:#087d42;
-}
-
-.bookingBox{
-  display:none;
-}
+.bookingBox{display:none}
 
 .small{
   font-size:13px;
-  color:#666;
+  color:#666
+}
+
+.loading{
+  text-align:center;
+  padding:15px
 }
 
 @media(max-width:600px){
-  .row{
-    grid-template-columns:1fr;
-  }
-
-  header h1{
-    font-size:24px;
-  }
+  .row{grid-template-columns:1fr}
+  header h1{font-size:24px}
 }
 </style>
 </head>
@@ -228,507 +190,13 @@ button{
 <body>
 
 <header>
-  <h1>🚕 Book My Car</h1>
-  <p>अपनी सवारी अभी बुक करें</p>
+<h1>🚕 Book My Car</h1>
+<p>अपनी सवारी अभी बुक करें</p>
 </header>
 
 <div class="container">
 
-  <!-- TRIP DETAILS -->
-  <div class="card">
+<!-- TRIP -->
+<div class="card">
 
-    <h2>📍 Trip Details</h2>
-
-    <div class="row">
-
-      <div>
-        <label>Pickup Location</label>
-        <input
-          id="pickup"
-          type="text"
-          placeholder="जैसे Sarangarh"
-          autocomplete="off">
-      </div>
-
-      <div>
-        <label>Drop Location</label>
-        <input
-          id="drop"
-          type="text"
-          placeholder="जैसे Raigarh"
-          autocomplete="off">
-      </div>
-
-    </div>
-
-    <div class="row">
-
-      <div>
-        <label>Travel Date</label>
-        <input id="travelDate" type="date">
-      </div>
-
-      <div>
-        <label>Travel Time</label>
-        <input id="travelTime" type="time">
-      </div>
-
-    </div>
-
-    <label>Trip Type</label>
-
-    <div class="buttons">
-      <button
-        id="localBtn"
-        class="tripBtn active"
-        onclick="setTripType('Local')">
-        🏙️ Local
-      </button>
-
-      <button
-        id="outstationBtn"
-        class="tripBtn"
-        onclick="setTripType('Outstation')">
-        🛣️ Outstation
-      </button>
-    </div>
-
-    <label>Journey Type</label>
-
-    <div class="buttons">
-
-      <button
-        id="oneWayBtn"
-        class="tripBtn active"
-        onclick="setJourneyType('One Way')">
-        ➡️ One Way
-      </button>
-
-      <button
-        id="roundBtn"
-        class="tripBtn"
-        onclick="setJourneyType('Round Trip')">
-        🔄 Round Trip
-      </button>
-
-    </div>
-
-    <div class="distanceBox">
-
-      <div>📏 अनुमानित Road Distance</div>
-
-      <div class="distance">
-        <span id="distance">0</span> KM
-      </div>
-
-      <div id="distanceStatus" class="status">
-        Pickup और Drop डालकर Distance Calculate करें।
-      </div>
-
-    </div>
-
-    <button
-      class="primary"
-      onclick="calculateDistance()">
-      📍 Distance Calculate करें
-    </button>
-
-    <div id="message" class="message"></div>
-
-  </div>
-
-
-  <!-- AVAILABLE CARS -->
-  <div class="card">
-
-    <h2>🚗 Available Cars</h2>
-
-    <div id="cars">
-      ⏳ Cars load हो रही हैं...
-    </div>
-
-  </div>
-
-
-  <!-- FARE -->
-  <div class="card">
-
-    <h2>💰 Estimated Fare</h2>
-
-    <div class="fare">
-
-      <div class="fareRow">
-        <span>Car</span>
-        <strong id="fareCar">-</strong>
-      </div>
-
-      <div class="fareRow">
-        <span>Journey</span>
-        <strong id="fareJourney">One Way</strong>
-      </div>
-
-      <div class="fareRow">
-        <span>Distance</span>
-        <strong>
-          <span id="fareDistance">0</span> KM
-        </strong>
-      </div>
-
-      <div class="fareRow">
-        <span>Rate / KM</span>
-        <strong>
-          ₹<span id="fareRate">0</span>
-        </strong>
-      </div>
-
-      <div class="fareRow">
-        <span>Base Rent</span>
-        <strong>
-          ₹<span id="fareRent">0</span>
-        </strong>
-      </div>
-
-      <div class="fareRow">
-        <span>Commission</span>
-        <strong>
-          ₹<span id="fareCommission">0</span>
-        </strong>
-      </div>
-
-      <div class="fareRow">
-        <span>Total</span>
-        <strong class="total">
-          ₹<span id="fareTotal">0</span>
-        </strong>
-      </div>
-
-    </div>
-
-    <p class="small">
-      Local में minimum 100 KM One Way और 200 KM Round Trip रखा गया है।
-      Outstation में road distance के अनुसार calculation होगा।
-    </p>
-
-  </div>
-
-
-  <!-- CUSTOMER -->
-  <div class="card">
-
-    <h2>👤 Customer Details</h2>
-
-    <label>आपका नाम</label>
-    <input
-      id="customerName"
-      type="text"
-      placeholder="पूरा नाम">
-
-    <label>मोबाइल नंबर</label>
-    <input
-      id="customerMobile"
-      type="tel"
-      maxlength="10"
-      placeholder="10 digit mobile number">
-
-    <label>Passengers</label>
-
-    <select id="passengers">
-      <option value="1">1 Passenger</option>
-      <option value="2">2 Passengers</option>
-      <option value="3">3 Passengers</option>
-      <option value="4">4 Passengers</option>
-      <option value="5">5 Passengers</option>
-      <option value="6">6 Passengers</option>
-      <option value="7">7 Passengers</option>
-      <option value="8">8 Passengers</option>
-    </select>
-
-    <button
-      class="primary success"
-      onclick="bookCar()">
-      🚕 Book My Car
-    </button>
-
-  </div>
-
-
-  <!-- BOOKING RESULT -->
-  <div id="bookingBox" class="card bookingBox">
-
-    <h2>✅ Booking Submitted</h2>
-
-    <p>
-      <strong>Booking ID:</strong>
-      <span id="resultBookingId">-</span>
-    </p>
-
-    <p>
-      <strong>Customer:</strong>
-      <span id="resultCustomer">-</span>
-    </p>
-
-    <p>
-      <strong>Mobile:</strong>
-      <span id="resultMobile">-</span>
-    </p>
-
-    <p>
-      <strong>Pickup:</strong>
-      <span id="resultPickup">-</span>
-    </p>
-
-    <p>
-      <strong>Drop:</strong>
-      <span id="resultDrop">-</span>
-    </p>
-
-    <p>
-      <strong>Trip:</strong>
-      <span id="resultTrip">-</span>
-    </p>
-
-    <p>
-      <strong>Journey:</strong>
-      <span id="resultJourney">-</span>
-    </p>
-
-    <p>
-      <strong>Car:</strong>
-      <span id="resultCar">-</span>
-    </p>
-
-    <p>
-      <strong>Distance:</strong>
-      <span id="resultDistance">0</span> KM
-    </p>
-
-    <p>
-      <strong>Travel:</strong>
-      <span id="resultTravel">-</span>
-    </p>
-
-    <p>
-      <strong>Estimated Fare:</strong>
-      ₹<span id="resultFare">0</span>
-    </p>
-
-    <p>
-      <strong>Status:</strong> Pending
-    </p>
-
-  </div>
-
-</div>
-
-
-<script>
-
-/* =========================================================
-   FIRESTORE CONFIG
-========================================================= */
-
-const FIREBASE_PROJECT_ID = "book-my-car-a97cf";
-
-const FIREBASE_API_KEY =
-  "AIzaSyDD-jSNG_HfhW4aTXtdf0kpdclaDVbgrNA";
-
-const FIRESTORE_BASE =
-  "https://firestore.googleapis.com/v1/projects/" +
-  FIREBASE_PROJECT_ID +
-  "/databases/(default)/documents";
-
-
-/* =========================================================
-   GLOBAL VARIABLES
-========================================================= */
-
-let tripType = "Local";
-let journeyType = "One Way";
-
-let distanceKm = 0;
-
-let cars = [];
-let selectedCar = null;
-
-let calculating = false;
-
-
-/* =========================================================
-   HELPERS
-========================================================= */
-
-function $(id){
-  return document.getElementById(id);
-}
-
-
-function number(value){
-
-  if(value === undefined || value === null){
-    return 0;
-  }
-
-  if(typeof value === "number"){
-    return value;
-  }
-
-  const n = parseFloat(
-    String(value).replace(/[₹,%\s,]/g,"")
-  );
-
-  return isNaN(n) ? 0 : n;
-}
-
-
-function cleanText(value){
-
-  if(value === undefined || value === null){
-    return "";
-  }
-
-  return String(value).trim();
-}
-
-
-function firestoreValue(value){
-
-  if(typeof value === "number"){
-    return {
-      doubleValue:value
-    };
-  }
-
-  if(typeof value === "boolean"){
-    return {
-      booleanValue:value
-    };
-  }
-
-  return {
-    stringValue:String(value ?? "")
-  };
-}
-
-
-function getFirestoreField(fields, names){
-
-  for(const name of names){
-
-    if(
-      fields &&
-      fields[name] &&
-      fields[name].stringValue !== undefined
-    ){
-      return fields[name].stringValue;
-    }
-
-    if(
-      fields &&
-      fields[name] &&
-      fields[name].integerValue !== undefined
-    ){
-      return Number(fields[name].integerValue);
-    }
-
-    if(
-      fields &&
-      fields[name] &&
-      fields[name].doubleValue !== undefined
-    ){
-      return Number(fields[name].doubleValue);
-    }
-
-    if(
-      fields &&
-      fields[name] &&
-      fields[name].booleanValue !== undefined
-    ){
-      return fields[name].booleanValue;
-    }
-  }
-
-  return "";
-}
-
-
-/* =========================================================
-   MESSAGE
-========================================================= */
-
-function showMessage(text, type="error"){
-
-  const box = $("message");
-
-  box.textContent = text;
-
-  box.className =
-    "message " +
-    (type === "ok" ? "ok" : "error");
-
-  box.style.display = "block";
-}
-
-
-function hideMessage(){
-
-  $("message").style.display = "none";
-}
-
-
-/* =========================================================
-   TRIP TYPE
-========================================================= */
-
-function setTripType(type){
-
-  tripType = type;
-
-  $("localBtn").classList.remove("active");
-  $("outstationBtn").classList.remove("active");
-
-  if(type === "Local"){
-    $("localBtn").classList.add("active");
-  }else{
-    $("outstationBtn").classList.add("active");
-  }
-
-  calculateFare();
-}
-
-
-/* =========================================================
-   JOURNEY TYPE
-========================================================= */
-
-function setJourneyType(type){
-
-  journeyType = type;
-
-  $("oneWayBtn").classList.remove("active");
-  $("roundBtn").classList.remove("active");
-
-  if(type === "One Way"){
-    $("oneWayBtn").classList.add("active");
-  }else{
-    $("roundBtn").classList.add("active");
-  }
-
-  calculateFare();
-}
-
-
-/* =========================================================
-   GEOCODING
-========================================================= */
-
-async function geocode(place){
-
-  const query =
-    encodeURIComponent(
-      place + ", Chhattisgarh, India"
-    );
-
-  const url =
-    "https://nominatim.openstreetmap.org/search" +
-    "?format=jsonv2" +
-   
+<h2>
