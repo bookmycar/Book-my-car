@@ -57,10 +57,6 @@ h2{
   gap:14px;
 }
 
-.field{
-  margin-bottom:4px;
-}
-
 .full{
   grid-column:1/-1;
 }
@@ -134,12 +130,12 @@ button:disabled{
   cursor:not-allowed;
 }
 
-.secondary{
-  background:#475467;
-}
-
 .calculate{
   background:#0b8f4d;
+}
+
+.secondary{
+  background:#475467;
 }
 
 .msg{
@@ -185,7 +181,7 @@ button:disabled{
   display:flex;
   justify-content:space-between;
   gap:10px;
-  padding:8px 0;
+  padding:9px 0;
   border-bottom:1px solid #e7ebf1;
 }
 
@@ -209,25 +205,15 @@ button:disabled{
   margin-top:8px;
 }
 
+.hidden{
+  display:none !important;
+}
+
 .back{
   display:inline-block;
   margin-top:15px;
   color:#075bd3;
   text-decoration:none;
-  font-weight:700;
-}
-
-.hidden{
-  display:none !important;
-}
-
-.badge{
-  display:inline-block;
-  padding:5px 9px;
-  border-radius:20px;
-  background:#e8f1ff;
-  color:#075bd3;
-  font-size:12px;
   font-weight:700;
 }
 
@@ -270,12 +256,12 @@ button:disabled{
 
 <div class="grid">
 
-<div class="field">
+<div>
 <label for="customerName">Customer Name *</label>
 <input id="customerName" required placeholder="आपका नाम">
 </div>
 
-<div class="field">
+<div>
 <label for="mobile">Mobile Number *</label>
 <input
  id="mobile"
@@ -286,76 +272,105 @@ button:disabled{
  placeholder="10 digit mobile">
 </div>
 
-<div class="field">
+<div>
 <label for="carId">Car *</label>
+
 <select id="carId" required>
 <option value="">Cars loading...</option>
 </select>
+
 <div id="carLoading" class="loading"></div>
 </div>
 
-<div class="field">
+<div>
 <label for="bookingDate">Booking Date *</label>
 <input id="bookingDate" type="date" required>
 </div>
 
-<div class="field">
+<div>
 <label for="pickup">Pickup Location *</label>
 <input id="pickup" required placeholder="जैसे Sarangarh">
 </div>
 
-<div class="field">
+<div>
 <label for="destination">Destination *</label>
 <input id="destination" required placeholder="जैसे Raigarh">
 </div>
 
-<div class="field">
+<div>
 <label for="pickupTime">Pickup Time *</label>
 <input id="pickupTime" type="time" required>
 </div>
 
-<div class="field">
+<div>
 <label for="passengers">Passengers</label>
-<input id="passengers" type="number" min="1" max="50" value="1">
+<input
+ id="passengers"
+ type="number"
+ min="1"
+ max="50"
+ value="1">
 </div>
 
-<div class="field full">
+<div class="full">
+
 <label>Trip Type *</label>
 
 <div class="radioBox">
 
 <label class="radioItem">
-<input type="radio" name="tripType" value="local" checked>
-Local Trip
+<input
+ type="radio"
+ name="tripType"
+ value="local"
+ checked>
+ Local Trip
 </label>
 
 <label class="radioItem">
-<input type="radio" name="tripType" value="outstation">
-Outstation
+<input
+ type="radio"
+ name="tripType"
+ value="outstation">
+ Outstation
 </label>
 
 </div>
+
 </div>
 
-<div class="field full">
+<div class="full">
+
 <label class="radioItem">
-<input id="roundTrip" type="checkbox">
+
+<input
+ id="roundTrip"
+ type="checkbox">
+
 🔄 Round Trip
+
 </label>
+
 </div>
 
-<div class="field full">
+<div class="full">
+
 <button
  type="button"
  id="calculateBtn"
  class="calculate">
+
 📍 Distance & Fare Calculate करें
+
 </button>
-</div>
 
 </div>
 
-<div id="calculationBox" class="result hidden">
+</div>
+
+<div
+ id="calculationBox"
+ class="result hidden">
 
 <div class="resultRow">
 <span>One Way Distance</span>
@@ -379,22 +394,38 @@ Outstation
 
 <div class="resultRow">
 <span>Calculated Fare</span>
-<strong class="total" id="totalFare">₹0</strong>
+<strong
+ id="totalFare"
+ class="total">
+₹0
+</strong>
 </div>
 
-<div id="fuelNote" class="note"></div>
+<div
+ id="fuelNote"
+ class="note">
+</div>
 
 </div>
 
-<div class="field full">
-<label for="notes">Extra Requirement</label>
+<div class="full">
+
+<label for="notes">
+Extra Requirement
+</label>
+
 <textarea
  id="notes"
  placeholder="कोई खास जानकारी हो तो लिखें"></textarea>
+
 </div>
 
-<button id="bookBtn" type="submit">
+<button
+ id="bookBtn"
+ type="submit">
+
 🚗 Booking Confirm करें
+
 </button>
 
 </form>
@@ -403,411 +434,187 @@ Outstation
 Booking submit होने के बाद Admin Panel में request दिखाई देगी।
 </p>
 
-<a class="back" href="index.html">
+<a
+ class="back"
+ href="index.html">
+
 ← Home पर वापस जाएँ
+
 </a>
 
 </div>
 </div>
 
+
 <script type="module">
 
+/* =====================================================
+   FIREBASE
+===================================================== */
+
 import {
- initializeApp
+  initializeApp
 } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
 
 import {
- getFirestore,
- collection,
- getDocs,
- addDoc,
- serverTimestamp
+  getFirestore,
+  collection,
+  getDocs,
+  addDoc,
+  serverTimestamp
 } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
 
 
-/* =========================
-   FIREBASE
-========================= */
-
 const firebaseConfig = {
- apiKey:"AIzaSyDD-jSNG_HfhW4aTXtdf0kpdclaDVbgrNA",
- authDomain:"book-my-car-a97cf.firebaseapp.com",
- projectId:"book-my-car-a97cf",
- storageBucket:"book-my-car-a97cf.firebasestorage.app",
- messagingSenderId:"546652899903",
- appId:"1:546652899903:web:c280a58db101e01d1d468a"
+
+  apiKey:
+  "AIzaSyDD-jSNG_HfhW4aTXtdf0kpdclaDVbgrNA",
+
+  authDomain:
+  "book-my-car-a97cf.firebaseapp.com",
+
+  projectId:
+  "book-my-car-a97cf",
+
+  storageBucket:
+  "book-my-car-a97cf.firebasestorage.app",
+
+  messagingSenderId:
+  "546652899903",
+
+  appId:
+  "1:546652899903:web:c280a58db101e01d1d468a"
 };
 
+
 const app = initializeApp(firebaseConfig);
+
 const db = getFirestore(app);
 
 
-/* =========================
+/* =====================================================
    ELEMENTS
-========================= */
+===================================================== */
 
-const form = document.getElementById("bookingForm");
-const carId = document.getElementById("carId");
-const msg = document.getElementById("msg");
-const btn = document.getElementById("bookBtn");
-const calculateBtn = document.getElementById("calculateBtn");
-const loading = document.getElementById("carLoading");
+const form =
+  document.getElementById("bookingForm");
 
-const bookingDate = document.getElementById("bookingDate");
-const pickup = document.getElementById("pickup");
-const destination = document.getElementById("destination");
-const roundTrip = document.getElementById("roundTrip");
+const carId =
+  document.getElementById("carId");
 
-const calculationBox = document.getElementById("calculationBox");
-const oneWayDistance = document.getElementById("oneWayDistance");
-const totalDistance = document.getElementById("totalDistance");
-const showTripType = document.getElementById("showTripType");
-const showRate = document.getElementById("showRate");
-const totalFare = document.getElementById("totalFare");
-const fuelNote = document.getElementById("fuelNote");
+const msg =
+  document.getElementById("msg");
+
+const bookBtn =
+  document.getElementById("bookBtn");
+
+const calculateBtn =
+  document.getElementById("calculateBtn");
+
+const carLoading =
+  document.getElementById("carLoading");
+
+const bookingDate =
+  document.getElementById("bookingDate");
+
+const pickup =
+  document.getElementById("pickup");
+
+const destination =
+  document.getElementById("destination");
+
+const roundTrip =
+  document.getElementById("roundTrip");
+
+const calculationBox =
+  document.getElementById("calculationBox");
+
+const oneWayDistance =
+  document.getElementById("oneWayDistance");
+
+const totalDistance =
+  document.getElementById("totalDistance");
+
+const showTripType =
+  document.getElementById("showTripType");
+
+const showRate =
+  document.getElementById("showRate");
+
+const totalFare =
+  document.getElementById("totalFare");
+
+const fuelNote =
+  document.getElementById("fuelNote");
 
 
-/* =========================
-   GLOBAL DATA
-========================= */
+/* =====================================================
+   DATA
+===================================================== */
 
 let cars = [];
+
 let selectedCarData = null;
 
 let calculatedDistance = 0;
+
 let calculatedTotalDistance = 0;
+
 let calculatedFare = 0;
 
+let calculated = false;
 
-/* =========================
+
+/* =====================================================
    DATE
-========================= */
+===================================================== */
 
-const today = new Date();
+const now = new Date();
+
 const todayString =
- today.getFullYear() + "-" +
- String(today.getMonth()+1).padStart(2,"0") + "-" +
- String(today.getDate()).padStart(2,"0");
+  now.getFullYear() +
+  "-" +
+  String(now.getMonth()+1).padStart(2,"0") +
+  "-" +
+  String(now.getDate()).padStart(2,"0");
 
 bookingDate.min = todayString;
 
 
-/* =========================
+/* =====================================================
    MESSAGE
-========================= */
+===================================================== */
 
 function showMessage(text,type="info"){
- msg.textContent = text;
- msg.className = "msg " + type;
+
+  msg.textContent = text;
+
+  msg.className =
+    "msg " + type;
+
 }
 
 
-/* =========================
-   NUMBER HELPERS
-========================= */
+/* =====================================================
+   NUMBER
+===================================================== */
 
 function numberValue(value){
 
- if(value === null || value === undefined || value === ""){
-   return 0;
- }
-
- const n = Number(
-   String(value)
-   .replace(/₹/g,"")
-   .replace(/,/g,"")
-   .replace(/[^\d.-]/g,"")
- );
-
- return Number.isFinite(n) ? n : 0;
-}
-
-
-function money(value){
- return "₹" + Math.round(numberValue(value)).toLocaleString("en-IN");
-}
-
-
-/* =========================
-   FIND RATE
-========================= */
-
-function getRate(car){
-
- /*
-  अलग-अलग पुराने AddCar versions में
-  अलग नाम हो सकते हैं।
- */
-
- const possibleRates = [
-   car.rateKm,
-   car.ratePerKm,
-   car.ratePerKM,
-   car.rate_km,
-   car.kmRate,
-   car.perKm,
-   car.pricePerKm
- ];
-
- for(const value of possibleRates){
-
-   const n = numberValue(value);
-
-   if(n > 0){
-     return n;
-   }
- }
-
- return 0;
-}
-
-
-/* =========================
-   FIND RENT
-========================= */
-
-function getRent(car){
-
- const possibleRents = [
-   car.rent,
-   car.localRate,
-   car.localRent,
-   car.dailyRent,
-   car.price
- ];
-
- for(const value of possibleRents){
-
-   const n = numberValue(value);
-
-   if(n > 0){
-     return n;
-   }
- }
-
- return 0;
-}
-
-
-/* =========================
-   LOAD CARS
-========================= */
-
-async function loadCars(){
-
- loading.textContent = "Cars load हो रही हैं...";
-
- try{
-
-   const snap =
-     await getDocs(collection(db,"cars"));
-
-   cars = [];
-
-   carId.innerHTML =
-     '<option value="">Car चुनें</option>';
-
-   snap.forEach(docSnap => {
-
-     const car = docSnap.data();
-
-     /*
-       Rejected cars को hide करें
-     */
-
-     const status =
-       String(car.status || "").toLowerCase();
-
-     if(status === "rejected"){
-       return;
-     }
-
-     if(car.available === false){
-       return;
-     }
-
-     const rate = getRate(car);
-     const rent = getRent(car);
-
-     const item = {
-       id:docSnap.id,
-       ...car,
-       _rateKm:rate,
-       _rent:rent
-     };
-
-     cars.push(item);
-
-     const option =
-       document.createElement("option");
-
-     option.value = docSnap.id;
-
-     const name =
-       car.carName ||
-       car.name ||
-       car.car ||
-       "Car";
-
-     let priceText = "";
-
-     if(rate > 0){
-       priceText =
-         " ₹" +
-         rate.toLocaleString("en-IN") +
-         "/KM";
-     }
-     else if(rent > 0){
-       priceText =
-         " " +
-         money(rent);
-     }
-
-     option.textContent =
-       name + priceText;
-
-     carId.appendChild(option);
-
-   });
-
-
-   if(cars.length === 0){
-
-     carId.innerHTML =
-       '<option value="">अभी कोई car उपलब्ध नहीं</option>';
-
-     loading.textContent =
-       "Firebase में कोई available car नहीं मिली।";
-
-     showMessage(
-       "अभी कोई car उपलब्ध नहीं है। पहले AddCar.html से car save करें।",
-       "error"
-     );
-
-     return;
-   }
-
-   loading.textContent =
-     cars.length + " car उपलब्ध हैं।";
-
-
- }catch(error){
-
-   console.error("CAR LOAD ERROR:",error);
-
-   carId.innerHTML =
-     '<option value="">Cars load नहीं हुईं</option>';
-
-   loading.textContent =
-     "Firebase error";
-
-   showMessage(
-     "Cars load नहीं हो पाईं। Firebase Firestore Rules/connection check करें। " +
-     error.message,
-     "error"
-   );
- }
-}
-
-
-/* =========================
-   SELECT CAR
-========================= */
-
-carId.addEventListener("change",function(){
-
- selectedCarData =
-   cars.find(car => car.id === carId.value) || null;
-
- calculationBox.classList.add("hidden");
-
- calculatedDistance = 0;
- calculatedTotalDistance = 0;
- calculatedFare = 0;
-
- if(selectedCarData){
-
-   console.log("Selected car:",selectedCarData);
-
- }
-
-});
-
-
-/* =========================
-   GEOCODING
-========================= */
-
-async function geocode(place){
-
- const url =
-   "https://nominatim.openstreetmap.org/search" +
-   "?format=json" +
-   "&limit=1" +
-   "&q=" +
-   encodeURIComponent(place + ", India");
-
- const response =
-   await fetch(url,{
-     headers:{
-       "Accept":"application/json"
-     }
-   });
-
- if(!response.ok){
-   throw new Error("Location service unavailable");
- }
-
- const data =
-   await response.json();
-
- if(!data || !data.length){
-   throw new Error(
-     "Location नहीं मिली: " + place
-   );
- }
-
- return {
-   lat:Number(data[0].lat),
-   lon:Number(data[0].lon),
-   display:data[0].display_name
- };
-}
-
-
-/* =========================
-   ROAD DISTANCE
-========================= */
-
-async function getRoadDistance(from,to){
-
- const fromPoint =
-   await geocode(from);
-
- const toPoint =
-   await geocode(to);
-
- const routeUrl =
-   "https://router.project-osrm.org/route/v1/driving/" +
-   fromPoint.lon + "," + fromPoint.lat +
-   ";" +
-   toPoint.lon + "," + toPoint.lat +
-   "?overview=false";
-
- const response =
-   await fetch(routeUrl);
-
- if(!response.ok){
-   throw new Error("Road distance service unavailable");
- }
-
- const data =
-   await response.json();
-
- if(
-   data.code !== "Ok" ||
-   !data.routes ||
-   !data.routes.length
- ){
-   throw new Error(
-     "Pickup और Destination के बीच road route
+  if(
+    value === null ||
+    value === undefined ||
+    value === ""
+  ){
+    return 0;
+  }
+
+  const n =
+    Number(
+      String(value)
+      .replace(/₹/g,"")
+      .replace(/,/g,"")
+      .replace(/[^\d.-]/g,"")
+    );
+
+  return Number.isFinite(n) ? n : 
