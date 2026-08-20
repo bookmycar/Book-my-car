@@ -1,8 +1,8 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="hi">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
 
 <title>Book My Car - Admin Panel</title>
 
@@ -10,1104 +10,292 @@
 *{box-sizing:border-box}
 
 body{
-    margin:0;
-    font-family:Arial,sans-serif;
-    background:#f3f6fb;
-    color:#222;
+  margin:0;
+  font-family:Arial,sans-serif;
+  background:#f3f6fb;
+  color:#172033;
 }
 
 header{
-    background:linear-gradient(135deg,#003caa,#007bff);
-    color:white;
-    text-align:center;
-    padding:24px 15px;
+  background:linear-gradient(135deg,#075bd3,#003caa);
+  color:white;
+  padding:16px 20px;
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
 }
 
 header h1{
-    margin:0;
-    font-size:30px;
-}
-
-header p{
-    margin:7px 0 0;
-}
-
-.container{
-    max-width:1250px;
-    margin:20px auto;
-    padding:0 12px;
-}
-
-.card{
-    background:white;
-    border-radius:15px;
-    padding:20px;
-    margin-bottom:20px;
-    box-shadow:0 5px 20px rgba(0,0,0,.08);
-}
-
-.login{
-    max-width:420px;
-    margin:50px auto;
-}
-
-input,select{
-    width:100%;
-    padding:13px;
-    border:1px solid #ccd5e3;
-    border-radius:9px;
-    font-size:16px;
-    margin-top:7px;
-}
-
-label{
-    display:block;
-    font-weight:bold;
-    margin-top:14px;
-}
-
-button{
-    border:0;
-    border-radius:8px;
-    padding:10px 13px;
-    background:#0066ff;
-    color:white;
-    font-weight:bold;
-    cursor:pointer;
-}
-
-button:hover{
-    opacity:.9;
-}
-
-.login button{
-    width:100%;
-    margin-top:18px;
-    padding:14px;
-}
-
-.hidden{
-    display:none!important;
-}
-
-.dashboard{
-    display:grid;
-    grid-template-columns:repeat(4,1fr);
-    gap:12px;
-}
-
-.stat{
-    background:#eef5ff;
-    border-radius:12px;
-    padding:18px;
-    text-align:center;
-}
-
-.stat-title{
-    color:#555;
-    font-weight:bold;
-}
-
-.stat-number{
-    font-size:30px;
-    font-weight:bold;
-    color:#0066ff;
-    margin-top:7px;
-}
-
-.section-header{
-    display:flex;
-    justify-content:space-between;
-    align-items:center;
-    gap:10px;
-    margin-bottom:15px;
-}
-
-.section-header h2{
-    margin:0;
-    color:#0066ff;
-}
-
-.table-container{
-    overflow-x:auto;
-}
-
-table{
-    width:100%;
-    border-collapse:collapse;
-    min-width:1050px;
-}
-
-th,td{
-    padding:11px;
-    border-bottom:1px solid #e7ebf1;
-    text-align:left;
-    vertical-align:top;
-}
-
-th{
-    background:#f6f8fc;
-}
-
-.badge{
-    display:inline-block;
-    padding:6px 9px;
-    border-radius:20px;
-    font-size:12px;
-    font-weight:bold;
-}
-
-.pending{
-    background:#fff3cd;
-    color:#856404;
-}
-
-.approved,
-.confirmed{
-    background:#d4edda;
-    color:#155724;
-}
-
-.rejected,
-.cancelled{
-    background:#f8d7da;
-    color:#721c24;
-}
-
-.available{
-    background:#d4edda;
-    color:#155724;
-}
-
-.unavailable{
-    background:#e2e3e5;
-    color:#383d41;
-}
-
-.action-btn{
-    margin:3px;
-}
-
-.green{
-    background:#198754;
-}
-
-.red{
-    background:#dc3545;
-}
-
-.dark{
-    background:#343a40;
+  margin:0;
+  font-size:21px;
 }
 
 .logout{
-    background:#dc3545;
+  background:white;
+  color:#075bd3;
+  border:0;
+  padding:9px 15px;
+  border-radius:8px;
+  font-weight:bold;
+  cursor:pointer;
 }
 
-.message{
-    padding:12px;
-    border-radius:9px;
-    margin-bottom:15px;
-    font-weight:bold;
-    background:#eef5ff;
+.login-page{
+  min-height:100vh;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  padding:20px;
+}
+
+.login-box{
+  width:100%;
+  max-width:400px;
+  background:white;
+  padding:30px;
+  border-radius:16px;
+  box-shadow:0 8px 30px #0002;
+}
+
+.login-box h2{
+  text-align:center;
+  margin:0 0 8px;
+}
+
+.login-box p{
+  text-align:center;
+  color:#666;
+  margin-bottom:25px;
+}
+
+label{
+  display:block;
+  margin-bottom:6px;
+  font-weight:bold;
+}
+
+input{
+  width:100%;
+  padding:13px;
+  border:1px solid #ccd5e3;
+  border-radius:8px;
+  margin-bottom:16px;
+  font-size:15px;
+}
+
+.login-btn{
+  width:100%;
+  padding:13px;
+  border:0;
+  border-radius:8px;
+  background:#075bd3;
+  color:white;
+  font-size:16px;
+  font-weight:bold;
+  cursor:pointer;
+}
+
+.login-btn:disabled{
+  opacity:.6;
+}
+
+.error{
+  margin-top:15px;
+  padding:10px;
+  border-radius:7px;
+  background:#fee2e2;
+  color:#b91c1c;
+  display:none;
+  text-align:center;
+}
+
+.success{
+  margin-top:15px;
+  padding:10px;
+  border-radius:7px;
+  background:#dcfce7;
+  color:#166534;
+  display:none;
+  text-align:center;
+}
+
+#adminPanel{
+  display:none;
+}
+
+.container{
+  max-width:1150px;
+  margin:auto;
+  padding:20px;
+}
+
+.cards{
+  display:grid;
+  grid-template-columns:repeat(3,1fr);
+  gap:15px;
+  margin-bottom:20px;
+}
+
+.card{
+  background:white;
+  padding:20px;
+  border-radius:12px;
+  box-shadow:0 3px 15px #0001;
+}
+
+.card span{
+  color:#666;
+}
+
+.card strong{
+  display:block;
+  font-size:28px;
+  color:#075bd3;
+  margin-top:8px;
+}
+
+.section{
+  background:white;
+  padding:20px;
+  border-radius:12px;
+  margin-bottom:20px;
+  box-shadow:0 3px 15px #0001;
+}
+
+.section h2{
+  margin-top:0;
+}
+
+.refresh{
+  background:#075bd3;
+  color:white;
+  border:0;
+  border-radius:7px;
+  padding:9px 14px;
+  cursor:pointer;
+}
+
+.table-wrap{
+  width:100%;
+  overflow-x:auto;
+}
+
+table{
+  width:100%;
+  border-collapse:collapse;
+  min-width:750px;
+}
+
+th,td{
+  padding:11px;
+  border-bottom:1px solid #e5e7eb;
+  text-align:left;
+}
+
+th{
+  background:#f1f5f9;
+}
+
+.btn{
+  border:0;
+  padding:7px 10px;
+  border-radius:6px;
+  cursor:pointer;
+  font-weight:bold;
+  margin:2px;
+}
+
+.confirm{
+  background:#16a34a;
+  color:white;
+}
+
+.cancel{
+  background:#dc2626;
+  color:white;
+}
+
+.delete{
+  background:#111827;
+  color:white;
+}
+
+.pending{
+  color:#d97706;
+  font-weight:bold;
+}
+
+.confirmed{
+  color:#16a34a;
+  font-weight:bold;
+}
+
+.cancelled{
+  color:#dc2626;
+  font-weight:bold;
+}
+
+.loading{
+  padding:20px;
+  text-align:center;
+  color:#666;
 }
 
 .empty{
-    text-align:center;
-    padding:25px;
-    color:#777;
+  text-align:center;
+  padding:20px;
+  color:#777;
 }
 
-.small{
-    color:#666;
-    font-size:13px;
+.topbar{
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  gap:10px;
+  flex-wrap:wrap;
 }
 
-@media(max-width:800px){
-    .dashboard{
-        grid-template-columns:repeat(2,1fr);
-    }
-}
+@media(max-width:700px){
 
-@media(max-width:500px){
-    .dashboard{
-        grid-template-columns:1fr 1fr;
-    }
+  header h1{
+    font-size:17px;
+  }
 
-    header h1{
-        font-size:25px;
-    }
+  .cards{
+    grid-template-columns:1fr;
+  }
+
+  .container{
+    padding:12px;
+  }
+
+  .login-box{
+    padding:22px;
+  }
 }
 </style>
 </head>
 
 <body>
 
-<header>
-    <h1>🔐 Book My Car Admin</h1>
-    <p>Car & Booking Management</p>
-</header>
 
-<!-- LOGIN -->
+<!-- ================= LOGIN ================= -->
 
-<div id="loginBox" class="card login">
+<div id="loginPage" class="login-page">
 
-    <h2>Admin Login</h2>
+  <div class="login-box">
 
-    <label>Admin Email</label>
-    <input
+    <h2>🚗 Book My Car</h2>
+
+    <p>Admin Panel Login</p>
+
+    <form id="loginForm">
+
+      <label for="email">
+        Admin Email
+      </label>
+
+      <input
         id="email"
         type="email"
-        placeholder="Admin email"
-    >
-
-    <label>Password</label>
-    <input
-        id="password"
-        type="password"
-        placeholder="Password"
-    >
-
-    <button id="loginBtn">
-        🔐 LOGIN
-    </button>
-
-    <div id="loginMessage" class="message hidden"></div>
-
-</div>
-
-
-<!-- DASHBOARD -->
-
-<div id="adminPanel" class="container hidden">
-
-    <div class="card">
-
-        <div class="section-header">
-
-            <h2>📊 Dashboard</h2>
-
-            <button class="logout" id="logoutBtn">
-                Logout
-            </button>
-
-        </div>
-
-        <div class="dashboard">
-
-            <div class="stat">
-                <div class="stat-title">
-                    Total Cars
-                </div>
-
-                <div id="totalCars" class="stat-number">
-                    0
-                </div>
-            </div>
-
-            <div class="stat">
-                <div class="stat-title">
-                    Pending Cars
-                </div>
-
-                <div id="pendingCars" class="stat-number">
-                    0
-                </div>
-            </div>
-
-            <div class="stat">
-                <div class="stat-title">
-                    Approved Cars
-                </div>
-
-                <div id="approvedCars" class="stat-number">
-                    0
-                </div>
-            </div>
-
-            <div class="stat">
-                <div class="stat-title">
-                    Total Bookings
-                </div>
-
-                <div id="totalBookings" class="stat-number">
-                    0
-                </div>
-            </div>
-
-        </div>
-
-    </div>
-
-
-    <!-- CARS -->
-
-    <div class="card">
-
-        <div class="section-header">
-
-            <h2>🚗 Car Management</h2>
-
-            <button id="refreshCars">
-                🔄 Refresh
-            </button>
-
-        </div>
-
-        <div id="carMessage" class="message hidden"></div>
-
-        <div class="table-container">
-
-            <table>
-
-                <thead>
-
-                    <tr>
-                        <th>Car</th>
-                        <th>Number</th>
-                        <th>Owner</th>
-                        <th>Location</th>
-                        <th>Rates</th>
-                        <th>Commission</th>
-                        <th>Availability</th>
-                        <th>Status</th>
-                        <th>Action</th>
-                    </tr>
-
-                </thead>
-
-                <tbody id="carsTable">
-
-                </tbody>
-
-            </table>
-
-        </div>
-
-    </div>
-
-
-    <!-- BOOKINGS -->
-
-    <div class="card">
-
-        <div class="section-header">
-
-            <h2>📋 Booking Management</h2>
-
-            <button id="refreshBookings">
-                🔄 Refresh
-            </button>
-
-        </div>
-
-        <div id="bookingMessage" class="message hidden"></div>
-
-        <div class="table-container">
-
-            <table>
-
-                <thead>
-
-                    <tr>
-                        <th>Customer</th>
-                        <th>Mobile</th>
-                        <th>Car</th>
-                        <th>Pickup</th>
-                        <th>Destination</th>
-                        <th>Date</th>
-                        <th>Amount</th>
-                        <th>Status</th>
-                        <th>Action</th>
-                    </tr>
-
-                </thead>
-
-                <tbody id="bookingsTable">
-
-                </tbody>
-
-            </table>
-
-        </div>
-
-    </div>
-
-
-    <div class="card">
-
-        <h3>ℹ️ Admin Information</h3>
-
-        <p class="small">
-            Owner का mobile number केवल Admin Panel में दिखाई देता है।
-            Customer को booking से पहले यह information नहीं दिखाई जाएगी।
-        </p>
-
-        <p class="small">
-            Created by Arvind Mehar • © 2026 Book My Car
-        </p>
-
-    </div>
-
-</div>
-
-
-<script type="module">
-
-import {
-    initializeApp
-} from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
-
-import {
-    getFirestore,
-    collection,
-    getDocs,
-    doc,
-    updateDoc,
-    deleteDoc,
-    orderBy,
-    query
-} from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
-
-import {
-    getAuth,
-    signInWithEmailAndPassword,
-    signOut,
-    onAuthStateChanged
-} from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
-
-
-/* =========================
-   FIREBASE CONFIG
-========================= */
-
-const firebaseConfig = {
-
-    apiKey:
-    "AIzaSyDD-jSNG_HfhW4aTXtdf0kpdclaDVbgrNA",
-
-    authDomain:
-    "book-my-car-a97cf.firebaseapp.com",
-
-    projectId:
-    "book-my-car-a97cf",
-
-    storageBucket:
-    "book-my-car-a97cf.firebasestorage.app",
-
-    messagingSenderId:
-    "546652899903",
-
-    appId:
-    "1:546652899903:web:c280a58db101e01d1d468a"
-
-};
-
-
-const app =
-initializeApp(firebaseConfig);
-
-const db =
-getFirestore(app);
-
-const auth =
-getAuth(app);
-
-
-/* =========================
-   ELEMENTS
-========================= */
-
-const loginBox =
-document.getElementById("loginBox");
-
-const adminPanel =
-document.getElementById("adminPanel");
-
-const loginBtn =
-document.getElementById("loginBtn");
-
-const logoutBtn =
-document.getElementById("logoutBtn");
-
-const loginMessage =
-document.getElementById("loginMessage");
-
-const carsTable =
-document.getElementById("carsTable");
-
-const bookingsTable =
-document.getElementById("bookingsTable");
-
-
-/* =========================
-   MESSAGE
-========================= */
-
-function showMessage(element,text){
-
-    element.innerText = text;
-
-    element.classList.remove("hidden");
-
-}
-
-
-/* =========================
-   LOGIN
-========================= */
-
-loginBtn.addEventListener(
-"click",
-async()=>{
-
-    const email =
-    document.getElementById("email").value.trim();
-
-    const password =
-    document.getElementById("password").value;
-
-    if(!email || !password){
-
-        showMessage(
-            loginMessage,
-            "❌ Email और Password डालें।"
-        );
-
-        return;
-    }
-
-    loginBtn.disabled=true;
-
-    loginBtn.innerText="⏳ Login हो रहा है...";
-
-    try{
-
-        await signInWithEmailAndPassword(
-            auth,
-            email,
-            password
-        );
-
-        loginMessage.classList.add("hidden");
-
-    }
-    catch(error){
-
-        console.error(error);
-
-        showMessage(
-            loginMessage,
-            "❌ Login failed: " + error.message
-        );
-
-    }
-
-    loginBtn.disabled=false;
-
-    loginBtn.innerText="🔐 LOGIN";
-
-});
-
-
-/* =========================
-   LOGOUT
-========================= */
-
-logoutBtn.addEventListener(
-"click",
-async()=>{
-
-    await signOut(auth);
-
-});
-
-
-/* =========================
-   AUTH STATE
-========================= */
-
-onAuthStateChanged(
-auth,
-async(user)=>{
-
-    if(user){
-
-        loginBox.classList.add("hidden");
-
-        adminPanel.classList.remove("hidden");
-
-        await loadCars();
-
-        await loadBookings();
-
-    }
-    else{
-
-        loginBox.classList.remove("hidden");
-
-        adminPanel.classList.add("hidden");
-
-    }
-
-});
-
-
-/* =========================
-   LOAD CARS
-========================= */
-
-async function loadCars(){
-
-    carsTable.innerHTML=`
-
-        <tr>
-            <td colspan="9" class="empty">
-                ⏳ Cars loading...
-            </td>
-        </tr>
-
-    `;
-
-    try{
-
-        const snapshot =
-        await getDocs(
-            collection(db,"cars")
-        );
-
-        carsTable.innerHTML="";
-
-        let total=0;
-        let pending=0;
-        let approved=0;
-
-        snapshot.forEach(
-        (carDoc)=>{
-
-            total++;
-
-            const car =
-            carDoc.data();
-
-            const id =
-            carDoc.id;
-
-            const status =
-            car.status || "Pending";
-
-            if(status==="Pending"){
-                pending++;
-            }
-
-            if(
-                status==="Approved" ||
-                status==="approved"
-            ){
-                approved++;
-            }
-
-
-            const availability =
-            car.available === false
-            ? "Unavailable"
-            : "Available";
-
-
-            const availabilityClass =
-            car.available === false
-            ? "unavailable"
-            : "available";
-
-
-            const tr =
-            document.createElement("tr");
-
-
-            tr.innerHTML=`
-
-                <td>
-                    <b>${safe(car.carName)}</b>
-                    <br>
-                    <span class="small">
-                        ${safe(car.carType)}
-                    </span>
-                    <br>
-                    <span class="small">
-                        ${safe(car.seats)} Seater
-                    </span>
-                </td>
-
-                <td>
-                    ${safe(car.carNumber)}
-                </td>
-
-                <td>
-                    <b>${safe(car.ownerName)}</b>
-                    <br>
-                    📱 ${safe(car.ownerPhone)}
-                    <br>
-                    Driver:
-                    ${safe(car.driverName)}
-                </td>
-
-                <td>
-                    ${safe(car.location)}
-                    <br>
-                    ${safe(car.serviceType)}
-                </td>
-
-                <td>
-                    Local:
-                    ₹${safe(car.localRate)}
-                    /day
-                    <br>
-                    Outstation:
-                    ₹${safe(car.outstationRate)}
-                    /km
-                    <br>
-                    Driver:
-                    ₹${safe(car.driverAllowance)}
-                    /day
-                </td>
-
-                <td>
-                    ${safe(car.commission)}%
-                </td>
-
-                <td>
-
-                    <span class="badge ${availabilityClass}">
-                        ${availability}
-                    </span>
-
-                </td>
-
-                <td>
-
-                    <span class="badge ${statusClass(status)}">
-                        ${safe(status)}
-                    </span>
-
-                </td>
-
-                <td>
-
-                    <button
-                        class="action-btn green"
-                        onclick="approveCar('${id}')"
-                    >
-                        ✅ Approve
-                    </button>
-
-                    <button
-                        class="action-btn red"
-                        onclick="rejectCar('${id}')"
-                    >
-                        ❌ Reject
-                    </button>
-
-                    <button
-                        class="action-btn dark"
-                        onclick="toggleCar('${id}',${car.available !== false})"
-                    >
-                        🔄 Availability
-                    </button>
-
-                    <button
-                        class="action-btn red"
-                        onclick="deleteCar('${id}')"
-                    >
-                        🗑️ Delete
-                    </button>
-
-                </td>
-
-            `;
-
-            carsTable.appendChild(tr);
-
-        });
-
-
-        document.getElementById("totalCars")
-        .innerText=total;
-
-        document.getElementById("pendingCars")
-        .innerText=pending;
-
-        document.getElementById("approvedCars")
-        .innerText=approved;
-
-
-        if(total===0){
-
-            carsTable.innerHTML=`
-
-                <tr>
-                    <td colspan="9" class="empty">
-                        🚗 अभी कोई car add नहीं हुई है।
-                    </td>
-                </tr>
-
-            `;
-
-        }
-
-    }
-    catch(error){
-
-        console.error(error);
-
-        carsTable.innerHTML=`
-
-            <tr>
-                <td colspan="9" class="empty">
-                    ❌ Cars load नहीं हो पाईं।
-                    <br><br>
-                    ${safe(error.message)}
-                </td>
-            </tr>
-
-        `;
-
-    }
-
-}
-
-
-/* =========================
-   LOAD BOOKINGS
-========================= */
-
-async function loadBookings(){
-
-    bookingsTable.innerHTML=`
-
-        <tr>
-            <td colspan="9" class="empty">
-                ⏳ Bookings loading...
-            </td>
-        </tr>
-
-    `;
-
-    try{
-
-        const snapshot =
-        await getDocs(
-            collection(db,"bookings")
-        );
-
-        bookingsTable.innerHTML="";
-
-        let total=0;
-
-        snapshot.forEach(
-        (bookingDoc)=>{
-
-            total++;
-
-            const booking =
-            bookingDoc.data();
-
-            const id =
-            bookingDoc.id;
-
-            const status =
-            booking.status || "Pending";
-
-
-            const tr =
-            document.createElement("tr");
-
-
-            tr.innerHTML=`
-
-                <td>
-                    <b>
-                        ${safe(
-                            booking.customerName ||
-                            booking.name ||
-                            "-"
-                        )}
-                    </b>
-                </td>
-
-                <td>
-                    ${safe(
-                        booking.customerPhone ||
-                        booking.phone ||
-                        "-"
-                    )}
-                </td>
-
-                <td>
-                    ${safe(
-                        booking.carName ||
-                        booking.car ||
-                        "-"
-                    )}
-                </td>
-
-                <td>
-                    ${safe(
-                        booking.pickup ||
-                        booking.pickupLocation ||
-                        "-"
-                    )}
-                </td>
-
-                <td>
-                    ${safe(
-                        booking.destination ||
-                        booking.dropLocation ||
-                        "-"
-                    )}
-                </td>
-
-                <td>
-                    ${safe(
-                        booking.date ||
-                        booking.bookingDate ||
-                        "-"
-                    )}
-                </td>
-
-                <td>
-                    ₹${safe(
-                        booking.amount ||
-                        booking.totalAmount ||
-                        0
-                    )}
-                </td>
-
-                <td>
-
-                    <span class="badge ${statusClass(status)}">
-                        ${safe(status)}
-                    </span>
-
-                </td>
-
-                <td>
-
-                    <button
-                        class="action-btn green"
-                        onclick="updateBooking('${id}','Confirmed')"
-                    >
-                        ✅ Confirm
-                    </button>
-
-                    <button
-                        class="action-btn red"
-                        onclick="updateBooking('${id}','Cancelled')"
-                    >
-                        ❌ Cancel
-                    </button>
-
-                    <button
-                        class="action-btn dark"
-                        onclick="deleteBooking('${id}')"
-                    >
-                        🗑️ Delete
-                    </button>
-
-                </td>
-
-            `;
-
-            bookingsTable.appendChild(tr);
-
-        });
-
-
-        document.getElementById("totalBookings")
-        .innerText=total;
-
-
-        if(total===0){
-
-            bookingsTable.innerHTML=`
-
-                <tr>
-                    <td colspan="9" class="empty">
-                        📋 अभी कोई booking नहीं है।
-                    </td>
-                </tr>
-
-            `;
-
-        }
-
-    }
-    catch(error){
-
-        console.error(error);
-
-        bookingsTable.innerHTML=`
-
-            <tr>
-                <td colspan="9" class="empty">
-                    ❌ Bookings load नहीं हो पाईं।
-                    <br><br>
-                    ${safe(error.message)}
-                </td>
-            </tr>
-
-        `;
-
-    }
-
-}
-
-
-/* =========================
-   APPROVE CAR
-========================= */
-
-window.approveCar =
-async function(id){
-
-    try{
-
-        await updateDoc(
-            doc(db,"cars",id),
-            {
-                status:"Approved",
-                available:true
-            }
-        );
-
-        alert("✅ Car Approved!");
-
-        await loadCars();
-
-    }
-    catch(error){
-
-        alert(
-            "❌ Error: " + error.message
-        );
-
-    }
-
-};
-
-
-/* =========================
-   REJECT CAR
-========================= */
-
-window.rejectCar =
-async function(id){
-
-    if(
-        !confirm(
-            "क्या आप इस car को Reject करना चाहते हैं?"
-        )
-    ){
-        return;
-    }
-
-    
+        placeholder
