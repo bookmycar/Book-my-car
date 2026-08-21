@@ -4,7 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
 
-<title>Book My Car - Customer Booking</title>
+<title>Book My Car - Online Car Booking</title>
 
 <style>
 *{box-sizing:border-box}
@@ -19,42 +19,43 @@ body{
 header{
   background:linear-gradient(135deg,#075bd3,#003caa);
   color:#fff;
-  padding:22px 16px;
+  padding:26px 16px;
   text-align:center;
 }
 
 header h1{
   margin:0;
-  font-size:28px;
+  font-size:30px;
 }
 
 header p{
-  margin:7px 0 0;
+  margin:8px 0 0;
+  opacity:.92;
 }
 
 .wrap{
-  max-width:820px;
+  max-width:900px;
   margin:25px auto;
-  padding:0 15px;
+  padding:0 14px;
 }
 
 .card{
   background:#fff;
-  border-radius:16px;
+  border-radius:18px;
   padding:22px;
-  box-shadow:0 5px 20px #00000012;
   margin-bottom:18px;
+  box-shadow:0 7px 25px #00000012;
 }
 
 h2{
-  margin-top:0;
+  margin:0 0 18px;
   color:#075bd3;
 }
 
 .grid{
   display:grid;
   grid-template-columns:1fr 1fr;
-  gap:14px;
+  gap:15px;
 }
 
 .full{
@@ -71,16 +72,11 @@ input,
 select,
 textarea{
   width:100%;
-  padding:13px;
+  padding:14px;
   border:1px solid #ccd5e3;
-  border-radius:9px;
+  border-radius:10px;
   font-size:16px;
   background:#fff;
-}
-
-textarea{
-  min-height:90px;
-  resize:vertical;
 }
 
 input:focus,
@@ -91,42 +87,43 @@ textarea:focus{
   box-shadow:0 0 0 3px #075bd31a;
 }
 
-.radioBox{
-  display:flex;
-  gap:10px;
-  flex-wrap:wrap;
+textarea{
+  min-height:90px;
+  resize:vertical;
 }
 
-.radioItem{
-  flex:1;
-  min-width:140px;
-  border:1px solid #ccd5e3;
-  border-radius:10px;
-  padding:12px;
+.tripBox{
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:12px;
+}
+
+.tripOption{
+  border:2px solid #d8e0ec;
+  border-radius:12px;
+  padding:14px;
   cursor:pointer;
-  background:#fff;
 }
 
-.radioItem input{
+.tripOption input{
   width:auto;
-  margin-right:6px;
+  margin-right:8px;
 }
 
 button{
   width:100%;
-  padding:14px;
+  padding:15px;
   border:0;
-  border-radius:9px;
+  border-radius:10px;
   background:#075bd3;
   color:#fff;
   font-size:17px;
   font-weight:700;
   cursor:pointer;
-  margin-top:8px;
 }
 
 button:disabled{
-  opacity:.6;
+  opacity:.55;
   cursor:not-allowed;
 }
 
@@ -134,55 +131,20 @@ button:disabled{
   background:#0b8f4d;
 }
 
-.secondary{
-  background:#475467;
-}
-
-.msg{
-  display:none;
-  padding:13px;
-  border-radius:9px;
-  margin-bottom:14px;
-  font-weight:700;
-}
-
-.success{
-  display:block;
-  background:#dff7e6;
-  color:#16733a;
-}
-
-.error{
-  display:block;
-  background:#ffe1e1;
-  color:#a50000;
-}
-
-.info{
-  display:block;
-  background:#e8f1ff;
-  color:#0751ad;
-}
-
-.note{
-  font-size:13px;
-  color:#667085;
-}
-
 .result{
-  background:#f7f9fc;
-  border:1px solid #dce3ee;
-  border-radius:12px;
-  padding:16px;
+  background:#f7faff;
+  border:1px solid #dce6f3;
+  border-radius:14px;
+  padding:17px;
   margin-top:15px;
 }
 
 .resultRow{
   display:flex;
   justify-content:space-between;
-  gap:10px;
-  padding:9px 0;
-  border-bottom:1px solid #e7ebf1;
+  gap:15px;
+  padding:10px 0;
+  border-bottom:1px solid #e5eaf1;
 }
 
 .resultRow:last-child{
@@ -194,30 +156,92 @@ button:disabled{
 }
 
 .total{
-  font-size:22px;
-  font-weight:800;
-  color:#0b8f4d !important;
+  font-size:25px;
+  color:#0b8f4d!important;
+}
+
+.note{
+  font-size:13px;
+  color:#667085;
+  line-height:1.5;
+}
+
+.msg{
+  display:none;
+  padding:14px;
+  border-radius:10px;
+  margin-bottom:15px;
+  font-weight:700;
+}
+
+.msg.show{
+  display:block;
+}
+
+.success{
+  background:#dcfce7;
+  color:#166534;
+}
+
+.error{
+  background:#fee2e2;
+  color:#991b1b;
+}
+
+.info{
+  background:#e8f1ff;
+  color:#0751ad;
 }
 
 .loading{
   color:#667085;
-  font-size:14px;
-  margin-top:8px;
+  font-size:13px;
+  margin-top:7px;
 }
 
 .hidden{
-  display:none !important;
+  display:none!important;
 }
 
-.back{
-  display:inline-block;
-  margin-top:15px;
+.carInfo{
+  margin-top:8px;
+  padding:10px;
+  background:#f7f9fc;
+  border-radius:8px;
+  font-size:13px;
+  color:#475467;
+}
+
+.successBox{
+  text-align:center;
+  padding:25px 15px;
+}
+
+.successIcon{
+  font-size:55px;
+}
+
+.successBox h2{
+  color:#0b8f4d;
+}
+
+.bookingId{
+  background:#eef5ff;
+  padding:12px;
+  border-radius:9px;
+  font-weight:bold;
   color:#075bd3;
-  text-decoration:none;
-  font-weight:700;
+  margin:15px 0;
 }
 
-@media(max-width:600px){
+.footer{
+  text-align:center;
+  color:#667085;
+  font-size:13px;
+  padding:20px;
+}
+
+@media(max-width:650px){
   .grid{
     grid-template-columns:1fr;
   }
@@ -226,8 +250,12 @@ button:disabled{
     grid-column:auto;
   }
 
+  .tripBox{
+    grid-template-columns:1fr;
+  }
+
   header h1{
-    font-size:24px;
+    font-size:25px;
   }
 
   .card{
@@ -241,7 +269,7 @@ button:disabled{
 
 <header>
   <h1>🚗 Book My Car</h1>
-  <p>Customer Booking</p>
+  <p>सुरक्षित और आसान Car Booking Service</p>
 </header>
 
 <div class="wrap">
@@ -258,7 +286,11 @@ button:disabled{
 
 <div>
 <label for="customerName">Customer Name *</label>
-<input id="customerName" required placeholder="आपका नाम">
+<input
+ id="customerName"
+ required
+ autocomplete="name"
+ placeholder="अपना नाम">
 </div>
 
 <div>
@@ -269,17 +301,21 @@ button:disabled{
  inputmode="numeric"
  pattern="[0-9]{10}"
  maxlength="10"
- placeholder="10 digit mobile">
+ placeholder="10 digit mobile number">
 </div>
 
 <div>
-<label for="carId">Car *</label>
+<label for="carId">Select Car *</label>
 
 <select id="carId" required>
 <option value="">Cars loading...</option>
 </select>
 
-<div id="carLoading" class="loading"></div>
+<div id="carLoading" class="loading">
+Available cars खोजे जा रहे हैं...
+</div>
+
+<div id="carInfo" class="carInfo hidden"></div>
 </div>
 
 <div>
@@ -289,12 +325,18 @@ button:disabled{
 
 <div>
 <label for="pickup">Pickup Location *</label>
-<input id="pickup" required placeholder="जैसे Sarangarh">
+<input
+ id="pickup"
+ required
+ placeholder="जैसे Sarangarh">
 </div>
 
 <div>
 <label for="destination">Destination *</label>
-<input id="destination" required placeholder="जैसे Raigarh">
+<input
+ id="destination"
+ required
+ placeholder="जैसे Raigarh">
 </div>
 
 <div>
@@ -316,23 +358,23 @@ button:disabled{
 
 <label>Trip Type *</label>
 
-<div class="radioBox">
+<div class="tripBox">
 
-<label class="radioItem">
+<label class="tripOption">
 <input
  type="radio"
  name="tripType"
  value="local"
  checked>
- Local Trip
+ 🏠 Local Trip
 </label>
 
-<label class="radioItem">
+<label class="tripOption">
 <input
  type="radio"
  name="tripType"
  value="outstation">
- Outstation
+ 🛣️ Outstation
 </label>
 
 </div>
@@ -341,13 +383,27 @@ button:disabled{
 
 <div class="full">
 
-<label class="radioItem">
+<label class="tripOption">
 
 <input
  id="roundTrip"
  type="checkbox">
 
-🔄 Round Trip
+ 🔄 Round Trip
+
+</label>
+
+</div>
+
+<div class="full">
+
+<label class="tripOption">
+
+<input
+ id="carLoadingOption"
+ type="checkbox">
+
+ 📦 Car Loading / सामान
 
 </label>
 
@@ -368,9 +424,7 @@ button:disabled{
 
 </div>
 
-<div
- id="calculationBox"
- class="result hidden">
+<div id="calculationBox" class="result hidden">
 
 <div class="resultRow">
 <span>One Way Distance</span>
@@ -388,31 +442,37 @@ button:disabled{
 </div>
 
 <div class="resultRow">
+<span>Round Trip</span>
+<strong id="showRoundTrip">No</strong>
+</div>
+
+<div class="resultRow">
 <span>Rate / KM</span>
 <strong id="showRate">₹0</strong>
 </div>
 
 <div class="resultRow">
-<span>Calculated Fare</span>
-<strong
- id="totalFare"
- class="total">
-₹0
-</strong>
+<span>Base Fare</span>
+<strong id="baseFare">₹0</strong>
 </div>
 
-<div
- id="fuelNote"
- class="note">
+<div class="resultRow">
+<span>Car Loading</span>
+<strong id="loadingFare">₹0</strong>
 </div>
+
+<div class="resultRow">
+<span>Total Fare</span>
+<strong id="totalFare" class="total">₹0</strong>
+</div>
+
+<div id="fuelNote" class="note"></div>
 
 </div>
 
 <div class="full">
 
-<label for="notes">
-Extra Requirement
-</label>
+<label for="notes">Extra Requirement</label>
 
 <textarea
  id="notes"
@@ -420,37 +480,51 @@ Extra Requirement
 
 </div>
 
-<button
- id="bookBtn"
- type="submit">
-
+<button id="bookBtn" type="submit">
 🚗 Booking Confirm करें
-
 </button>
 
 </form>
 
 <p class="note">
-Booking submit होने के बाद Admin Panel में request दिखाई देगी।
+Booking submit करने के बाद आपकी request Admin Panel में दिखाई देगी।
 </p>
 
-<a
- class="back"
- href="index.html">
+</div>
 
-← Home पर वापस जाएँ
+<div id="successCard" class="card successBox hidden">
 
-</a>
+<div class="successIcon">✅</div>
+
+<h2>Booking Request भेज दी गई!</h2>
+
+<p>
+आपकी booking successfully submit हो गई है।
+</p>
+
+<div class="bookingId">
+Booking ID:
+<span id="successBookingId">-</span>
+</div>
+
+<p class="note">
+Admin आपकी booking confirm करने के बाद आपसे संपर्क करेगा।
+</p>
+
+<button id="newBookingBtn">
+नई Booking करें
+</button>
 
 </div>
+
+</div>
+
+<div class="footer">
+© 2026 Book My Car • Created by Arvind Mehar
 </div>
 
 
 <script type="module">
-
-/* =====================================================
-   FIREBASE
-===================================================== */
 
 import {
   initializeApp
@@ -466,7 +540,6 @@ import {
 
 
 const firebaseConfig = {
-
   apiKey:
   "AIzaSyDD-jSNG_HfhW4aTXtdf0kpdclaDVbgrNA",
 
@@ -486,88 +559,41 @@ const firebaseConfig = {
   "1:546652899903:web:c280a58db101e01d1d468a"
 };
 
-
 const app = initializeApp(firebaseConfig);
-
 const db = getFirestore(app);
 
+const $ = id => document.getElementById(id);
 
-/* =====================================================
-   ELEMENTS
-===================================================== */
-
-const form =
-  document.getElementById("bookingForm");
-
-const carId =
-  document.getElementById("carId");
-
-const msg =
-  document.getElementById("msg");
-
-const bookBtn =
-  document.getElementById("bookBtn");
-
-const calculateBtn =
-  document.getElementById("calculateBtn");
-
-const carLoading =
-  document.getElementById("carLoading");
-
-const bookingDate =
-  document.getElementById("bookingDate");
-
-const pickup =
-  document.getElementById("pickup");
-
-const destination =
-  document.getElementById("destination");
-
-const roundTrip =
-  document.getElementById("roundTrip");
-
-const calculationBox =
-  document.getElementById("calculationBox");
-
-const oneWayDistance =
-  document.getElementById("oneWayDistance");
-
-const totalDistance =
-  document.getElementById("totalDistance");
-
-const showTripType =
-  document.getElementById("showTripType");
-
-const showRate =
-  document.getElementById("showRate");
-
-const totalFare =
-  document.getElementById("totalFare");
-
-const fuelNote =
-  document.getElementById("fuelNote");
-
-
-/* =====================================================
-   DATA
-===================================================== */
+const form = $("bookingForm");
+const carId = $("carId");
+const carInfo = $("carInfo");
+const msg = $("msg");
+const bookBtn = $("bookBtn");
+const calculateBtn = $("calculateBtn");
+const carLoading = $("carLoading");
+const bookingDate = $("bookingDate");
+const pickup = $("pickup");
+const destination = $("destination");
+const roundTrip = $("roundTrip");
+const carLoadingOption = $("carLoadingOption");
+const calculationBox = $("calculationBox");
+const oneWayDistance = $("oneWayDistance");
+const totalDistance = $("totalDistance");
+const showTripType = $("showTripType");
+const showRoundTrip = $("showRoundTrip");
+const showRate = $("showRate");
+const baseFare = $("baseFare");
+const loadingFare = $("loadingFare");
+const totalFare = $("totalFare");
+const fuelNote = $("fuelNote");
 
 let cars = [];
-
 let selectedCarData = null;
-
 let calculatedDistance = 0;
-
 let calculatedTotalDistance = 0;
-
 let calculatedFare = 0;
-
 let calculated = false;
 
-
-/* =====================================================
-   DATE
-===================================================== */
 
 const now = new Date();
 
@@ -581,40 +607,272 @@ const todayString =
 bookingDate.min = todayString;
 
 
-/* =====================================================
-   MESSAGE
-===================================================== */
-
 function showMessage(text,type="info"){
-
   msg.textContent = text;
+  msg.className = "msg show " + type;
+}
 
-  msg.className =
-    "msg " + type;
-
+function clearMessage(){
+  msg.textContent = "";
+  msg.className = "msg";
 }
 
 
-/* =====================================================
-   NUMBER
-===================================================== */
-
 function numberValue(value){
 
-  if(
-    value === null ||
-    value === undefined ||
-    value === ""
-  ){
+  if(value === null || value === undefined || value === ""){
     return 0;
   }
 
-  const n =
-    Number(
-      String(value)
+  const n = Number(
+    String(value)
       .replace(/₹/g,"")
       .replace(/,/g,"")
       .replace(/[^\d.-]/g,"")
+  );
+
+  return Number.isFinite(n) ? n : 0;
+}
+
+
+function money(value){
+  return "₹" +
+    Math.round(numberValue(value))
+    .toLocaleString("en-IN");
+}
+
+
+function getCarName(car){
+  return (
+    car.carName ||
+    car.name ||
+    car.vehicleName ||
+    car.car ||
+    "Car"
+  );
+}
+
+
+function getRate(car){
+  return numberValue(
+    car.ratePerKm ??
+    car.rate ??
+    car.localRate ??
+    car.outstationRate ??
+    0
+  );
+}
+
+
+function getLocalFare(car){
+  return numberValue(
+    car.localFare ??
+    car.rent ??
+    car.perDayRent ??
+    car.dailyRent ??
+    0
+  );
+}
+
+
+async function loadCars(){
+
+  try{
+
+    carLoading.textContent = "Cars loading...";
+
+    const snap =
+      await getDocs(collection(db,"cars"));
+
+    cars = snap.docs.map(d => ({
+      id:d.id,
+      ...d.data()
+    }));
+
+    const available = cars.filter(car => {
+
+      const status =
+        String(car.status || "available")
+        .toLowerCase();
+
+      return status !== "unavailable" &&
+             status !== "inactive";
+    });
+
+    carId.innerHTML =
+      '<option value="">-- Car Select करें --</option>';
+
+    available.forEach(car => {
+
+      const option =
+        document.createElement("option");
+
+      option.value = car.id;
+      option.textContent = getCarName(car);
+
+      carId.appendChild(option);
+
+    });
+
+    if(!available.length){
+      carLoading.textContent =
+        "अभी कोई available car नहीं मिली।";
+    }else{
+      carLoading.textContent =
+        available.length + " car available";
+    }
+
+  }catch(error){
+
+    console.error(error);
+
+    carId.innerHTML =
+      '<option value="">Cars load नहीं हो पाईं</option>';
+
+    carLoading.textContent =
+      "Firebase error: " + error.message;
+
+    showMessage(
+      "Cars load करने में समस्या हुई। Firebase/Firestore check करें।",
+      "error"
+    );
+  }
+}
+
+
+carId.addEventListener("change",()=>{
+
+  selectedCarData =
+    cars.find(car => car.id === carId.value) || null;
+
+  calculated = false;
+  calculationBox.classList.add("hidden");
+
+  if(!selectedCarData){
+
+    carInfo.classList.add("hidden");
+    return;
+
+  }
+
+  const rate = getRate(selectedCarData);
+  const rent = getLocalFare(selectedCarData);
+
+  const owner =
+    selectedCarData.ownerName ||
+    selectedCarData.owner ||
+    "-";
+
+  const driver =
+    selectedCarData.driverName ||
+    selectedCarData.driver ||
+    "-";
+
+  carInfo.innerHTML =
+    "<b>" + getCarName(selectedCarData) + "</b><br>" +
+    "Owner: " + owner + "<br>" +
+    "Driver: " + driver + "<br>" +
+    "Rate/KM: " + money(rate) +
+    " | Local Rent: " + money(rent);
+
+  carInfo.classList.remove("hidden");
+
+});
+
+
+async function geocode(place){
+
+  const url =
+    "https://nominatim.openstreetmap.org/search?" +
+    new URLSearchParams({
+      q: place + ", India",
+      format: "json",
+      limit: "1",
+      countrycodes: "in"
+    });
+
+  const response =
+    await fetch(url,{
+      headers:{
+        "Accept":"application/json"
+      }
+    });
+
+  if(!response.ok){
+    throw new Error("Location service unavailable");
+  }
+
+  const data = await response.json();
+
+  if(!data.length){
+    throw new Error("Location नहीं मिली: " + place);
+  }
+
+  return {
+    lat:Number(data[0].lat),
+    lon:Number(data[0].lon)
+  };
+}
+
+
+async function getDistanceKm(from,to){
+
+  const a = await geocode(from);
+
+  await new Promise(resolve =>
+    setTimeout(resolve,700)
+  );
+
+  const b = await geocode(to);
+
+  const url =
+    "https://router.project-osrm.org/route/v1/driving/" +
+    a.lon + "," + a.lat +
+    ";" +
+    b.lon + "," + b.lat +
+    "?overview=false";
+
+  const response = await fetch(url);
+
+  if(!response.ok){
+    throw new Error("Route service unavailable");
+  }
+
+  const data = await response.json();
+
+  if(!data.routes || !data.routes.length){
+    throw new Error("Route नहीं मिली।");
+  }
+
+  return Number(data.routes[0].distance) / 1000;
+}
+
+
+calculateBtn.addEventListener("click",async()=>{
+
+  clearMessage();
+
+  if(!selectedCarData){
+
+    showMessage(
+      "पहले Car select करें।",
+      "error"
     );
 
-  return Number.isFinite(n) ? n : 
+    return;
+  }
+
+  if(
+    !pickup.value.trim() ||
+    !destination.value.trim()
+  ){
+
+    showMessage(
+      "Pickup और Destination दोनों भरें।",
+      "error"
+    );
+
+    return;
+  }
+
+ 
