@@ -11,7 +11,8 @@ const RAZORPAY_KEY_ID = defineSecret('RAZORPAY_KEY_ID');
 const RAZORPAY_KEY_SECRET = defineSecret('RAZORPAY_KEY_SECRET');
 
 const cors = (req, res) => {
-  res.set('Access-Control-Allow-Origin', 'https://bookmycar.github.io');
+  const origin = req.get('Origin');
+  if (origin === 'https://bookmycar.github.io') res.set('Access-Control-Allow-Origin', origin);
   res.set('Vary', 'Origin');
   res.set('Access-Control-Allow-Methods', 'POST, OPTIONS');
   res.set('Access-Control-Allow-Headers', 'Content-Type');
@@ -50,6 +51,27 @@ exports.notifyNewCar = onDocumentCreated({ document: 'cars/{carId}', region: 'as
   const c = event.data?.data();
   if (!c) return;
   await notifyAdmins('🚘 New Car Added', `${c.carName || 'New car'} • Owner: ${c.ownerName || 'Owner'}`, { type: 'car', carId: event.params.carId });
+});
+
+exports.getBooking = onRequest({ region: 'asia-south1' }, async (req, res) => {
+  if (cors(req, res)) return;
+  if (req.method !== 'POST') return res.status(405).json({ error: 'POST required' });
+  try {
+    const { bookingId, mobile } = req.body || {};
+    if (typeof bookingId !== 'string' || !bookingId.trim() || !/^\d{10}$/.test(String(mobile || ''))) return res.status(400).json({ error: 'Booking ID and 10 digit mobile are required' });
+    const snap = await db.collection('bookings').doc(bookingId.trim()).get();
+    if (!snap.exists) return res.status(404).json({ error: 'Booking not found' });
+    const b = snap.data();
+    if (String(b.mobile) !== String(mobile)) return res.status(403).json({ error: 'Booking ID and mobile do not match' });
+    return res.json({ bookingId: snap.id, booking: {
+      customerName: b.customerName || '', mobile: '******' + String(b.mobile).slice(-4),
+      pickup: b.pickup || '', destination: b.destination || '', carName: b.carName || '',
+      date: b.date || '', pickupTime: b.pickupTime || '', tripType: b.tripType || '',
+      distanceKm: Number(b.distanceKm || 0), paymentMethod: b.paymentMethod || '',
+      paymentStatus: b.paymentStatus || 'Pending', status: b.status || 'Pending',
+      totalFare: Number(b.totalFare || 0)
+    }});
+  } catch (e) { console.error(e); return res.status(500).json({ error: 'Unable to load booking' }); }
 });
 
 exports.createRazorpayOrder = onRequest({ secrets: [RAZORPAY_KEY_ID, RAZORPAY_KEY_SECRET], region: 'asia-south1' }, async (req, res) => {
