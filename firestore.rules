@@ -3,7 +3,11 @@ service cloud.firestore {
   match /databases/{database}/documents {
     function signedIn() { return request.auth != null; }
     function isAdmin() { return signedIn() && request.auth.token.email == 'bookmycar.cg@gmail.com'; }
-    function isOwner() { return signedIn() && exists(/databases/$(database)/documents/owners/$(request.auth.uid)); }
+    function isOwner() {
+      return signedIn() && exists(/databases/$(database)/documents/owners/$(request.auth.uid))
+        && get(/databases/$(database)/documents/owners/$(request.auth.uid)).data.role == 'owner'
+        && get(/databases/$(database)/documents/owners/$(request.auth.uid)).data.active == true;
+    }
     function ownerOf(id) { return isOwner() && request.auth.uid == id; }
     function validBookingCreate() {
       return request.resource.data.keys().hasAll(['customerName','mobile','carId','carName','ownerUid','pickup','destination','tripType','date','pickupTime','passengers','distanceKm','totalFare','paymentMethod','paymentStatus','status','createdAt'])
@@ -19,8 +23,9 @@ service cloud.firestore {
       && get(/databases/$(database)/documents/publicCars/$(request.resource.data.carId)).data.ownerUid == request.resource.data.ownerUid;
     }
     match /owners/{uid} {
-      allow create: if signedIn() && request.auth.uid == uid;
-      allow read, update: if isAdmin() || ownerOf(uid);
+      allow create: if isAdmin() && request.resource.data.uid == uid && request.resource.data.role == 'owner' && request.resource.data.active == true;
+      allow read: if isAdmin() || ownerOf(uid);
+      allow update: if isAdmin() || (ownerOf(uid) && request.resource.data.uid == resource.data.uid && request.resource.data.role == resource.data.role && request.resource.data.active == resource.data.active);
       allow delete: if isAdmin();
     }
     match /publicCars/{carId} {
@@ -29,20 +34,14 @@ service cloud.firestore {
       allow update, delete: if isAdmin() || (isOwner() && resource.data.ownerUid == request.auth.uid);
     }
     match /cars/{carId} {
-      allow read: if true;
+      allow read: if isAdmin() || (isOwner() && resource.data.ownerUid == request.auth.uid);
       allow create: if isAdmin() || (isOwner() && request.resource.data.ownerUid == request.auth.uid);
       allow update, delete: if isAdmin() || (isOwner() && resource.data.ownerUid == request.auth.uid);
     }
     match /bookings/{bookingId} {
       allow create: if validBookingCreate();
       allow read: if isAdmin() || (isOwner() && resource.data.ownerUid == request.auth.uid);
-      allow update: if isAdmin() || (isOwner() && resource.data.ownerUid == request.auth.uid
-        && request.resource.data.ownerUid == resource.data.ownerUid
-        && request.resource.data.totalFare == resource.data.totalFare
-        && request.resource.data.paymentStatus == resource.data.paymentStatus
-        && request.resource.data.paymentMethod == resource.data.paymentMethod
-        && request.resource.data.customerName == resource.data.customerName
-        && request.resource.data.mobile == resource.data.mobile);
+      allow update: if isAdmin() || (isOwner() && resource.data.ownerUid == request.auth.uid && request.resource.data.ownerUid == resource.data.ownerUid && request.resource.data.totalFare == resource.data.totalFare && request.resource.data.paymentStatus == resource.data.paymentStatus && request.resource.data.paymentMethod == resource.data.paymentMethod && request.resource.data.customerName == resource.data.customerName && request.resource.data.mobile == resource.data.mobile);
       allow delete: if isAdmin();
     }
     match /{document=**} { allow read, write: if false; }
