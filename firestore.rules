@@ -2,74 +2,49 @@ rules_version = '2';
 service cloud.firestore {
   match /databases/{database}/documents {
     function signedIn() { return request.auth != null; }
-    function isAdmin() {
-      return signedIn() && request.auth.token.email == 'bookmycar.cg@gmail.com';
-    }
-    function isOwner() {
-      return signedIn() && exists(/databases/$(database)/documents/owners/$(request.auth.uid));
-    }
+    function isAdmin() { return signedIn() && request.auth.token.email == 'bookmycar.cg@gmail.com'; }
+    function isOwner() { return signedIn() && exists(/databases/$(database)/documents/owners/$(request.auth.uid)); }
+    function ownerOf(id) { return isOwner() && request.auth.uid == id; }
     function validBookingCreate() {
-      return request.resource.data.keys().hasAll([
-        'customerName','mobile','carId','carName','ownerUid','pickup','destination',
-        'tripType','date','pickupTime','passengers','distanceKm','totalFare',
-        'paymentMethod','paymentStatus','status','createdAt'
-      ])
-      && request.resource.data.customerName is string
-      && request.resource.data.mobile is string
-      && request.resource.data.mobile.matches('^[0-9]{10}$')
-      && request.resource.data.carId is string
-      && request.resource.data.ownerUid is string
-      && request.resource.data.pickup is string
-      && request.resource.data.destination is string
-      && request.resource.data.tripType in ['oneway','roundtrip']
-      && request.resource.data.passengers is int
-      && request.resource.data.passengers >= 1
-      && request.resource.data.passengers <= 50
-      && request.resource.data.distanceKm is number
-      && request.resource.data.distanceKm >= 0
-      && request.resource.data.totalFare is number
-      && request.resource.data.totalFare >= 0
-      && request.resource.data.paymentMethod in ['UPI','Card','NetBanking','Cash']
-      && request.resource.data.paymentStatus in ['Pending','Pay Later']
-      && request.resource.data.status == 'Pending'
+      return request.resource.data.keys().hasAll(['customerName','mobile','carId','carName','ownerUid','pickup','destination','tripType','date','pickupTime','passengers','distanceKm','totalFare','paymentMethod','paymentStatus','status','createdAt'])
+      && request.resource.data.customerName is string && request.resource.data.customerName.size() >= 2 && request.resource.data.customerName.size() <= 80
+      && request.resource.data.mobile is string && request.resource.data.mobile.matches('^[0-9]{10}$')
+      && request.resource.data.carId is string && request.resource.data.ownerUid is string
+      && request.resource.data.pickup is string && request.resource.data.destination is string
+      && request.resource.data.tripType in ['oneway','roundtrip'] && request.resource.data.passengers is int && request.resource.data.passengers >= 1 && request.resource.data.passengers <= 50
+      && request.resource.data.distanceKm is number && request.resource.data.distanceKm >= 0 && request.resource.data.distanceKm <= 10000
+      && request.resource.data.totalFare is number && request.resource.data.totalFare >= 0 && request.resource.data.totalFare <= 10000000
+      && request.resource.data.paymentMethod in ['UPI','Card','NetBanking','Cash'] && request.resource.data.paymentStatus in ['Pending','Pay Later'] && request.resource.data.status == 'Pending'
       && exists(/databases/$(database)/documents/publicCars/$(request.resource.data.carId))
       && get(/databases/$(database)/documents/publicCars/$(request.resource.data.carId)).data.ownerUid == request.resource.data.ownerUid;
     }
-
     match /owners/{uid} {
       allow create: if signedIn() && request.auth.uid == uid;
-      allow read: if isAdmin() || (signedIn() && request.auth.uid == uid);
-      allow update: if isAdmin() || (signedIn() && request.auth.uid == uid);
+      allow read, update: if isAdmin() || ownerOf(uid);
       allow delete: if isAdmin();
     }
-
     match /publicCars/{carId} {
       allow read: if true;
       allow create: if isAdmin() || (isOwner() && request.resource.data.ownerUid == request.auth.uid);
       allow update, delete: if isAdmin() || (isOwner() && resource.data.ownerUid == request.auth.uid);
     }
-
     match /cars/{carId} {
-      allow read: if isAdmin() || (isOwner() && resource.data.ownerUid == request.auth.uid);
+      allow read: if true;
       allow create: if isAdmin() || (isOwner() && request.resource.data.ownerUid == request.auth.uid);
       allow update, delete: if isAdmin() || (isOwner() && resource.data.ownerUid == request.auth.uid);
     }
-
     match /bookings/{bookingId} {
-      // Customer may create a booking, but cannot forge the owner, payment state or status.
       allow create: if validBookingCreate();
-      // Admin has full control. Owner can see and act only on their own bookings.
       allow read: if isAdmin() || (isOwner() && resource.data.ownerUid == request.auth.uid);
-      allow update: if isAdmin() || (
-        isOwner() && resource.data.ownerUid == request.auth.uid
+      allow update: if isAdmin() || (isOwner() && resource.data.ownerUid == request.auth.uid
         && request.resource.data.ownerUid == resource.data.ownerUid
         && request.resource.data.totalFare == resource.data.totalFare
         && request.resource.data.paymentStatus == resource.data.paymentStatus
         && request.resource.data.paymentMethod == resource.data.paymentMethod
-      );
+        && request.resource.data.customerName == resource.data.customerName
+        && request.resource.data.mobile == resource.data.mobile);
       allow delete: if isAdmin();
     }
-
     match /{document=**} { allow read, write: if false; }
   }
 }
