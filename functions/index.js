@@ -1,4 +1,5 @@
 const { onRequest } = require('firebase-functions/v2/https');
+const { onDocumentCreated } = require('firebase-functions/v2/firestore');
 const { defineSecret } = require('firebase-functions/params');
 const admin = require('firebase-admin');
 const Razorpay = require('razorpay');
@@ -18,6 +19,39 @@ const cors = (req, res) => {
   return false;
 };
 
+async function notifyAdmins(title, body, data = {}) {
+  const snap = await db.collection('adminTokens').get();
+  const tokens = snap.docs.map(d => d.data().token).filter(Boolean);
+  if (!tokens.length) return;
+  const response = await admin.messaging().sendEachForMulticast({
+    tokens,
+    notification: { title, body },
+    data: Object.fromEntries(Object.entries(data).map(([k,v]) => [k, String(v)])),
+    webpush: { fcmOptions: { link: 'https://bookmycar.github.io/Book-my-car/Admin.html' } }
+  });
+  const bad = [];
+  response.responses.forEach((r, i) => {
+    if (!r.success && ['messaging/registration-token-not-registered','messaging/invalid-registration-token'].includes(r.error?.code)) bad.push(tokens[i]);
+  });
+  if (bad.length) {
+    const batch = db.batch();
+    snap.docs.forEach(d => { if (bad.includes(d.data().token)) batch.delete(d.ref); });
+    await batch.commit();
+  }
+}
+
+exports.notifyNewBooking = onDocumentCreated({ document: 'bookings/{bookingId}', region: 'asia-south1' }, async event => {
+  const b = event.data?.data();
+  if (!b) return;
+  await notifyAdmins('🚗 New Booking', `${b.customerName || 'Customer'} • ${b.pickup || ''} → ${b.destination || ''} • ₹${Math.round(Number(b.totalFare || 0)).toLocaleString('en-IN')}`, { type: 'booking', bookingId: event.params.bookingId });
+});
+
+exports.notifyNewCar = onDocumentCreated({ document: 'cars/{carId}', region: 'asia-south1' }, async event => {
+  const c = event.data?.data();
+  if (!c) return;
+  await notifyAdmins('🚘 New Car Added', `${c.carName || 'New car'} • Owner: ${c.ownerName || 'Owner'}`, { type: 'car', carId: event.params.carId });
+});
+
 exports.createRazorpayOrder = onRequest({ secrets: [RAZORPAY_KEY_ID, RAZORPAY_KEY_SECRET], region: 'asia-south1' }, async (req, res) => {
   if (cors(req, res)) return;
   if (req.method !== 'POST') return res.status(405).json({ error: 'POST required' });
@@ -32,7 +66,6 @@ exports.createRazorpayOrder = onRequest({ secrets: [RAZORPAY_KEY_ID, RAZORPAY_KE
     if (b.paymentStatus === 'Verified') return res.status(400).json({ error: 'Payment already verified' });
     const amount = Math.round(Number(b.totalFare || 0) * 100);
     if (!Number.isInteger(amount) || amount < 100 || amount > 100000000) return res.status(400).json({ error: 'Invalid payment amount' });
-
     const razorpay = new Razorpay({ key_id: RAZORPAY_KEY_ID.value(), key_secret: RAZORPAY_KEY_SECRET.value() });
     const order = await razorpay.orders.create({ amount, currency: 'INR', receipt: bookingId.slice(0, 40), notes: { bookingId } });
     await ref.update({ razorpayOrderId: order.id, paymentStatus: 'Order Created', paymentGateway: 'Razorpay', paymentUpdatedAt: admin.firestore.FieldValue.serverTimestamp() });
