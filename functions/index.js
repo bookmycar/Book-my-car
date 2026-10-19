@@ -20,3 +20,77 @@ exports.calculateRoute=onRequest({region:'asia-south1',secrets:[GOOGLE_MAPS_API_
 exports.getBooking=onRequest({region:'asia-south1'},async(req,res)=>{if(cors(req,res))return;if(req.method!=='POST')return res.status(405).json({error:'POST required'});try{const{bookingId,mobile}=req.body||{};if(typeof bookingId!=='string'||!bookingId.trim()||!/^\d{10}$/.test(String(mobile||'')))return res.status(400).json({error:'Booking ID and 10 digit mobile are required'});const s=await db.collection('bookings').doc(bookingId.trim()).get();if(!s.exists)return res.status(404).json({error:'Booking not found'});const b=s.data();if(String(b.mobile)!==String(mobile))return res.status(403).json({error:'Booking ID and mobile do not match'});return res.json({bookingId:s.id,booking:{customerName:b.customerName||'',mobile:'******'+String(b.mobile).slice(-4),pickup:b.pickup||'',destination:b.destination||'',carName:b.carName||'',date:b.date||'',pickupTime:b.pickupTime||'',tripType:b.tripType||'',distanceKm:Number(b.distanceKm||0),paymentMethod:b.paymentMethod||'',paymentStatus:b.paymentStatus||'Pending',status:b.status||'Pending',totalFare:Number(b.totalFare||0)}})}catch(e){console.error(e);return res.status(500).json({error:'Unable to load booking'})}});
 exports.createRazorpayOrder=onRequest({secrets:[RAZORPAY_KEY_ID,RAZORPAY_KEY_SECRET],region:'asia-south1'},async(req,res)=>{if(cors(req,res))return;if(req.method!=='POST')return res.status(405).json({error:'POST required'});try{const{bookingId}=req.body||{};if(!bookingId||typeof bookingId!=='string')return res.status(400).json({error:'bookingId required'});const ref=db.collection('bookings').doc(bookingId),s=await ref.get();if(!s.exists)return res.status(404).json({error:'Booking not found'});const b=s.data();if(b.status!=='Pending')return res.status(400).json({error:'Booking is not pending'});if(b.paymentStatus==='Verified')return res.status(400).json({error:'Payment already verified'});const amount=Math.round(Number(b.totalFare||0)*100);if(!Number.isInteger(amount)||amount<100||amount>100000000)return res.status(400).json({error:'Invalid payment amount'});const rz=new Razorpay({key_id:RAZORPAY_KEY_ID.value(),key_secret:RAZORPAY_KEY_SECRET.value()}),o=await rz.orders.create({amount,currency:'INR',receipt:bookingId.slice(0,40),notes:{bookingId}});await ref.update({razorpayOrderId:o.id,paymentStatus:'Order Created',paymentGateway:'Razorpay',paymentUpdatedAt:admin.firestore.FieldValue.serverTimestamp()});return res.json({keyId:RAZORPAY_KEY_ID.value(),orderId:o.id,amount:o.amount,currency:o.currency,bookingId})}catch(e){console.error(e);return res.status(500).json({error:'Unable to create payment order'})}});
 exports.verifyRazorpayPayment=onRequest({secrets:[RAZORPAY_KEY_ID,RAZORPAY_KEY_SECRET],region:'asia-south1'},async(req,res)=>{if(cors(req,res))return;if(req.method!=='POST')return res.status(405).json({error:'POST required'});try{const{bookingId,razorpay_order_id,razorpay_payment_id,razorpay_signature}=req.body||{};if(!bookingId||!razorpay_order_id||!razorpay_payment_id||!razorpay_signature)return res.status(400).json({error:'Payment verification data incomplete'});const ref=db.collection('bookings').doc(bookingId),s=await ref.get();if(!s.exists)return res.status(404).json({error:'Booking not found'});if(s.data().razorpayOrderId!==razorpay_order_id)return res.status(400).json({error:'Order mismatch'});const expected=crypto.createHmac('sha256',RAZORPAY_KEY_SECRET.value()).update(razorpay_order_id+'|'+razorpay_payment_id).digest('hex');if(expected!==razorpay_signature)return res.status(400).json({error:'Invalid payment signature'});await ref.update({paymentStatus:'Verified',razorpayPaymentId:razorpay_payment_id,razorpaySignatureVerified:true,paymentVerifiedAt:admin.firestore.FieldValue.serverTimestamp(),paymentUpdatedAt:admin.firestore.FieldValue.serverTimestamp()});return res.json({verified:true,bookingId})}catch(e){console.error(e);return res.status(500).json({error:'Payment verification failed'})}});
+
+// Secure trip OTP: OTP plaintext is kept only in a server-only collection.
+// Firestore client rules must not grant access to bookingSecrets.
+exports.issueTripOtp = onDocumentCreated({document:'bookings/{bookingId}',region:'asia-south1'}, async e => {
+  // New bookings start Pending; OTP is issued only after Admin confirms them.
+  // Confirmation is handled by the update trigger below.
+});
+exports.onBookingStatusChanged = require('firebase-functions/v2/firestore').onDocumentUpdated({document:'bookings/{bookingId}',region:'asia-south1'}, async e => {
+  const before=e.data.before.data(), after=e.data.after.data(), bookingId=e.params.bookingId;
+  if(!before || !after || before.status===after.status) return;
+  if(after.status==='Confirmed' && before.status!=='Confirmed') {
+    const code=String(crypto.randomInt(0,1000000)).padStart(6,'0');
+    const now=Date.now();
+    await db.runTransaction(async tx=>{
+      const ref=db.collection('bookingSecrets').doc(bookingId);
+      const existing=await tx.get(ref);
+      if(existing.exists && existing.data().used!==true && Number(existing.data().expiresAt||0)>now) return;
+      tx.set(ref,{otp:code,createdAt:admin.firestore.FieldValue.serverTimestamp(),expiresAt:now+10*60*1000,attempts:0,used:false});
+      tx.update(e.data.after.ref,{otpStatus:'Ready',otpIssuedAt:admin.firestore.FieldValue.serverTimestamp()});
+    });
+    await notifyAdmins('🔐 Trip OTP जारी हुआ',`Booking ${bookingId} confirmed. OTP ग्राहक को सुरक्षित endpoint से मिलेगा; Admin notification में OTP नहीं दिखाया गया.`,{type:'otp_issued',bookingId});
+  }
+  const labels={Confirmed:'Booking Confirmed',Cancelled:'Booking Cancelled','Trip Started':'Trip Started','Trip Completed':'Trip Completed'};
+  if(labels[after.status]) await notifyAdmins('🚗 '+labels[after.status],`Booking ${bookingId} • ${after.pickup||''} → ${after.destination||''}`,{type:'booking_status',bookingId,status:after.status});
+});
+
+// Customer obtains the OTP only with booking ID + matching mobile, after confirmation.
+exports.getTripOtp = onRequest({region:'asia-south1'},async(req,res)=>{
+  if(cors(req,res)) return;
+  if(req.method!=='POST') return res.status(405).json({error:'POST required'});
+  try{
+    const {bookingId,mobile}=req.body||{};
+    if(typeof bookingId!=='string'||bookingId.length<10||bookingId.length>100||!/^\\d{10}$/.test(String(mobile||''))) return res.status(400).json({error:'Booking ID and 10 digit mobile are required'});
+    const bRef=db.collection('bookings').doc(bookingId.trim()), bSnap=await bRef.get();
+    if(!bSnap.exists) return res.status(404).json({error:'Booking not found'});
+    const b=bSnap.data();
+    if(String(b.mobile)!==String(mobile)) return res.status(403).json({error:'Booking ID and mobile do not match'});
+    if(b.status!=='Confirmed') return res.status(409).json({error:'OTP is available only after booking confirmation'});
+    const sec=await db.collection('bookingSecrets').doc(bSnap.id).get();
+    if(!sec.exists || sec.data().used || Date.now()>Number(sec.data().expiresAt||0)) return res.status(410).json({error:'OTP expired or unavailable. Contact Admin.'});
+    return res.json({bookingId:bSnap.id,otp:sec.data().otp,expiresAt:sec.data().expiresAt});
+  }catch(err){console.error(err);return res.status(500).json({error:'Unable to retrieve trip OTP'});}
+});
+
+// Only the Firebase-authenticated UID assigned to a booking may verify its OTP.
+exports.verifyTripOtp = onRequest({region:'asia-south1'},async(req,res)=>{
+  if(cors(req,res)) return;
+  if(req.method!=='POST') return res.status(405).json({error:'POST required'});
+  try{
+    const authHeader=String(req.get('Authorization')||'');
+    if(!authHeader.startsWith('Bearer ')) return res.status(401).json({error:'Driver sign-in required'});
+    const decoded=await admin.auth().verifyIdToken(authHeader.slice(7));
+    const {bookingId,otp}=req.body||{};
+    if(typeof bookingId!=='string'||typeof otp!=='string'||!/^\\d{6}$/.test(otp)) return res.status(400).json({error:'Booking ID and 6 digit OTP are required'});
+    const ref=db.collection('bookings').doc(bookingId.trim()), secretRef=db.collection('bookingSecrets').doc(bookingId.trim());
+    const result=await db.runTransaction(async tx=>{
+      const [bSnap,sSnap]=await Promise.all([tx.get(ref),tx.get(secretRef)]);
+      if(!bSnap.exists||!sSnap.exists) return {status:404,error:'Booking or OTP not found'};
+      const b=bSnap.data(),s=sSnap.data(),now=Date.now();
+      if(!b.driverUid || b.driverUid!==decoded.uid) return {status:403,error:'This driver is not assigned to this booking'};
+      if(b.status!=='Confirmed') return {status:409,error:'Booking is not confirmed'};
+      if(s.used) return {status:409,error:'OTP has already been used'};
+      if(now>Number(s.expiresAt||0)) return {status:410,error:'OTP expired'};
+      if(Number(s.attempts||0)>=5) return {status:429,error:'Too many attempts. Contact Admin.'};
+      if(s.otp!==otp){tx.update(secretRef,{attempts:admin.firestore.FieldValue.increment(1)});return {status:400,error:'Incorrect OTP'};}
+      tx.update(secretRef,{used:true,usedAt:admin.firestore.FieldValue.serverTimestamp(),otp:admin.firestore.FieldValue.delete()});
+      tx.update(ref,{status:'Trip Started',tripStartedAt:admin.firestore.FieldValue.serverTimestamp(),otpStatus:'Verified'});
+      return {status:200,ok:true};
+    });
+    if(result.status!==200) return res.status(result.status).json({error:result.error});
+    await notifyAdmins('🟢 Trip Started',`Booking ${bookingId} OTP verified by assigned driver.`,{type:'trip_started',bookingId});
+    return res.json({verified:true,status:'Trip Started'});
+  }catch(err){console.error(err);return res.status(401).json({error:'Driver authentication or OTP verification failed'});}
+});
