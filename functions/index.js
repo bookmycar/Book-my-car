@@ -43,21 +43,12 @@ exports.onBookingStatusChanged = require('firebase-functions/v2/firestore').onDo
 });
 
 // Customer obtains the OTP only with booking ID + matching mobile, after confirmation.
+// Do not expose a trip OTP through booking ID + phone alone: those values are not
+// proof of identity. Configure an authenticated SMS provider before enabling delivery.
 exports.getTripOtp = onRequest({region:'asia-south1'},async(req,res)=>{
   if(cors(req,res)) return;
   if(req.method!=='POST') return res.status(405).json({error:'POST required'});
-  try{
-    const {bookingId,mobile}=req.body||{};
-    if(typeof bookingId!=='string'||bookingId.length<10||bookingId.length>100||!/^\\d{10}$/.test(String(mobile||''))) return res.status(400).json({error:'Booking ID and 10 digit mobile are required'});
-    const bRef=db.collection('bookings').doc(bookingId.trim()), bSnap=await bRef.get();
-    if(!bSnap.exists) return res.status(404).json({error:'Booking not found'});
-    const b=bSnap.data();
-    if(String(b.mobile)!==String(mobile)) return res.status(403).json({error:'Booking ID and mobile do not match'});
-    if(b.status!=='Confirmed') return res.status(409).json({error:'OTP is available only after booking confirmation'});
-    const sec=await db.collection('bookingSecrets').doc(bSnap.id).get();
-    if(!sec.exists || sec.data().used || Date.now()>Number(sec.data().expiresAt||0)) return res.status(410).json({error:'OTP expired or unavailable. Contact Admin.'});
-    return res.json({bookingId:bSnap.id,otp:sec.data().otp,expiresAt:sec.data().expiresAt});
-  }catch(err){console.error(err);return res.status(500).json({error:'Unable to retrieve trip OTP'});}
+  return res.status(503).json({error:'Secure OTP delivery is not configured yet. Please contact Book My Car Admin.'});
 });
 
 // Only the Firebase-authenticated UID assigned to a booking may verify its OTP.
@@ -69,7 +60,7 @@ exports.verifyTripOtp = onRequest({region:'asia-south1'},async(req,res)=>{
     if(!authHeader.startsWith('Bearer ')) return res.status(401).json({error:'Driver sign-in required'});
     const decoded=await admin.auth().verifyIdToken(authHeader.slice(7));
     const {bookingId,otp}=req.body||{};
-    if(typeof bookingId!=='string'||typeof otp!=='string'||!/^\\d{6}$/.test(otp)) return res.status(400).json({error:'Booking ID and 6 digit OTP are required'});
+    if(typeof bookingId!=='string'||typeof otp!=='string'||!/^\d{6}$/.test(otp)) return res.status(400).json({error:'Booking ID and 6 digit OTP are required'});
     const ref=db.collection('bookings').doc(bookingId.trim()), secretRef=db.collection('bookingSecrets').doc(bookingId.trim());
     const result=await db.runTransaction(async tx=>{
       const [bSnap,sSnap]=await Promise.all([tx.get(ref),tx.get(secretRef)]);
