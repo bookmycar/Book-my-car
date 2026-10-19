@@ -1,0 +1,48 @@
+name: Validate Book My Car
+on:
+  pull_request:
+    branches: [main]
+  push:
+    branches: [main, secure-booking-otp-notifications]
+jobs:
+  syntax:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+      - name: Validate Cloud Functions JavaScript and package JSON
+        run: |
+          node --check functions/index.js
+          node -e "JSON.parse(require('fs').readFileSync('functions/package.json','utf8')); console.log('functions/package.json: valid JSON')"
+      - name: Check inline JavaScript in site pages
+        shell: bash
+        run: |
+          node <<'NODE'
+          const fs = require('fs');
+          const cp = require('child_process');
+          const pages = ['index.html','Admin.html','Booking.html','Owner.html','AddCar.html','Driver.html'];
+          let count = 0;
+          for (const page of pages) {
+            if (!fs.existsSync(page)) continue;
+            const html = fs.readFileSync(page, 'utf8');
+            const re = /<script\b([^>]*)>([\s\S]*?)<\/script\s*>/gi;
+            let m, n = 0;
+            while ((m = re.exec(html))) {
+              const code = m[2].trim();
+              if (!code || /\bsrc\s*=/.test(m[1])) continue;
+              const module = /\btype\s*=\s*["']module["']/.test(m[1]);
+              const file = `/tmp/bmc-${page.replace(/[^a-z0-9]/gi,'_')}-${n++}.${module?'mjs':'js'}`;
+              fs.writeFileSync(file, code);
+              try {
+                cp.execFileSync(process.execPath, ['--check', file], {stdio:'pipe'});
+                count++;
+              } catch (e) {
+                console.error(`Syntax error in ${page} inline script #${n}:\n${e.stderr?.toString() || e.message}`);
+                process.exitCode = 1;
+              }
+            }
+          }
+          console.log(`Checked ${count} inline JavaScript blocks.`);
+          NODE
