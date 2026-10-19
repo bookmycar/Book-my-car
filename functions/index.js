@@ -43,12 +43,27 @@ exports.onBookingStatusChanged = require('firebase-functions/v2/firestore').onDo
 });
 
 // Customer obtains the OTP only with booking ID + matching mobile, after confirmation.
-// Do not expose a trip OTP through booking ID + phone alone: those values are not
-// proof of identity. Configure an authenticated SMS provider before enabling delivery.
+// Return the trip OTP only after Firebase Phone Auth proves control of the
+// exact phone number stored on this booking. Do not rely on booking ID alone.
 exports.getTripOtp = onRequest({region:'asia-south1'},async(req,res)=>{
   if(cors(req,res)) return;
   if(req.method!=='POST') return res.status(405).json({error:'POST required'});
-  return res.status(503).json({error:'Secure OTP delivery is not configured yet. Please contact Book My Car Admin.'});
+  try{
+    const authHeader=String(req.get('Authorization')||'');
+    if(!authHeader.startsWith('Bearer ')) return res.status(401).json({error:'Verify the booking mobile by SMS first'});
+    const decoded=await admin.auth().verifyIdToken(authHeader.slice(7));
+    const {bookingId}=req.body||{};
+    if(typeof bookingId!=='string'||bookingId.trim().length<1||bookingId.length>100) return res.status(400).json({error:'Valid booking ID required'});
+    const ref=db.collection('bookings').doc(bookingId.trim()),snap=await ref.get();
+    if(!snap.exists) return res.status(404).json({error:'Booking not found'});
+    const b=snap.data();
+    const expectedPhone='+91'+String(b.mobile||'');
+    if(!decoded.phone_number||decoded.phone_number!==expectedPhone) return res.status(403).json({error:'Verified phone does not match this booking'});
+    if(b.status!=='Confirmed') return res.status(409).json({error:'OTP is available only after booking confirmation'});
+    const sec=await db.collection('bookingSecrets').doc(snap.id).get();
+    if(!sec.exists||sec.data().used||Date.now()>Number(sec.data().expiresAt||0)||!sec.data().otp) return res.status(410).json({error:'OTP expired or unavailable. Contact Admin to reissue it.'});
+    return res.json({bookingId:snap.id,otp:sec.data().otp,expiresAt:sec.data().expiresAt});
+  }catch(err){console.error(err);return res.status(401).json({error:'Phone verification or OTP retrieval failed'});}
 });
 
 // Only the Firebase-authenticated UID assigned to a booking may verify its OTP.
